@@ -89,6 +89,6 @@ int					ctl_mousekey(enum e_mousecode code, int x, int y, struct s_fractol *s);
  * @param y The mouse's y position
  * @param s Closure
  */
-int					ctl_mousmove(int x, int y, struct s_fractol *s);
+int					ctl_mousemove(int x, int y, struct s_fractol *s);
 
 #endif // FRACTOL_H

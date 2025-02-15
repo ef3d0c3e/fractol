@@ -1,5 +1,7 @@
 #ifndef VIEWPORT_H
-#define VIEWPORT_H
+# define VIEWPORT_H
+
+#include <stdlib.h>
 
 struct s_viewport
 {
@@ -7,19 +9,28 @@ struct s_viewport
 	double	cy;
 	double	zoom;
 
-	int		sz_x;
-	int		sz_y;
+	size_t		sz_x;
+	size_t		sz_y;
 
 	/**
 	 * @brief Anti-aliasing (MSAA)
 	 */
-	int aa;
+	size_t aa;
 };
 
-struct s_viewport	viewport_create(int sz_x, int sz_y);
+struct s_viewport	viewport_create(size_t sz_x, size_t sz_y);
 
 /**
  * @brief Applies closure to each pixel in the viewport
+ *
+ *   <----- sz_x ----->
+ *  ^
+ *  |
+ *  |
+ * sz_y   (cx, cy)
+ *  |
+ *  |
+ *  v
  *
  * @param view Viewport to iterate over
  * @param callback Callback closyre
@@ -27,7 +38,7 @@ struct s_viewport	viewport_create(int sz_x, int sz_y);
  */
 void viewport_foreach(
 		const struct s_viewport *view,
-		void (*callback)(int x, int y, double zr, double zi, void*),
+		void (*callback)(size_t x, size_t y, double zr, double zi, void*),
 		void *closure);
 
 #endif // VIEWPORT_H

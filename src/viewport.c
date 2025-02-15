@@ -1,6 +1,6 @@
 #include "viewport.h"
 
-struct s_viewport	viewport_create(int sz_x, int sz_y)
+struct s_viewport	viewport_create(size_t sz_x, size_t sz_y)
 {
 	return ((struct s_viewport) {
 		.cx = 0.0,
@@ -14,25 +14,26 @@ struct s_viewport	viewport_create(int sz_x, int sz_y)
 
 void viewport_foreach(
 		const struct s_viewport *view,
-		void (*callback)(int x, int y, double zr, double zi, void*),
+		void (*callback)(const size_t x, const size_t y, const double zr, const double zi, void*),
 		void *closure)
 {
-	int		pos[2];
+	size_t		pos[2];
 
-	pos[0] = 0;
-	while (pos[0] < view->sz_y)
+	pos[1] = 0;
+	while (pos[1] < view->sz_y)
 	{
-		pos[1] = 0;
-		while (pos[1] < view->sz_x)
+		pos[0] = 0;
+		while (pos[0] < view->sz_x)
 		{
 			callback(
-					pos[1],
 					pos[0],
-					((double)pos[1])/view->sz_x -  + view->cx,
+					pos[1],
+					((double)pos[0])/view->sz_x - 0.5 + view->cx,
+					((double)pos[1])/view->sz_y + 0.5 + view->cy,
 					closure
 					);
-			++pos[1];
+			++pos[0];
 		}
-		++pos[0];
+		++pos[1];
 	}
 }

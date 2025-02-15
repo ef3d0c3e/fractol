@@ -1,14 +1,17 @@
 #include "../kernel.h"
 
+static void iter(size_t x, size_t y, double re, double im, void *closure)
+{
+	
+}
+
 static void render(const struct s_viewport *viewport, struct s_image *img)
 {
-	int	x;
-	int	y;
+	struct s_kernel_closure closure;
 
-	while ()
-	{
-
-	}
+	closure.img = img,
+	closure.view = viewport,
+	viewport_foreach(viewport, iter, &closure);
 }
 
 struct s_kernel mandel_ext_de = (struct s_kernel) {
