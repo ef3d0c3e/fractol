@@ -5,7 +5,7 @@ struct s_viewport	viewport_create(size_t sz_x, size_t sz_y)
 	return ((struct s_viewport) {
 		.cx = 0.0,
 		.cy = 0.0,
-		.zoom = 400.0,
+		.zoom = 200.0,
 		.sz_x = sz_x,
 		.sz_y = sz_y,
 		.aa = 1,
@@ -28,8 +28,8 @@ void viewport_foreach(
 			callback(
 					pos[0],
 					pos[1],
-					((double)pos[0])/view->sz_x - 0.5 + view->cx,
-					((double)pos[1])/view->sz_y + 0.5 + view->cy,
+					((double)pos[0] - view->sz_x / 2.0) / view->zoom + view->cx,
+					((double)pos[1] - view->sz_y / 2.0) / view->zoom - view->cy,
 					closure
 					);
 			++pos[0];

@@ -1,6 +1,6 @@
 NAME   := fractol
 CC     := gcc
-CFLAGS := -Wall -Wextra -ggdb -Og -g3
+CFLAGS := -Wall -Wextra -ggdb -Og -g3 -fsanitize=address
 IFLAGS := -Iminilibx-linux
 LFLAGS := -L/usr/lib -lX11 -lXext -lz -lm
 
@@ -8,11 +8,9 @@ SOURCES := \
 		src/fractol.c \
 		src/viewport.c \
 		src/controls.c \
+		src/draw_buffer.c \
 		src/kernels/mandel_ext_de.c
 OBJECTS := $(addprefix objs/,$(SOURCES:.c=.o))
-
-./minilibx-linux/libmlx_Linux.a:
-	cd ./minilibx-linux && make
 
 objs/%.o : %.c
 	@mkdir -p $(@D)
@@ -20,6 +18,9 @@ objs/%.o : %.c
 
 $(NAME): $(OBJECTS)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJECTS) ./minilibx-linux/libmlx_Linux.a $(LFLAGS)
+
+./minilibx-linux/libmlx_Linux.a:
+	$(MAKE) -C minilibx-linux
 
 .PHONY: all
 all: $(NAME)

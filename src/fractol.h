@@ -1,20 +1,25 @@
 #ifndef FRACTOL_H
-#define FRACTOL_H
+# define FRACTOL_H
 
-#include "../minilibx-linux/mlx_int.h"
-#include "draw_buffer.h"
+# include "../minilibx-linux/mlx_int.h"
+# include "draw_buffer.h"
+# include "kernel.h"
+#include "viewport.h"
+# include <stdbool.h>
 
-struct	s_fractol
+typedef struct	s_fractol
 {
 	t_xvar			*mlx;
 	t_win_list		*window;
 	struct s_image	img;
 
-	int				needs_redraw;
-};
+	bool			needs_redraw;
+	t_viewport		view;
+	t_kernel		kernel;
+}	t_fractol;
 
-struct s_fractol	fractol_init();
-void				fractol_deinit(struct s_fractol*);
+t_fractol	fractol_init();
+void		fractol_deinit(t_fractol *fractol);
 
 
 /**

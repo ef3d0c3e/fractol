@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 
-struct s_viewport
+typedef struct s_viewport
 {
 	double	cx;
 	double	cy;
@@ -16,7 +16,7 @@ struct s_viewport
 	 * @brief Anti-aliasing (MSAA)
 	 */
 	size_t aa;
-};
+}	t_viewport;
 
 struct s_viewport	viewport_create(size_t sz_x, size_t sz_y);
 

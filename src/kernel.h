@@ -3,20 +3,30 @@
 
 #include "draw_buffer.h"
 #include "viewport.h"
+#include <stdint.h>
 
-struct s_kernel
+typedef struct s_kernel
 {
 	const char	*name;
-	void		(*render)(const struct s_viewport* view, struct s_image *img);
-};
+	void		(*render)(const t_viewport* view, struct s_image *img);
+}	t_kernel;
 
-struct s_kernel_closure
+typedef struct s_kernel_closure
 {
-	struct s_image			*img;
-	const struct s_viewport	*view;
-};
+	struct s_image		*img;
+	/**
+	 * @brief Render buffer
+	 */
+	uint8_t				*buffer;
+	/**
+	 * @brief Viewport
+	 */
+	const t_viewport	*view;
+}	t_closure;
 
-extern struct s_kernel	mandel_ext_de;
+uint8_t	*kernel_resize_buffer(uint8_t *buffer, t_viewport *view);
+
+extern t_kernel	mandel_ext_de;
 
 
 #endif // KERNEL_H
