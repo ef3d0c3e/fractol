@@ -17,7 +17,7 @@ static inline void iter(size_t ix, size_t iy, double re, double im, void *closur
 	{
 		tmp = x;
 		x = x * x - y * y + re;
-		y = 2 * tmp * y * im;
+		y = 2 * tmp * y + im;
 
 		if (x*x + y*y >= 4)
 		{

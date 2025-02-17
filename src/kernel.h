@@ -7,7 +7,14 @@
 
 typedef struct s_kernel
 {
+	/**
+	 * @brief Kernel's display name
+	 */
 	const char	*name;
+	/**
+	 * @brief Initializes the kernel
+	 */
+	void		(*init)(const t_viewport* view);
 	void		(*render)(const t_viewport* view, struct s_image *img);
 }	t_kernel;
 

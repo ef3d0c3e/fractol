@@ -1,7 +1,9 @@
 #ifndef VIEWPORT_H
 # define VIEWPORT_H
 
-#include <stdlib.h>
+# include <stdlib.h>
+
+#define OMP_KERN _Pragma("omp parallel")
 
 typedef struct s_viewport
 {

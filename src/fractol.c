@@ -2,6 +2,7 @@
 #include "kernel.h"
 #include "viewport.h"
 #include "fractol.h"
+#include "controls.h"
 
 void draw(t_fractol *fractol)
 {
@@ -21,12 +22,13 @@ t_fractol fractol_init()
 	s.needs_redraw = 0;
 	s.view = viewport_create(1920, 1080);
 	s.kernel = mandel_ext_de;
-	mlx_key_hook(s.window, ctl_keyboard, &s);
 	//mlx_expose_hook(s.window, ctl_expose, &s);
 	draw(&s);
-	mlx_hook(s.window, 4, 0x4, ctl_mousekey, &s);
-	mlx_hook(s.window, 5, 0x8, ctl_mousekey, &s);
-	mlx_hook(s.window, 6, 0x20, ctl_mousemove, &s);
+	mlx_hook(s.window, EVENT_MOUSEDOWN, MASK_BUTTON_PRESS, ctl_mousedown, &s);
+	mlx_hook(s.window, EVENT_MOUSEUP, MASK_BUTTON_RELEASE, ctl_mouseup, &s);
+	mlx_hook(s.window, EVENT_MOUSEMOVE, MASK_LEAVE_WINDOW, ctl_mousemove, &s);
+	mlx_hook(s.window, EVENT_KEYDOWN, MASK_KEY_PRESS, ctl_keydown, &s);
+	mlx_hook(s.window, EVENT_KEYUP, MASK_KEY_RELEASE, ctl_keyup, &s);
 	mlx_loop(s.mlx);
 	return (s);
 }
