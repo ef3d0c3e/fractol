@@ -29,6 +29,10 @@ typedef struct s_ui
 }	t_ui;
 
 t_ui	ui_init();
-void	ui_draw(t_fractol *f);
+
+/**
+ * @brief Refreshes the ui
+ */
+int		ui_draw(t_fractol *f);
 
 #endif // UI_H

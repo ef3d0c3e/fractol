@@ -24,7 +24,7 @@ typedef struct	s_fractol
 }	t_fractol;
 
 t_fractol	fractol_init();
-void		fractol_deinit(t_fractol *fractol);
+int			fractol_deinit(t_fractol *fractol);
 
 
 /**
@@ -68,12 +68,11 @@ enum	e_keycode
 
 enum e_mousecode
 {
-	MOUSE_LEFT_DOWN = 1,
-	MOUSE_LEFT_UP,
-	MOUSE_RIGHT_DOWN,
-	MOUSE_RIGHT_UP,
-	MOUSE_WHEEL_DOWN,
-	MOUSE_WHEEL_UP,
+	MOUSE_LEFT = 1,
+	MOUSE_MIDDLE = 2,
+	MOUSE_RIGHT = 3,
+	MOUSE_WHEEL_DOWN = 4,
+	MOUSE_WHEEL_UP = 5,
 };
 
 enum e_eventcode {

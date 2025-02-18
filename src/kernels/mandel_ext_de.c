@@ -1,10 +1,10 @@
 #include "../kernel.h"
 #include <stdio.h>
 
-static inline void iter(size_t ix, size_t iy, double re, double im, void *closure)
+static inline void iter(t_pos pos, t_vec2d z, void *d)
 {
-	const t_closure	*data = closure;
-	size_t			i;
+	const t_closure *data = d;
+	int				i;
 	double			x;
 	double			y;
 	double			tmp;
@@ -16,17 +16,17 @@ static inline void iter(size_t ix, size_t iy, double re, double im, void *closur
 	while (i < 100)
 	{
 		tmp = x;
-		x = x * x - y * y + re;
-		y = 2 * tmp * y + im;
+		x = x * x - y * y + z.x;
+		y = 2 * tmp * y + z.y;
 
 		if (x*x + y*y >= 4)
 		{
-			set_pixel(data->img, ix, iy, 0xFF0000);
+			image_pixel(data->img, pos, 0xFF0000);
 			return;
 		}
 		++i;
 	}
-	set_pixel(data->img, ix, iy, 0x0000FF);
+	image_pixel(data->img, pos, 0x0000FF);
 }
 
 static inline void render(const struct s_viewport *viewport, struct s_image *img)
@@ -35,7 +35,7 @@ static inline void render(const struct s_viewport *viewport, struct s_image *img
 
 	closure.img = img;
 	closure.view = viewport;
-	viewport_foreach(viewport, iter, &closure);
+	viewport_foreach(viewport, (void *)iter, &closure);
 }
 
 struct s_kernel mandel_ext_de = (struct s_kernel) {

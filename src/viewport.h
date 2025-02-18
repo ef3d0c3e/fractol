@@ -1,46 +1,55 @@
 #ifndef VIEWPORT_H
 # define VIEWPORT_H
 
-# include <stdlib.h>
-
-#define OMP_KERN _Pragma("omp parallel")
+# include "ui.h"
+# include "matrix.h"
 
 typedef struct s_viewport
 {
-	double	cx;
-	double	cy;
-	double	zoom;
-
-	size_t		sz_x;
-	size_t		sz_y;
-
 	/**
-	 * @brief Anti-aliasing (MSAA)
+	 * @brief Screen size
 	 */
-	size_t aa;
+	t_pos	size;
+	/**
+	 * @brief Viewport dimensions
+	 */
+	t_mat2d	view;
+	/**
+	 * @brief View function
+	 */
+	t_vec2d(*screen_to_space)(const struct s_viewport *this, const t_pos pos);
+	t_pos(*space_to_screen)(const struct s_viewport *this, const t_vec2d pos);
+	void	*data;
 }	t_viewport;
 
-struct s_viewport	viewport_create(size_t sz_x, size_t sz_y);
+t_viewport
+viewport_create(
+		t_pos size,
+		t_vec2d(*screen_to_space)(const t_viewport *this, const t_pos pos),
+		t_pos(*space_to_screen)(const t_viewport *this, const t_vec2d pos),
+		void *data);
+
+/**
+ * @brief Moves the view
+ */
+void
+view_move(
+		t_viewport *this,
+		const t_pos start,
+		const t_pos end,
+		const int zoom_delta);
 
 /**
  * @brief Applies closure to each pixel in the viewport
- *
- *   <----- sz_x ----->
- *  ^
- *  |
- *  |
- * sz_y   (cx, cy)
- *  |
- *  |
- *  v
  *
  * @param view Viewport to iterate over
  * @param callback Callback closyre
  * @param closure Closure data
  */
-void viewport_foreach(
-		const struct s_viewport *view,
-		void (*callback)(size_t x, size_t y, double zr, double zi, void*),
+void
+viewport_foreach(
+		const t_viewport *this,
+		void (*callback)(t_pos pos, t_vec2d z, void *data),
 		void *closure);
 
 #endif // VIEWPORT_H

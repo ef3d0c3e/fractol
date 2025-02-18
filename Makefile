@@ -7,11 +7,14 @@ LFLAGS := -L/usr/lib -lX11 -lXext -lm
 SOURCES := \
 src/fractol.c \
 src/ui.c \
+src/matrix.c \
+src/vector.c \
 src/draw_buffer.c \
 src/controls_keyboard.c \
 src/controls_mouse.c \
 src/kernels/mandel_ext_de.c \
 src/viewport.c \
+src/viewport_linear.c \
 src/kernel.c
 
 OBJECTS := $(addprefix objs/,$(SOURCES:.c=.o))

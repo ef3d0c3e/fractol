@@ -21,10 +21,11 @@ t_ui	ui_init()
 	});
 }
 
-void ui_draw(t_fractol *f)
+int	ui_draw(t_fractol *f)
 {
 	if (f->ui.needs_render)
 		f->kernel.render(&f->view, &f->img);
-	mlx_put_image_to_window(f->mlx, f->window, f->img.img, f->ui.img_pos.x, f->ui.img_pos.y);
 	f->ui.needs_render = false;
+	mlx_put_image_to_window(f->mlx, f->window, f->img.img, f->ui.img_pos.x, f->ui.img_pos.y);
+	return (0);
 }
