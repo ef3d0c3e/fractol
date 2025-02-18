@@ -7,6 +7,7 @@
 
 # include "../minilibx-linux/mlx_int.h"
 # include "draw_buffer.h"
+# include "sfx.h"
 # include <stdbool.h>
 
 typedef struct	s_fractol
@@ -16,10 +17,13 @@ typedef struct	s_fractol
 	t_win_list		*window;
 	struct s_image	img;
 
+	// Ui
 	t_ui			ui;
+	t_sfx			sfx;
 
 	// Rendering data
 	t_viewport		view;
+	t_viewport		last_view;
 	t_kernel		kernel;
 }	t_fractol;
 

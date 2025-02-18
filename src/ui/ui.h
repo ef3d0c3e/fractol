@@ -5,14 +5,6 @@
 
 typedef struct s_fractol	t_fractol;
 
-typedef struct s_pos
-{
-	int	x;
-	int y;
-}	t_pos;
-
-t_pos	pos_new(int x, int y);
-
 typedef struct s_ui
 {
 	/**

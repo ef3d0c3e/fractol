@@ -1,6 +1,7 @@
 #include "../minilibx-linux/mlx.h"
 #include "kernel.h"
 #include "matrix.h"
+#include "sfx.h"
 #include "ui.h"
 #include "viewport.h"
 #include "fractol.h"
@@ -19,6 +20,8 @@ t_fractol fractol_init()
 	s.img.img = mlx_new_image(s.mlx, 1920, 1080);
 	s.img.data = (unsigned char*)mlx_get_data_addr(s.img.img, &s.img.bpp, &s.img.len, &s.img.endian);
 
+	s.sfx = sfx_new(&s);
+
 	mlx_loop_hook(s.mlx, ui_draw, &s);
 	mlx_hook(s.window, EVENT_MOUSEDOWN, MASK_BUTTON_PRESS, ctl_mousedown, &s);
 	mlx_hook(s.window, EVENT_MOUSEUP, MASK_BUTTON_RELEASE, ctl_mouseup, &s);
@@ -35,6 +38,7 @@ t_fractol fractol_init()
 			view_linear_screen_to_space,
 			view_linear_space_to_screen,
 			&view_data);
+	s.last_view = s.view;
 	s.kernel = mandel_ext_de;
 
 	mlx_loop(s.mlx);

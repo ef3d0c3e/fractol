@@ -1,21 +1,27 @@
 NAME   := fractol
 CC     := gcc
 CFLAGS := -Wall -Wextra -ggdb -Og -g3 -fsanitize=address -fopenmp
-IFLAGS := -Iminilibx-linux
+IFLAGS := -Iminilibx-linux -Isrc
 LFLAGS := -L/usr/lib -lX11 -lXext -lm
 
 SOURCES := \
 src/fractol.c \
-src/ui.c \
-src/matrix.c \
 src/vector.c \
-src/draw_buffer.c \
-src/controls_keyboard.c \
-src/controls_mouse.c \
 src/kernels/mandel_ext_de.c \
 src/viewport.c \
+src/controls_mouse.c \
+src/draw_buffer.c \
+src/sfx_draw.c \
+src/draw/draw_queue.c \
+src/draw/draw.c \
+src/controls_keyboard.c \
+src/util/realloc.c \
+src/util/memcpy.c \
+src/sfx.c \
 src/viewport_linear.c \
-src/kernel.c
+src/kernel.c \
+src/matrix.c \
+src/ui.c
 
 OBJECTS := $(addprefix objs/,$(SOURCES:.c=.o))
 

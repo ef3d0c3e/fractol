@@ -1,14 +1,7 @@
 #include "ui.h"
 #include "fractol.h"
 #include "mlx.h"
-
-t_pos	pos_new(int x, int y)
-{
-	return ((t_pos){
-		.x = x,
-		.y = y,
-	});
-}
+#include "sfx.h"
 
 t_ui	ui_init()
 {
@@ -24,8 +17,13 @@ t_ui	ui_init()
 int	ui_draw(t_fractol *f)
 {
 	if (f->ui.needs_render)
+	{
+		f->last_view = f->view;
 		f->kernel.render(&f->view, &f->img);
+	}
 	f->ui.needs_render = false;
 	mlx_put_image_to_window(f->mlx, f->window, f->img.img, f->ui.img_pos.x, f->ui.img_pos.y);
+	sfx_display(f, &f->sfx);
+
 	return (0);
 }

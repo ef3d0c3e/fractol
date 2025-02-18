@@ -19,7 +19,7 @@ typedef struct s_viewport
 	 */
 	t_vec2d(*screen_to_space)(const struct s_viewport *this, const t_pos pos);
 	t_pos(*space_to_screen)(const struct s_viewport *this, const t_vec2d pos);
-	void	*data;
+	const void	*data;
 }	t_viewport;
 
 t_viewport
@@ -27,7 +27,7 @@ viewport_create(
 		t_pos size,
 		t_vec2d(*screen_to_space)(const t_viewport *this, const t_pos pos),
 		t_pos(*space_to_screen)(const t_viewport *this, const t_vec2d pos),
-		void *data);
+		const void *data);
 
 /**
  * @brief Moves the view
