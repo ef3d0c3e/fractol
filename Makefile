@@ -2,10 +2,11 @@ NAME   := fractol
 CC     := gcc
 CFLAGS := -Wall -Wextra -ggdb -Og -g3 -fsanitize=address -fopenmp
 IFLAGS := -Iminilibx-linux
-LFLAGS := -L/usr/lib -lX11 -lXext -lz -lm
+LFLAGS := -L/usr/lib -lX11 -lXext -lm
 
 SOURCES := \
 src/fractol.c \
+src/ui.c \
 src/draw_buffer.c \
 src/controls_keyboard.c \
 src/controls_mouse.c \

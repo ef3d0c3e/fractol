@@ -1,11 +1,12 @@
 #ifndef FRACTOL_H
 # define FRACTOL_H
 
+# include "kernel.h"
+# include "viewport.h"
+# include "ui.h"
+
 # include "../minilibx-linux/mlx_int.h"
 # include "draw_buffer.h"
-# include "kernel.h"
-#include "viewport.h"
-#include <X11/X.h>
 # include <stdbool.h>
 
 typedef struct	s_fractol
@@ -14,12 +15,10 @@ typedef struct	s_fractol
 	t_xvar			*mlx;
 	t_win_list		*window;
 	struct s_image	img;
-	// UI data
-	int	mouse_x;
-	int	mouse_y;
+
+	t_ui			ui;
 
 	// Rendering data
-	bool			needs_redraw;
 	t_viewport		view;
 	t_kernel		kernel;
 }	t_fractol;
@@ -69,7 +68,7 @@ enum	e_keycode
 
 enum e_mousecode
 {
-	MOUSE_LEFT_DOWN,
+	MOUSE_LEFT_DOWN = 1,
 	MOUSE_LEFT_UP,
 	MOUSE_RIGHT_DOWN,
 	MOUSE_RIGHT_UP,
