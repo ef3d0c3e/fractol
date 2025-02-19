@@ -16,9 +16,9 @@
  * @file Fractol's ui manager
  */
 
-# include <stdbool.h>
-# include "draw.h"
+# include <ui/draw.h>
 # include <util/pos.h>
+# include <stdbool.h>
 
 typedef struct s_fractol	t_fractol;
 
@@ -31,11 +31,15 @@ typedef struct s_ui
 	t_pos		mouse_pos;
 	t_pos		mouse_delta;
 	t_pos		img_pos;
+	/**
+	 * @brief UI sizes in pixels
+	 */
+	t_pos		size;
 
 	/**
 	 * @brief Set to true when in need fo re-rendering next frame
 	 */
-	bool	needs_render;
+	bool		needs_render;
 	/**
 	 * @brief Buffer from the rendered fractal
 	 */
@@ -43,22 +47,23 @@ typedef struct s_ui
 	/**
 	 * @brief UI Draw list
 	 */
-	t_drawqueue ui_queue;
+	t_drawqueue	ui_queue;
 }	t_ui;
 
 /**
  * @brief Initializes ui
  */
-t_ui	ui_init(t_xvar *mlx, const t_pos size);
+t_ui
+ui_init(t_fractol *f, const t_pos size);
 /**
  * @brief Deinitializes ui
  */
-void	ui_deinit(t_xvar *mlx, t_ui *ui);
+void
+ui_deinit(t_fractol *f, t_ui *ui);
 /**
- * @brief Refreshes the ui
- *
- * This will also re-render the fractal in case `needs_render` is true
+ * @brief Draws the ui
  */
-int		ui_draw(t_fractol *f);
+int
+ui_draw(t_fractol *f);
 
 #endif // UI_H

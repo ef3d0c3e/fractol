@@ -1,4 +1,4 @@
-#include "kernel.h"
+#include <kernel/kernel.h>
 
 static inline void iter(t_pos pos, t_vec2d z, const t_closure *data)
 {

@@ -43,7 +43,7 @@ view_linear_space_to_screen(const t_viewport *this, const t_vec2d pos)
 			// Scale to screen width
 			* this->size.x,
 		// Top offset
-		(pre.y - this->view.data[2])
+		(- pre.y - this->view.data[2])
 		 	// Normalize to [0, 1]
 		 	/ (this->view.data[3] - this->view.data[2])
 			// Scale to screen height

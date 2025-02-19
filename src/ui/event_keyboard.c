@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   image.c                                            :+:      :+:    :+:   */
+/*   event_keyboard.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgamba <lgamba@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -9,31 +9,32 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "image.h"
-#include "mlx_int.h"
+#include "event.h"
+#include <app/fractol.h>
 
-inline void	image_pixel(t_img *img, t_pos pos, uint32_t color)
+void
+move_event(
+	t_fractol *fractol,
+	const t_pos start,
+	const t_pos end,
+	const int zoom_delta
+	);
+
+int	ev_keyup(enum e_keycode code, t_fractol *f)
 {
-	const int	factor = img->bpp / 8;
+	double	delta_x;
+	double	delta_y;
 
-	img->data[(pos.x + pos.y * img->width) * factor] = color >> 16;
-	img->data[(pos.x + pos.y * img->width) * factor + 1] = color >> 8;
-	img->data[(pos.x + pos.y * img->width) * factor + 2] = color;
+	if (code == KEY_R)
+	{
+		f->ui.needs_render = true;
+		f->ui.img_pos = pos_new(0, 0);
+		ui_draw(f);
+	}
+	return (0);
 }
 
-void	image_fill(t_img *img, uint32_t color)
+int	ev_keydown(enum e_keycode code, t_fractol *f)
 {
-	t_pos	pos;
-
-	pos.y = 0;
-	while (pos.y < img->height)
-	{
-		pos.x = 0;
-		while (pos.x < img->width)
-		{
-			image_pixel(img, pos, color);
-			++pos.x;
-		}
-		++pos.y;
-	}
+	return (0);
 }

@@ -28,7 +28,6 @@ enum	e_draw_item
 {
 	DRAW_RECT,
 	DRAW_LINE,
-	DRAW_CIRCLE,
 };
 
 typedef union u_draw_item
@@ -47,15 +46,8 @@ typedef union u_draw_item
 		uint32_t			color;
 		t_pos				start;
 		t_pos				end;
+		int					width;
 	} line;
-	struct s_draw_circle
-	{
-		enum e_draw_item	item;
-		uint32_t			color;
-		t_pos				center;
-		double				radius;
-		bool				fill;
-	} circle;
 }	t_draw_item;
 
 /**

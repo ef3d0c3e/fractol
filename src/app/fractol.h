@@ -12,7 +12,7 @@
 #ifndef FRACTOL_H
 # define FRACTOL_H
 
-# include <kernels/kernel.h>
+# include <kernel/kernel.h>
 # include "viewport/viewport.h"
 # include <ui/ui.h>
 

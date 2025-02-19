@@ -36,7 +36,12 @@ view_move(
 		t_viewport *this,
 		const t_pos start,
 		const t_pos end,
-		const int zoom_delta);
+		const double factor);
+void
+view_zoom(
+	t_viewport *this,
+	const t_vec2d center,
+	const int zoom);
 
 /**
  * @brief Applies closure to each pixel in the viewport

@@ -5,23 +5,24 @@ IFLAGS := -Iminilibx-linux -Isrc
 LFLAGS := -L/usr/lib -lX11 -lXext -lm
 
 SOURCES := \
-src/kernels/mandel_ext_de.c \
-src/kernels/kernel.c \
-src/app/fractol.c \
-src/app/controls_mouse.c \
-src/app/viewport/viewport.c \
-src/app/viewport/viewport_linear.c \
-src/app/controls_keyboard.c \
-src/util/vector.c \
-src/util/pos.c \
-src/util/realloc.c \
-src/util/memcpy.c \
-src/util/matrix.c \
-src/ui/draw_queue.c \
-src/ui/image.c \
-src/ui/draw.c \
-src/main.c \
-src/ui/ui.c
+	src/main.c \
+	src/app/fractol.c \
+	src/app/viewport/viewport.c \
+	src/app/viewport/viewport_linear.c \
+	src/util/vector.c \
+	src/util/pos.c \
+	src/util/realloc.c \
+	src/util/memcpy.c \
+	src/util/matrix.c \
+	src/kernel/kernels/mandel_ext_de.c \
+	src/kernel/kernel.c \
+	src/ui/draw_queue.c \
+	src/ui/image.c \
+	src/ui/draw.c \
+	src/ui/event_keyboard.c \
+	src/ui/event.c \
+	src/ui/ui.c \
+	src/ui/event_mouse.c
 
 OBJECTS := $(addprefix objs/,$(SOURCES:.c=.o))
 
