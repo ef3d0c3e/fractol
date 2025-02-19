@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   color.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgamba <lgamba@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -9,10 +9,39 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include <app/fractol.h>
+#ifndef COLOR_H
+# define COLOR_H
 
-int	main(int argc, char **argv)
+#include <stdint.h>
+
+/**
+ * @brief Color definition
+ */
+typedef union u_color
 {
-	(void)fractol_init();
-	return (0);
-}
+	uint32_t	color;
+	struct s_color_field
+	{
+		uint8_t	a;
+		uint8_t	r;
+		uint8_t	g;
+		uint8_t	b;
+	}			channels;
+}	t_color;
+
+/**
+ * @brief Performs linear interpolation between two color values
+ *
+ * @param first First color to interpolate
+ * @param second Second color to interpolate
+ * @param f Lerp amount
+ *
+ * @returns The color `first * f + second * (1 - f)`.
+ */
+t_color
+color_lerp(
+		const t_color first,
+		const t_color second,
+		const double f);
+
+#endif // COLOR_H

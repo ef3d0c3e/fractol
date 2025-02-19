@@ -40,7 +40,7 @@ int	ui_draw(t_fractol *f)
 	if (f->ui.needs_render)
 	{
 		f->last_view = f->view;
-		f->kernel.render(&f->view, f->ui.render);
+		f->kernel->render(&f->view, &f->kernel_settings, f->ui.render);
 		f->ui.needs_render = false;
 	}
 	mlx_put_image_to_window(f->mlx, f->window, f->ui.render,

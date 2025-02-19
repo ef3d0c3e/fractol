@@ -1,7 +1,7 @@
 #include "viewport.h"
 #include "util/vector.h"
-#include <stdio.h>
 #include <util/math.h>
+#include <stdlib.h>
 
 t_viewport
 viewport_create(
@@ -22,6 +22,12 @@ viewport_create(
 		.space_to_screen = space_to_screen,
 		.data = data,
 	});
+}
+
+void
+viewport_free(t_viewport *this)
+{
+	free((void *)this->data);
 }
 
 void

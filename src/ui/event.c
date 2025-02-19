@@ -9,12 +9,7 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "event.h"
-#include "app/viewport/viewport.h"
-#include "app/viewport/viewport_linear.h"
-#include "ui/draw.h"
-#include "ui/ui.h"
-#include "util/vector.h"
+#include <ui/event.h>
 #include <app/fractol.h>
 #include <mlx.h>
 
@@ -33,7 +28,6 @@ void
 	const int zoom_delta
 	)
 {
-	//const t_vec2d center = f->last_view.screen_to_space(&f->last_view, end);
 	if (!zoom_delta)
 		view_move(&f->view, start, end, 1.0);
 	else
@@ -77,5 +71,5 @@ void	event_setup(t_fractol *f)
 	mlx_hook(f->window, EVENT_MOUSEMOVE, MASK_POINTER_MOTION, ev_mousemove, f);
 	mlx_hook(f->window, EVENT_KEYDOWN, MASK_KEY_PRESS, ev_keydown, f);
 	mlx_hook(f->window, EVENT_KEYUP, MASK_KEY_RELEASE, ev_keyup, f);
-	mlx_hook(f->window, EVENT_DESTROY, 0, mlx_loop_end, f->mlx);
+	mlx_hook(f->window, EVENT_DESTROY, MASK_NONE, mlx_loop_end, f->mlx);
 }

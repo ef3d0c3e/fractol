@@ -10,34 +10,37 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "fractol.h"
+#include "app/viewport/viewport.h"
+#include "kernel/kernel.h"
+#include "util/matrix.h"
 #include "viewport/viewport_linear.h"
 #include <mlx.h>
 
+static void pmat(const t_mat2d *mat)
+{
+	printf("[[%F %F] [%F %F]]", mat->data[0], mat->data[1], mat->data[2], mat->data[3]);
+}
+
 t_fractol fractol_init()
 {
+	const t_pos	size = pos_new(1920, 1080);
 	t_fractol	s;
 
 	/// MLX_INIT
 	s.mlx = mlx_init();
-	s.window = mlx_new_window(s.mlx, 1920, 1080, "Fractol");
+	s.window = mlx_new_window(s.mlx, size.x, size.y, "Fractol");
 
-	s.ui = ui_init(&s, (t_pos){1920, 1080});
-
-	// Viewport
-	struct s_viewport_linear_data view_data = view_linear_data(
-			(t_mat2d){{ 1.0, 0.0, 0.0, 1.0 }});
-	s.view = viewport_create(
-			pos_new(1920, 1080),
-			view_linear_screen_to_space,
-			view_linear_space_to_screen,
-			&view_data);
+	s.ui = ui_init(&s, size);
+	s.kernel = kernel_init(0, size, &s.view, &s.kernel_settings);
+	//pmat(&((struct s_viewport_linear_data*)s.view.data)->mat);
+	printf("\n");
 	s.last_view = s.view;
-	s.kernel = mandel_ext_de;
 
 	ui_draw(&s);
 	mlx_loop(s.mlx);
 
 	ui_deinit(&s, &s.ui);
+	viewport_free(&s.view);
 	mlx_destroy_window(s.mlx, s.window);
 	free(s.mlx);
 

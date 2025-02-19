@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   viewport.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lgamba <lgamba@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/18 11:54:01 by lgamba            #+#    #+#             */
+/*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #ifndef VIEWPORT_H
 # define VIEWPORT_H
 
@@ -27,6 +38,9 @@ viewport_create(
 		t_vec2d(*screen_to_space)(const t_viewport *this, const t_pos pos),
 		t_pos(*space_to_screen)(const t_viewport *this, const t_vec2d pos),
 		const void *data);
+
+void
+viewport_free(t_viewport *this);
 
 /**
  * @brief Moves the view
