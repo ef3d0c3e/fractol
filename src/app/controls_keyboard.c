@@ -1,7 +1,5 @@
 #include "controls.h"
 #include "fractol.h"
-#include "ui.h"
-#include <stdio.h>
 
 
 int	ctl_keyup(enum e_keycode code, t_fractol *f)

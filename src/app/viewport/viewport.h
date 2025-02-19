@@ -1,8 +1,7 @@
 #ifndef VIEWPORT_H
 # define VIEWPORT_H
 
-# include "ui.h"
-# include "matrix.h"
+# include <util/math.h>
 
 typedef struct s_viewport
 {

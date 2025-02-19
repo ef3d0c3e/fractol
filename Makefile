@@ -5,23 +5,23 @@ IFLAGS := -Iminilibx-linux -Isrc
 LFLAGS := -L/usr/lib -lX11 -lXext -lm
 
 SOURCES := \
-src/fractol.c \
-src/vector.c \
 src/kernels/mandel_ext_de.c \
-src/viewport.c \
-src/controls_mouse.c \
-src/draw_buffer.c \
-src/sfx_draw.c \
-src/draw/draw_queue.c \
-src/draw/draw.c \
-src/controls_keyboard.c \
+src/kernels/kernel.c \
+src/app/fractol.c \
+src/app/controls_mouse.c \
+src/app/viewport/viewport.c \
+src/app/viewport/viewport_linear.c \
+src/app/controls_keyboard.c \
+src/util/vector.c \
+src/util/pos.c \
 src/util/realloc.c \
 src/util/memcpy.c \
-src/sfx.c \
-src/viewport_linear.c \
-src/kernel.c \
-src/matrix.c \
-src/ui.c
+src/util/matrix.c \
+src/ui/draw_queue.c \
+src/ui/image.c \
+src/ui/draw.c \
+src/main.c \
+src/ui/ui.c
 
 OBJECTS := $(addprefix objs/,$(SOURCES:.c=.o))
 

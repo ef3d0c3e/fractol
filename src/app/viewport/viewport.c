@@ -1,8 +1,5 @@
 #include "viewport.h"
-#include "matrix.h"
-#include "ui.h"
-#include "vector.h"
-#include <math.h>
+#include <util/math.h>
 
 t_viewport
 viewport_create(

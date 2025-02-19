@@ -1,4 +1,5 @@
 #include "draw.h"
+#include "mlx_int.h"
 #include <util/util.h>
 
 t_drawqueue
@@ -37,14 +38,14 @@ drawqueue_clear(t_drawqueue *d)
 }
 
 void
-drawqueue_render(const t_drawqueue *d, t_img *img)
+drawqueue_render(const t_drawqueue *d, t_xvar *mlx, t_win_list *win)
 {
 	size_t	i;
 
 	i = 0;
 	while (i < d->size)
 	{
-		draw(img, &d->queue[i]);
+		draw(mlx, win, &d->queue[i]);
 		++i;
 	}
 }

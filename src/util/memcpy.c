@@ -14,7 +14,7 @@
 #include "util.h"
 #include <stdint.h>
 
-inline void	*memcpy_4(char *dest, const char *src, size_t n)
+static inline void	*memcpy_4(char *dest, const char *src, size_t n)
 {
 	const char	*s = (char *)src;
 	char		*d;
@@ -31,7 +31,7 @@ inline void	*memcpy_4(char *dest, const char *src, size_t n)
 	return (dest);
 }
 
-inline void	*memcpy_16(char *dest, const char *src, size_t n)
+static inline void	*memcpy_16(char *dest, const char *src, size_t n)
 {
 	const char	*first_s = src;
 	const char	*last_s = src + n - 8;
@@ -53,7 +53,7 @@ inline void	*memcpy_16(char *dest, const char *src, size_t n)
 	return (dest);
 }
 
-inline void	*memcpy_32(void *dest, const void *src, size_t n)
+static inline void	*memcpy_32(void *dest, const void *src, size_t n)
 {
 	const char	*first_s = src;
 	const char	*last_s = src + n - 16;

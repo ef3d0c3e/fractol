@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   math.h                                             :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgamba <lgamba@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -9,18 +9,12 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#ifndef MATH_H
-# define MATH_H
+#include <app/fractol.h>
 
-/**
- * @file Math helpers
- */
+int	main(int argc, char **argv)
+{
+	t_fractol	fractol;
 
-# include "vector.h"
-# include "matrix.h"
-# include "pos.h"
-# include <math.h>
-
-// TODO: FASTLOG/EXP
-
-#endif // MATH_H
+	fractol = fractol_init();
+	return (0);
+}

@@ -1,9 +1,7 @@
-#include "../kernel.h"
-#include <stdio.h>
+#include "kernel.h"
 
-static inline void iter(t_pos pos, t_vec2d z, void *d)
+static inline void iter(t_pos pos, t_vec2d z, const t_closure *data)
 {
-	const t_closure *data = d;
 	int				i;
 	double			x;
 	double			y;
@@ -29,13 +27,13 @@ static inline void iter(t_pos pos, t_vec2d z, void *d)
 	image_pixel(data->img, pos, 0x0000FF);
 }
 
-static inline void render(const struct s_viewport *viewport, struct s_image *img)
+static inline void render(const struct s_viewport *viewport, t_img *img)
 {
 	struct s_kernel_closure closure;
 
 	closure.img = img;
 	closure.view = viewport;
-	viewport_foreach(viewport, (void *)iter, &closure);
+	viewport_foreach(viewport, (void*)iter, &closure);
 }
 
 struct s_kernel mandel_ext_de = (struct s_kernel) {

@@ -1,7 +1,6 @@
 #ifndef VIEWPORT_LINEAR_H
 # define VIEWPORT_LINEAR_H
 
-# include "matrix.h"
 # include "viewport.h"
 
 /**

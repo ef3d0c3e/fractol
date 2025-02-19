@@ -1,6 +1,6 @@
 #include "controls.h"
 #include "fractol.h"
-#include "viewport.h"
+#include "viewport/viewport.h"
 #include <stdio.h>
 
 int	ctl_mousedown(enum e_mousecode code, int x, int y, t_fractol *f)

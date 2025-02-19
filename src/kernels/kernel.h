@@ -1,8 +1,8 @@
 #ifndef KERNEL_H
 #define KERNEL_H
 
-#include "draw_buffer.h"
-#include "viewport.h"
+#include <ui/image.h>
+#include <app/viewport/viewport.h>
 #include <stdint.h>
 
 typedef struct s_kernel
@@ -15,12 +15,12 @@ typedef struct s_kernel
 	 * @brief Initializes the kernel
 	 */
 	void		(*init)(const t_viewport* view);
-	void		(*render)(const t_viewport* view, struct s_image *img);
+	void		(*render)(const t_viewport* view, t_img *img);
 }	t_kernel;
 
 typedef struct s_kernel_closure
 {
-	struct s_image		*img;
+	t_img				*img;
 	/**
 	 * @brief Render buffer
 	 */

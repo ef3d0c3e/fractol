@@ -1,7 +1,5 @@
 #include "viewport_linear.h"
-#include "matrix.h"
-#include "vector.h"
-#include "viewport.h"
+#include <util/math.h>
 
 struct s_viewport_linear_data
 view_linear_data(t_mat2d mat)
