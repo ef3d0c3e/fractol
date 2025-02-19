@@ -43,6 +43,7 @@ int	ui_draw(t_fractol *f)
 		f->kernel->render(&f->view, &f->kernel_settings, f->ui.render);
 		f->ui.needs_render = false;
 	}
+	mlx_clear_window(f->mlx, f->window);
 	mlx_put_image_to_window(f->mlx, f->window, f->ui.render,
 		f->ui.img_pos.x, f->ui.img_pos.y);
 	drawqueue_render(&f->ui.ui_queue, f->mlx, f->window);

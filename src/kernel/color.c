@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "color.h"
+#include "util/math.h"
 #include <math.h>
 
 inline t_color
@@ -25,9 +26,9 @@ inline t_color
 	else if (f < 0.0)
 		return (color_lerp(first, second, 1.0 - modf(f, &out)));
 	return (t_color) {.channels = {
+		.b = lerpf(first.channels.b, second.channels.b, f),
+		.g = lerpf(first.channels.g, second.channels.g, f),
+		.r = lerpf(first.channels.r, second.channels.r, f),
 		.a = 0,
-		.r = first.channels.r * f + second.channels.r * (1.0 - f),
-		.g = first.channels.g * f + second.channels.g * (1.0 - f),
-		.b = first.channels.b * f + second.channels.b * (1.0 - f),
 	}};
 }

@@ -10,33 +10,39 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "kernel/gradient.h"
+#include "util/vector.h"
 #include <app/viewport/viewport.h>
 #include <kernel/kernel.h>
 
-static inline void	iter(t_pos pos, t_vec2d z, const t_closure *data)
+static inline void	iter(t_pos pos, t_vec2d c, const t_closure *data)
 {
 	int				i;
-	double			x;
-	double			y;
-	double			tmp;
+	t_vec2d			z;
 
-	x = 0;
-	y = 0;
-	tmp = 0;
+	z = c;
 	i = 0;
-	while (i < 100)
+	double	dist = 0;
+	while (i < 500)
 	{
-		tmp = x;
-		x = x * x - y * y + z.x;
-		y = 2 * tmp * y + z.y;
-		if (x * x + y * y >= 4)
+		z = (t_vec2d){
+			z.x * z.x - z.y * z.y + c.x,
+			2.0 * z.x * z.y + c.y,
+		};
+		dist += exp(-sqrt(z.x * z.x + z.y * z.y));
+		if (z.x * z.x + z.y * z.y >= 4)
 		{
-			image_pixel(data->img, pos, 0xFF0000);
+			float f = sqrt(log(1.0 + dist));
+			image_pixel(data->img, pos,
+				gradient_get(&data->settings->gradient, f)
+			);
 			return ;
 		}
 		++i;
 	}
-	image_pixel(data->img, pos, 0x0000FF);
+	image_pixel(data->img, pos, (t_color){0x000000});
+	/*image_pixel(data->img, pos,
+			gradient_get(&data->settings->gradient, pos.x / 1920.0)
+			);*/
 }
 
 static inline void
@@ -56,17 +62,18 @@ static inline void
 
 const t_kernel	*mandel_ext_de(t_kernel_settings *settings)
 {
-	const static struct s_gr_color	colors[] = {
-		{{0xFF0000}, 1.f},
+	static const struct s_gr_color	colors[] = {
+		{{0xFF0000}, .5f},
+		{{0x00FF00}, 1.f},
+		{{0x0000FF}, 1.f},
+		{{0xFF0000}, .5f},
 	};
 	static const t_kernel	kernel = {
 		.name = "Mandelbrot Exterior Distance Estimate",
 		.render = render,
 		.default_viewport = {{-1.5, 1.5, -1.0, 1.0}},
 		.default_mat = {{1, 0, 0, 1}},
-		.settings = { 
-		}
 	};
-	//gradient_new(colors, sizeof(colors) / sizeof(colors[0]));
+	settings->gradient = gradient_new(colors, sizeof(colors) / sizeof(colors[0]));
 	return (&kernel);
 }

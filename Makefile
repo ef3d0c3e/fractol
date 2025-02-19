@@ -1,6 +1,6 @@
 NAME   := fractol
 CC     := gcc
-CFLAGS := -Wall -Wextra -ggdb  -fsanitize=address -fopenmp
+CFLAGS := -Wall -Wextra -ggdb  -fsanitize=thread -fopenmp
 IFLAGS := -Iminilibx-linux -Isrc
 LFLAGS := -L/usr/lib -lX11 -lXext -lm
 

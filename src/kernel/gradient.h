@@ -27,9 +27,9 @@ struct s_gr_color
 
 typedef struct s_gradient
 {
-	const size_t			size;
+	size_t					size;
 	const struct s_gr_color	*colors;
-	const float				scale;
+	float					scale;
 }	t_gradient;
 
 /**

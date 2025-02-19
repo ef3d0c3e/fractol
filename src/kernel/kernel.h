@@ -48,10 +48,6 @@ typedef struct s_kernel
 	 * @brief Default transformation matrix
 	 */
 	const t_mat2d			default_mat;
-	/**
-	 * @brief Default settings
-	 */
-	const t_kernel_settings	settings;
 }	t_kernel;
 
 /**
