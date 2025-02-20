@@ -9,7 +9,9 @@ const t_kernel	*mandel_smooth_it(t_kernel_settings *settings);
 static const t_kernel	*kernel_list(size_t id, t_kernel_settings *settings)
 {
 	static t_kernel const* (*list[])(t_kernel_settings *settings) = {
+		mandel_smooth_it,
 		mandel_de,
+		mandel_exp,
 	};
 	return (list[id])(settings);
 }

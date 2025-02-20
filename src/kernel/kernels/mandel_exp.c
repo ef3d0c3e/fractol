@@ -14,7 +14,7 @@
 #include <app/viewport/viewport.h>
 #include <kernel/kernel.h>
 
-static inline void	iter(t_pos pos, t_vec2d c, const t_closure *data)
+static inline t_color iter(t_pos pos, t_vec2d c, const t_closure *data)
 {
 	int				i;
 	t_vec2d			z;
@@ -32,14 +32,11 @@ static inline void	iter(t_pos pos, t_vec2d c, const t_closure *data)
 		if (z.x * z.x + z.y * z.y >= 4)
 		{
 			float f = log(1 + dist / 100);
-			image_pixel(data->img, pos,
-				gradient_get(&data->settings->gradient, f)
-			);
-			return ;
+			return gradient_get(&data->settings->gradient, f);
 		}
 		++i;
 	}
-	image_pixel(data->img, pos, (t_color){0x000000});
+	return (t_color){0x000000};
 	/*image_pixel(data->img, pos,
 			gradient_get(&data->settings->gradient, pos.x / 1920.0)
 			);*/
@@ -57,9 +54,8 @@ static inline void
 
 	closure.view = viewport;
 	closure.settings = settings;
-	closure.img = img;
 	closure.max_it = max_it,
-	viewport_foreach(viewport, (void *)iter, &closure);
+	viewport_fragment(viewport, img, (void *)iter, &closure);
 }
 
 const t_kernel	*mandel_exp(t_kernel_settings *settings)

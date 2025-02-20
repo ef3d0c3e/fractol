@@ -1,5 +1,6 @@
 #include "viewport.h"
 #include "kernel/kernel.h"
+#include "ui/image.h"
 #include "util/vector.h"
 #include <util/math.h>
 #include <stdlib.h>
@@ -74,21 +75,26 @@ void
 }
 
 void
-viewport_foreach(
+viewport_fragment(
 		const t_viewport *this,
-		void (*callback)(t_pos pos, t_vec2d z, void *data),
+		t_img *img,
+		t_color (*callback)(t_pos pos, t_vec2d z, void *data),
 		void *closure)
 {
-	t_closure *c = closure;
-	char *shared = c->img->data;
+	char *shared = img->data;
 
-	int y;
-#pragma omp parallel for private(y) schedule(static)
-	for (y = 0; y < this->size.y; ++y)
+#pragma omp parallel shared(shared)
 	{
-		for (int x = 0; x < this->size.x; ++x)
-		{	
-			callback((t_pos){x, y}, this->screen_to_space(this, (t_pos){x, y}), closure);
+		int y;
+#pragma omp for private(y) schedule(dynamic)
+		for (y = 0; y < this->size.y; ++y)
+		{
+			for (int x = 0; x < this->size.x; ++x)
+			{	
+				const t_color color =
+					callback((t_pos){x, y}, this->screen_to_space(this, (t_pos){x, y}), closure);
+				image_pixel(img, (t_pos){x, y}, color);
+			}
 		}
 	}
 }

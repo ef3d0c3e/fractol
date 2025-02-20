@@ -14,34 +14,31 @@
 #include <app/viewport/viewport.h>
 #include <kernel/kernel.h>
 
-static inline t_color	iter(t_pos pos, t_vec2d c, const t_closure *data)
+static inline void	iter(t_pos pos, t_vec2d c, const t_closure *data)
 {
 	int				i;
 	t_vec2d			z;
-	t_vec2d			d;
+	float			f;
 
-	z = (t_vec2d){0, 0};
-	d = (t_vec2d){0, 0};
+	z = c;
 	i = 0;
 	while (i < data->max_it)
 	{
-		d = (t_vec2d){
-			2.0 * (d.x * z.x - d.y * z.y) + 1,
-			2.0 * (d.y * z.x + d.x * z.y)
-		};
 		z = (t_vec2d){
 			z.x * z.x - z.y * z.y + c.x,
 			2.0 * z.x * z.y + c.y,
 		};
-		if (z.x * z.x + z.y * z.y >= 400)
+		if (z.x * z.x + z.y * z.y >= 4)
 		{
-			float xy2 = z.x * z.x + z.y * z.y;
-			float f = 2*log2(sqrt(xy2))*sqrt(xy2)/sqrt(pow(d.x, 2)+pow(d.y, 2));
-			return gradient_get(&data->settings->gradient, sqrt(log10(1 + 5 / f)));
+			f = (i + log2(log2(z.x * z.x + z.y * z.y))) / data->max_it;
+			image_pixel(data->img, pos,
+				gradient_get(&data->settings->gradient, f)
+			);
+			return ;
 		}
 		++i;
 	}
-	return (t_color){0x000000};
+	image_pixel(data->img, pos, (t_color){0x000000});
 }
 
 static inline void
@@ -56,8 +53,9 @@ static inline void
 
 	closure.view = viewport;
 	closure.settings = settings;
+	closure.img = img;
 	closure.max_it = max_it,
-	viewport_fragment(viewport, img, (void *)iter, &closure);
+	viewport_foreach(viewport, (void *)iter, &closure);
 }
 
 const t_kernel	*mandel_smooth_it(t_kernel_settings *settings)

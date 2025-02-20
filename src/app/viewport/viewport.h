@@ -13,6 +13,8 @@
 # define VIEWPORT_H
 
 # include <util/math.h>
+# include <kernel/color.h>
+# include <mlx_int.h>
 
 typedef struct s_viewport
 {
@@ -65,9 +67,10 @@ view_zoom(
  * @param closure Closure data
  */
 void
-viewport_foreach(
+viewport_fragment(
 		const t_viewport *this,
-		void (*callback)(t_pos pos, t_vec2d z, void *data),
+		t_img *img,
+		t_color (*callback)(t_pos pos, t_vec2d z, void *data),
 		void *closure);
 
 #endif // VIEWPORT_H

@@ -25,7 +25,11 @@ void
 vec_add(t_vec2d *a, const t_vec2d *const b);
 void
 vec_mul(t_vec2d *a, const double f);
+double
+vec_norm(const t_vec2d *a);
+double
+vec_norm_sqr(const t_vec2d *a);
 void
-vec_apply(t_vec2d *a, double (*fn)(const double x));
+vec_imul(t_vec2d *a, const t_vec2d *const b);
 
 #endif // VECTOR_H

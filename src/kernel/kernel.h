@@ -65,10 +65,6 @@ typedef struct s_kernel_closure
 	 */
 	const t_kernel_settings	*settings;
 	/**
-	 * @brief Rendering buffer
-	 */
-	t_img					*img;
-	/**
 	 * @brief Max iteration count
 	 */
 	int						max_it;
