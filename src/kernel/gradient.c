@@ -14,66 +14,88 @@
 #include <math.h>
 #include <stdio.h>
 
+static t_color	get_color(const struct s_gr_color *colors, size_t size, const float total_weight, float f)
+{
+	int		index;
+	float	next;
+	float	start;
+
+	if (size == 1)
+		return (colors[0].color);
+	else if (f > 1.0)
+		f = modff(f, &next);
+	else if (f < 0.0)
+		f = modff(-f, &next);
+	if (f == 0 || size == 1)
+		return (colors[0].color);
+	else if (f == 1)
+		return (colors[size - 1].color);
+
+	index = 0;
+	next = (colors[0].weight + colors[1].weight) / 2;
+	start = 0;
+	f *= total_weight;
+	while (next < f && index < (int)size - 2)
+	{
+		++index;
+		start = next;
+		next += (colors[index].weight + colors[index + 1].weight) / 2;
+	}
+
+	float	range = (colors[index + 1].weight + colors[index].weight) / 2;
+	float	center = start + colors[index].weight / 2;
+	if (f <= center)
+		f = (f - start) / (colors[index].weight / 2) / 2;
+	else
+		f = 0.5 + (f - center) / (colors[index + 1].weight / 2) / 2;
+	return color_lerp(colors[index].color, colors[index + 1].color, f);
+}
+
 t_gradient
 gradient_new(const struct s_gr_color *colors, size_t size)
 {
 	size_t	i;
 	float	scale;
+	t_color	*gradient;
 
 	i = 0;
 	scale = colors[0].weight / 2;
 	while (++i < size - 1)
 		scale += colors[i].weight;
 	scale += colors[size - 1].weight / 2;
-	return ((t_gradient){size, colors, scale});
+	i = 0;
+	gradient = malloc(sizeof(t_color) * 4096);
+	while (i < 4096)
+	{
+		gradient[i] = get_color(colors, size, scale, i / 4096.f);
+		++i;
+	}
+	return ((t_gradient){4096, gradient});
+}
+
+void
+gradient_free(t_gradient *g)
+{
+	free(g->colors);
 }
 
 inline t_color
 gradient_get(const t_gradient *g, float f)
 {
-	const struct s_gr_color	*col_a;
-	const struct s_gr_color	*col_b;
-	float					v;
+	int		index;
+	float	next;
+	float	start;
 
-
-	if (g->size == 1)
-		return (g->colors[0].color);
-	else if (f > 1.0)
-		f = modff(f, &v);
+	if (f > 1.0)
+		f = modff(f, &next);
 	else if (f < 0.0)
-		f = modff(-f, &v);
-	if (f == 0 || g->size == 1)
-		return (g->colors[0].color);
+		f = modff(-f, &next);
+	if (f == 0)
+		return (g->colors[0]);
 	else if (f == 1)
-		return (g->colors[g->size - 1].color);
+		return (g->colors[g->size - 1]);
 
-	int index = 0;
-	float next = (g->colors[0].weight + g->colors[1].weight) / 2;
-	float start = 0;
-	f *= g->scale;
-	while (next < f && index < g->size - 2)
-	{
-		++index;
-		start = next;
-		next += (g->colors[index].weight + g->colors[index + 1].weight) / 2;
-	}
-
-	float	range = (g->colors[index + 1].weight + g->colors[index].weight) / 2;
-	float	center = start + g->colors[index].weight / 2;
-	if (f <= center)
-	{
-		f = (f - start)
-			/ (g->colors[index].weight / 2)
-			/ 2;
-	}
-	else
-	{
-		f = 0.5 + (f - center)
-			/ (g->colors[index + 1].weight / 2)
-			/ 2;
-	}
-	
-	return color_lerp(g->colors[index].color, g->colors[index + 1].color, f);
+	return (g->colors[(int)(4096 * f)]);
 
 	/*
 	f = modff(f * g->scale / 2, &v);

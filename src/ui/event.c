@@ -40,8 +40,8 @@ void
 
 	// Render rectangle
 	drawqueue_push(&f->ui.ui_queue, (t_draw_item){
-		.rect = {
-			.item = DRAW_RECT,
+		.item = DRAW_RECT,
+		.draw.rect = {
 			.fill = false,
 			.color = 0x00FF00,
 			.top_left = tl,
@@ -49,9 +49,10 @@ void
 		}
 	});
 
+	// Render reticle
 	drawqueue_push(&f->ui.ui_queue, (t_draw_item){
-		.rect = {
-			.item = DRAW_RECT,
+		.item = DRAW_RECT,
+		.draw.rect = {
 			.fill = false,
 			.color = 0x00FFFF,
 			.top_left = {tl.x + (br.x - tl.x) / 2 - 8, tl.y + (br.y - tl.y) / 2 - 8},
@@ -60,7 +61,6 @@ void
 	});
 
 	ui_draw(f);
-	drawqueue_clear(&f->ui.ui_queue);
 }
 
 void	event_setup(t_fractol *f)

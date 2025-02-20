@@ -39,6 +39,8 @@ t_fractol fractol_init()
 	ui_draw(&s);
 	mlx_loop(s.mlx);
 
+	kernel_deinit(s.kernel, &s.kernel_settings);
+
 	ui_deinit(&s, &s.ui);
 	viewport_free(&s.view);
 	mlx_destroy_window(s.mlx, s.window);

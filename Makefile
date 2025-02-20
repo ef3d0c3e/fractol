@@ -1,7 +1,7 @@
 NAME   := fractol
 CC     := clang
-#CFLAGS := -Wall -Wextra -ggdb  -fsanitize=address -fopenmp
-CFLAGS := -Wall -Wextra -fopenmp -O3 -Ofast -ffast-math
+CFLAGS := -Wall -Wextra -ggdb  -fsanitize=address -fopenmp
+#CFLAGS := -Wall -Wextra -fopenmp -fsanitize=thread -O3 -Ofast -ffast-math
 IFLAGS := -Iminilibx-linux -Isrc
 LFLAGS := -L/usr/lib -lX11 -lXext -lm
 

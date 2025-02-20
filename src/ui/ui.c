@@ -9,6 +9,7 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include "kernel/kernel.h"
 #include <ui/ui.h>
 #include <ui/event.h>
 #include <app/fractol.h>
@@ -40,21 +41,31 @@ int	ui_draw(t_fractol *f)
 	if (f->ui.needs_render)
 	{
 		f->last_view = f->view;
-		f->kernel->render(&f->view, &f->kernel_settings, f->ui.render, 5000);
+		f->kernel->render(&f->view, &f->kernel_settings, f->ui.render, 500);
 		f->ui.needs_render = false;
 	}
 
-	drawqueue_push(&f->ui.ui_queue, (t_draw_item){
-		.text = {
+	// Kernel name
+
+	size_t	id = 0;
+	const char *name;
+	while ((name = kernel_name(id++)))
+	{
+		drawqueue_push(&f->ui.ui_queue, (t_draw_item){
+
 			.item = DRAW_TEXT,
-			.color = 0x00FFFF,
-			.pos = {32, 32},
-			.str = "TEST",
-		}
-	});
+			.draw.text = {
+				.color = 0x00FFFF,
+				.pos = {32, 32},
+				.str = name,
+			}
+		});
+	}
+	//static const char *t = "TEST";
 	mlx_clear_window(f->mlx, f->window);
 	mlx_put_image_to_window(f->mlx, f->window, f->ui.render,
 		f->ui.img_pos.x, f->ui.img_pos.y);
 	drawqueue_render(&f->ui.ui_queue, f->mlx, f->window);
+	drawqueue_clear(&f->ui.ui_queue);
 	return (0);
 }

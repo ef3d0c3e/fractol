@@ -23,6 +23,11 @@ typedef union u_kernel_settings
 	t_gradient	gradient;
 }	t_kernel_settings;
 
+typedef enum e_kernel_flags
+{
+	USE_GRADIENT = (1L<<0),
+}	t_kernel_flags;
+
 /**
  * @brief Rendering kernel struct
  */
@@ -49,6 +54,8 @@ typedef struct s_kernel
 	 * @brief Default transformation matrix
 	 */
 	const t_mat2d			default_mat;
+
+	const t_kernel_flags	flags;
 }	t_kernel;
 
 /**
@@ -86,5 +93,27 @@ const t_kernel
 			t_pos size,
 			t_viewport *viewport,
 			t_kernel_settings *settings);
+
+/**
+ * @brief Cleanly deinitializes the current kernel
+ *
+ * @param kernel Kernel to deinitialize
+ * @param settings Settings for the kernel
+ */
+void
+kernel_deinit(
+		const t_kernel *kernel,
+		t_kernel_settings *settings
+		);
+
+/**
+ * @brief Gets the name of a kernel
+ *
+ * @param id If of the kernel
+ *
+ * @returns The name of the kernel or NULL
+ */
+const char
+	*kernel_name(size_t id);
 
 #endif // KERNEL_H

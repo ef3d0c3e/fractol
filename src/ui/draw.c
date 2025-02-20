@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 /**
- * @file Drawing primitives
+ * @file Drawing primitives using XLib
  */
 
 #include "draw.h"
@@ -96,6 +96,6 @@ inline void	draw(t_xvar *mlx, t_win_list *win, const t_draw_item *item)
 	[DRAW_LINE] = (void*)draw_line,
 	[DRAW_TEXT] = (void*)draw_text,
 	};
-
-	drawer_table[item->rect.item](mlx, win, item);
+	printf("Drawing: %d\n", item->item);
+	drawer_table[item->item](mlx, win, (void *)&item->draw);
 }

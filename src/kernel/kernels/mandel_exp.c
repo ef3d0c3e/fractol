@@ -75,6 +75,7 @@ const t_kernel	*mandel_exp(t_kernel_settings *settings)
 		.default_viewport = {{-1.5, 1.5, -1.0, 1.0}},
 		.default_mat = {{1, 0, 0, 1}},
 	};
-	settings->gradient = gradient_new(colors, sizeof(colors) / sizeof(colors[0]));
+	if (settings)
+		settings->gradient = gradient_new(colors, sizeof(colors) / sizeof(colors[0]));
 	return (&kernel);
 }

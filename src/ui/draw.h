@@ -31,31 +31,32 @@ enum	e_draw_item
 	DRAW_TEXT,
 };
 
-typedef union u_draw_item
+typedef struct s_draw_item
 {
-	struct s_draw_rect
+	enum e_draw_item	item;
+	union u_draw_item
 	{
-		enum e_draw_item	item;
-		uint32_t			color;
-		t_pos				top_left;
-		t_pos				bottom_right;
-		bool				fill;
-	} rect;
-	struct s_draw_line
-	{
-		enum e_draw_item	item;
-		uint32_t			color;
-		t_pos				start;
-		t_pos				end;
-		int					width;
-	} line;
-	struct s_draw_text
-	{
-		enum e_draw_item	item;
-		uint32_t			color;
-		t_pos				pos;
-		const char			*str;
-	} text;
+		struct s_draw_rect
+		{
+			uint32_t			color;
+			t_pos				top_left;
+			t_pos				bottom_right;
+			bool				fill;
+		} rect;
+		struct s_draw_line
+		{
+			uint32_t			color;
+			t_pos				start;
+			t_pos				end;
+			int					width;
+		} line;
+		struct s_draw_text
+		{
+			uint32_t			color;
+			t_pos				pos;
+			const char			*str;
+		} text;
+	} draw;
 }	t_draw_item;
 
 /**

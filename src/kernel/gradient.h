@@ -25,17 +25,26 @@ struct s_gr_color
 	float	weight;
 };
 
+/**
+ * @brief A color gradient
+ */
 typedef struct s_gradient
 {
-	size_t					size;
-	const struct s_gr_color	*colors;
-	float					scale;
+	/**
+	 * @brief Number of colored pixels
+	 */
+	size_t		size;
+	/**
+	 * @brief Color data
+	 */
+	t_color		*colors;
 }	t_gradient;
 
 /**
  * @brief Creates a new gradient
  *
- * To make the gradient repeat continuously, specify the first color as the last color
+ * To make the gradient repeat continuously, specify the first color as the last color.
+ * This function will generate a 4096 wide gradient that can be picked from later.
  *
  * @param colors The colors array
  * @param size The number of colors

@@ -1,6 +1,7 @@
 #include "kernel.h"
 #include "app/viewport/viewport.h"
 #include "app/viewport/viewport_linear.h"
+#include "kernel/gradient.h"
 
 const t_kernel	*mandel_de(t_kernel_settings *settings);
 const t_kernel	*mandel_exp(t_kernel_settings *settings);
@@ -9,10 +10,13 @@ const t_kernel	*mandel_smooth_it(t_kernel_settings *settings);
 static const t_kernel	*kernel_list(size_t id, t_kernel_settings *settings)
 {
 	static t_kernel const* (*list[])(t_kernel_settings *settings) = {
-		mandel_smooth_it,
 		mandel_de,
+		mandel_smooth_it,
 		mandel_exp,
 	};
+
+	if (id >= sizeof(list)/sizeof(list[0]))
+		return (NULL);
 	return (list[id])(settings);
 }
 
@@ -42,4 +46,24 @@ const t_kernel
 	viewport->data = view_data;
 
 	return (kernel);
+}
+
+void
+	kernel_deinit(
+		const t_kernel *kernel,
+		t_kernel_settings *settings
+		)
+{
+	if (kernel->flags & USE_GRADIENT)
+		gradient_free(&settings->gradient);
+}
+
+const char
+	*kernel_name(size_t id)
+{
+	const t_kernel	*kernel = kernel_list(id, NULL);
+
+	if (!kernel)
+		return (NULL);
+	return (kernel->name);
 }
