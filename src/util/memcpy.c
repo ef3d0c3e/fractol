@@ -71,27 +71,26 @@ inline void
 	*ft_memcpy(void *dest, const void *src, size_t n)
 {
 	const char	*s = src;
-	const char	*last_word_s = (const char *)src + n - 32;
+	const char	*last_word_s = s + n - 32;
 	char		*d;
 	char		*last_word_d;
 
 	d = dest;
-	last_word_d = (char *)dest + n - 32;
+	last_word_d = d + n - 32;
 	if (n <= 4)
 		return (memcpy_4(dest, src, n));
 	else if (n <= 16)
 		return (memcpy_16(dest, src, n));
 	else if (n <= 32)
 		return (memcpy_32(dest, src, n));
-	*((t_char32 *)dest) = *((t_char32 *)src);
+	*((t_char32 *)d) = *((t_char32 *)s);
 	d += 32;
 	s += 32;
-	while (d < last_word_d)
-	{
-		*((t_char32 *)dest) = *((t_char32 *)src);
+	do {
+		*((t_char32 *)d) = *((t_char32 *)s);
 		d += 32;
 		s += 32;
-	}
+	} while (d < last_word_d);
 	*((t_char32 *)last_word_d) = *((t_char32 *)last_word_s);
 	return (dest);
 }

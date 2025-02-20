@@ -52,11 +52,10 @@ int	ui_draw(t_fractol *f)
 	while ((name = kernel_name(id++)))
 	{
 		drawqueue_push(&f->ui.ui_queue, (t_draw_item){
-
 			.item = DRAW_TEXT,
 			.draw.text = {
 				.color = 0x00FFFF,
-				.pos = {32, 32},
+				.pos = {0, 12 * id},
 				.str = name,
 			}
 		});

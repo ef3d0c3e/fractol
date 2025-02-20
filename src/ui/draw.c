@@ -96,6 +96,5 @@ inline void	draw(t_xvar *mlx, t_win_list *win, const t_draw_item *item)
 	[DRAW_LINE] = (void*)draw_line,
 	[DRAW_TEXT] = (void*)draw_text,
 	};
-	printf("Drawing: %d\n", item->item);
 	drawer_table[item->item](mlx, win, (void *)&item->draw);
 }

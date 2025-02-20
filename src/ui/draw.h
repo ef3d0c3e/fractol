@@ -31,6 +31,9 @@ enum	e_draw_item
 	DRAW_TEXT,
 };
 
+/**
+ * @brief Drawable item data
+ */
 typedef struct s_draw_item
 {
 	enum e_draw_item	item;

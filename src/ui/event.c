@@ -42,10 +42,10 @@ void
 	drawqueue_push(&f->ui.ui_queue, (t_draw_item){
 		.item = DRAW_RECT,
 		.draw.rect = {
-			.fill = false,
-			.color = 0x00FF00,
 			.top_left = tl,
 			.bottom_right = br,
+			.color = 0x00FF00,
+			.fill = false,
 		}
 	});
 
@@ -53,10 +53,10 @@ void
 	drawqueue_push(&f->ui.ui_queue, (t_draw_item){
 		.item = DRAW_RECT,
 		.draw.rect = {
-			.fill = false,
-			.color = 0x00FFFF,
 			.top_left = {tl.x + (br.x - tl.x) / 2 - 8, tl.y + (br.y - tl.y) / 2 - 8},
 			.bottom_right = {tl.x + (br.x - tl.x) / 2 + 8, tl.y + (br.y - tl.y) / 2 + 8},
+			.color = 0x00FFFF,
+			.fill = false,
 		}
 	});
 

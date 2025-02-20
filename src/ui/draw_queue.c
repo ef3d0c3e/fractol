@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 #include "draw.h"
 #include "mlx_int.h"
+#include <stdio.h>
 #include <util/util.h>
 
 t_drawqueue

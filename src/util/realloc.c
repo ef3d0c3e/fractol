@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "util.h"
+#include <stdio.h>
+#include <string.h>
 
 void
 	*ft_realloc(void *ptr, const size_t old, const size_t size)
@@ -20,6 +22,13 @@ void
 		return (ptr);
 	new = malloc(size);
 	ft_memcpy(new, ptr, old);
+	for (size_t i = 0; i < old; ++i)
+	{
+		if (((char*)ptr)[i] != ((char*)new)[i])
+		{
+			printf("Mismatch at %zu/%zu\n", i, old);
+		}
+	}
 	free(ptr);
 	return (new);
 }
