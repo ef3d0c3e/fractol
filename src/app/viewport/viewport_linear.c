@@ -1,4 +1,5 @@
 #include "viewport_linear.h"
+#include "util/matrix.h"
 #include <util/math.h>
 
 struct s_viewport_linear_data
@@ -18,15 +19,14 @@ t_vec2d
 view_linear_screen_to_space(const t_viewport *this, const t_pos pos)
 {
 	const t_mat2d	*mat = &((struct s_viewport_linear_data *)this->data)->mat;
-
-	return ((t_vec2d){
+	const t_vec2d vec = {
 		(this->view.data[0] + ((double)pos.x / this->size.x)
-			* (this->view.data[1] - this->view.data[0]))
-			* (mat->data[0] + mat->data[2]),
+			* (this->view.data[1] - this->view.data[0])),
 		(this->view.data[2] + ((double)pos.y / this->size.y)
 		 	* (this->view.data[3] - this->view.data[2]))
-			* (mat->data[1] + mat->data[3]),
-	});
+	};
+
+	return (mat_mul_vec(mat, &vec));
 }
 
 t_pos

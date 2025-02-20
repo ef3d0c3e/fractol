@@ -39,7 +39,8 @@ typedef struct s_kernel
 	void		(*render)(
 			const t_viewport* view,
 			const t_kernel_settings *settings,
-			t_img *img);
+			t_img *img,
+			const int max_it);
 	/**
 	 * @brief Default viewport
 	 */
@@ -67,6 +68,10 @@ typedef struct s_kernel_closure
 	 * @brief Rendering buffer
 	 */
 	t_img					*img;
+	/**
+	 * @brief Max iteration count
+	 */
+	int						max_it;
 }	t_closure;
 
 /**

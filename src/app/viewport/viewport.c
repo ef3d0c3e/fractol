@@ -1,4 +1,5 @@
 #include "viewport.h"
+#include "kernel/kernel.h"
 #include "util/vector.h"
 #include <util/math.h>
 #include <stdlib.h>
@@ -61,7 +62,7 @@ void
 		(this->view.data[1] + this->view.data[0]) / 2.0,
 		(this->view.data[3] + this->view.data[2]) / 2.0
 	});
-	view_move(this, this->space_to_screen(this, center), old_c, .1);
+	view_move(this, this->space_to_screen(this, center), old_c, 1);
 	c = (t_vec2d){
 		(this->view.data[1] + this->view.data[0]) / 2.0,
 		(this->view.data[3] + this->view.data[2]) / 2.0
@@ -78,20 +79,16 @@ viewport_foreach(
 		void (*callback)(t_pos pos, t_vec2d z, void *data),
 		void *closure)
 {
-	int		y;
+	t_closure *c = closure;
+	char *shared = c->img->data;
 
-
-#pragma omp parallel
+	int y;
+#pragma omp parallel for private(y) schedule(static)
+	for (y = 0; y < this->size.y; ++y)
 	{
-#pragma omp for schedule(dynamic) private(y)
-		for (y = 0; y < this->size.y; ++y)
-		{
-			for (int x = 0; x < this->size.x; ++x)
-			{	
-				callback((t_pos){x, y}, this->screen_to_space(this, (t_pos){x, y}), closure);
-			}
+		for (int x = 0; x < this->size.x; ++x)
+		{	
+			callback((t_pos){x, y}, this->screen_to_space(this, (t_pos){x, y}), closure);
 		}
-
-#pragma omp barrier
 	}
 }

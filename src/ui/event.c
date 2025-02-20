@@ -59,7 +59,6 @@ void
 		}
 	});
 
-
 	ui_draw(f);
 	drawqueue_clear(&f->ui.ui_queue);
 }

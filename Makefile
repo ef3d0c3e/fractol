@@ -1,6 +1,7 @@
 NAME   := fractol
-CC     := gcc
-CFLAGS := -Wall -Wextra -ggdb  -fsanitize=thread -fopenmp
+CC     := clang
+#CFLAGS := -Wall -Wextra -ggdb  -fsanitize=address -fopenmp
+CFLAGS := -Wall -Wextra -fopenmp -O3 -Ofast -ffast-math
 IFLAGS := -Iminilibx-linux -Isrc
 LFLAGS := -L/usr/lib -lX11 -lXext -lm
 
@@ -15,7 +16,9 @@ src/util/realloc.c \
 src/util/math.c \
 src/util/memcpy.c \
 src/util/matrix.c \
-src/kernel/kernels/mandel_ext_de.c \
+src/kernel/kernels/mandel_exp.c \
+src/kernel/kernels/mandel_smooth_it.c \
+src/kernel/kernels/mandel_de.c \
 src/kernel/gradient.c \
 src/kernel/color.c \
 src/kernel/kernel.c \

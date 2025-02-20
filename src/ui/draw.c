@@ -69,12 +69,32 @@ static inline void
 		);
 }
 
+static inline void
+	draw_text(
+		t_xvar *mlx,
+		t_win_list *win,
+		const struct s_draw_text *text
+		)
+{
+	XGCValues	xgcv;
+
+	xgcv.foreground = text->color;
+	XChangeGC(mlx->display, win->gc, GCForeground, &xgcv);
+	XDrawString(
+		mlx->display, win->window, win->gc,
+		text->pos.x,
+		text->pos.y,
+		text->str, strlen(text->str)
+		);
+}
+
 inline void	draw(t_xvar *mlx, t_win_list *win, const t_draw_item *item)
 {
 	static	void (*const drawer_table[])
 		(t_xvar *mlx, t_win_list *win, const t_draw_item *item) = {
 	[DRAW_RECT] = (void*)draw_rect,
 	[DRAW_LINE] = (void*)draw_line,
+	[DRAW_TEXT] = (void*)draw_text,
 	};
 
 	drawer_table[item->rect.item](mlx, win, item);

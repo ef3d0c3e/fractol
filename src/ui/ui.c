@@ -40,9 +40,18 @@ int	ui_draw(t_fractol *f)
 	if (f->ui.needs_render)
 	{
 		f->last_view = f->view;
-		f->kernel->render(&f->view, &f->kernel_settings, f->ui.render);
+		f->kernel->render(&f->view, &f->kernel_settings, f->ui.render, 5000);
 		f->ui.needs_render = false;
 	}
+
+	drawqueue_push(&f->ui.ui_queue, (t_draw_item){
+		.text = {
+			.item = DRAW_TEXT,
+			.color = 0x00FFFF,
+			.pos = {32, 32},
+			.str = "TEST",
+		}
+	});
 	mlx_clear_window(f->mlx, f->window);
 	mlx_put_image_to_window(f->mlx, f->window, f->ui.render,
 		f->ui.img_pos.x, f->ui.img_pos.y);

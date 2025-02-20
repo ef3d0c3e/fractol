@@ -31,6 +31,11 @@ int	ev_keyup(enum e_keycode code, t_fractol *f)
 		f->ui.img_pos = pos_new(0, 0);
 		ui_draw(f);
 	}
+	else if (code == KEY_S)
+	{
+		f->ui.selector_shown = !f->ui.selector_shown;
+		ui_draw(f);
+	}
 	return (0);
 }
 

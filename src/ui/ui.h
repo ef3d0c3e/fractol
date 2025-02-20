@@ -40,6 +40,8 @@ typedef struct s_ui
 	 * @brief Set to true when in need fo re-rendering next frame
 	 */
 	bool		needs_render;
+
+	bool		selector_shown;
 	/**
 	 * @brief Buffer from the rendered fractal
 	 */

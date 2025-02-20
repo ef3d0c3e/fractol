@@ -2,12 +2,14 @@
 #include "app/viewport/viewport.h"
 #include "app/viewport/viewport_linear.h"
 
-const t_kernel	*mandel_ext_de(t_kernel_settings *settings);
+const t_kernel	*mandel_de(t_kernel_settings *settings);
+const t_kernel	*mandel_exp(t_kernel_settings *settings);
+const t_kernel	*mandel_smooth_it(t_kernel_settings *settings);
 
 static const t_kernel	*kernel_list(size_t id, t_kernel_settings *settings)
 {
 	static t_kernel const* (*list[])(t_kernel_settings *settings) = {
-		mandel_ext_de,
+		mandel_de,
 	};
 	return (list[id])(settings);
 }

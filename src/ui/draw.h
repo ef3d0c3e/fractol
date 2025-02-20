@@ -28,6 +28,7 @@ enum	e_draw_item
 {
 	DRAW_RECT,
 	DRAW_LINE,
+	DRAW_TEXT,
 };
 
 typedef union u_draw_item
@@ -48,6 +49,13 @@ typedef union u_draw_item
 		t_pos				end;
 		int					width;
 	} line;
+	struct s_draw_text
+	{
+		enum e_draw_item	item;
+		uint32_t			color;
+		t_pos				pos;
+		const char			*str;
+	} text;
 }	t_draw_item;
 
 /**

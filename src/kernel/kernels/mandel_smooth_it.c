@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mandel_ext_de.c                                    :+:      :+:    :+:   */
+/*   mandel_smooth_it.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgamba <lgamba@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -18,20 +18,19 @@ static inline void	iter(t_pos pos, t_vec2d c, const t_closure *data)
 {
 	int				i;
 	t_vec2d			z;
+	float			f;
 
 	z = c;
 	i = 0;
-	double	dist = 0;
-	while (i < 500)
+	while (i < data->max_it)
 	{
 		z = (t_vec2d){
 			z.x * z.x - z.y * z.y + c.x,
 			2.0 * z.x * z.y + c.y,
 		};
-		dist += exp(-sqrt(z.x * z.x + z.y * z.y));
 		if (z.x * z.x + z.y * z.y >= 4)
 		{
-			float f = sqrt(log(1.0 + dist));
+			f = (i + log2(log2(z.x * z.x + z.y * z.y))) / data->max_it;
 			image_pixel(data->img, pos,
 				gradient_get(&data->settings->gradient, f)
 			);
@@ -40,16 +39,14 @@ static inline void	iter(t_pos pos, t_vec2d c, const t_closure *data)
 		++i;
 	}
 	image_pixel(data->img, pos, (t_color){0x000000});
-	/*image_pixel(data->img, pos,
-			gradient_get(&data->settings->gradient, pos.x / 1920.0)
-			);*/
 }
 
 static inline void
 	render(
 			const struct s_viewport *viewport,
 			const t_kernel_settings *settings,
-			t_img *img
+			t_img *img,
+			const int max_it
 			)
 {
 	struct s_kernel_closure	closure;
@@ -57,19 +54,23 @@ static inline void
 	closure.view = viewport;
 	closure.settings = settings;
 	closure.img = img;
+	closure.max_it = max_it,
 	viewport_foreach(viewport, (void *)iter, &closure);
 }
 
-const t_kernel	*mandel_ext_de(t_kernel_settings *settings)
+const t_kernel	*mandel_smooth_it(t_kernel_settings *settings)
 {
 	static const struct s_gr_color	colors[] = {
-		{{0xFF0000}, .5f},
-		{{0x00FF00}, 1.f},
-		{{0x0000FF}, 1.f},
-		{{0xFF0000}, .5f},
+		{{0x82c6e3}, 1.f},
+		{{0xe382c6}, 1.f},
+		{{0x8295e3}, 1.f},
+		{{0xe38295}, 1.f},
+		{{0xc9e382}, 1.f},
+		{{0x95e382}, 1.f},
+		{{0x82c6e3}, 1.f},
 	};
 	static const t_kernel	kernel = {
-		.name = "Mandelbrot Exterior Distance Estimate",
+		.name = "Mandelbrot Smooth Iteration Count",
 		.render = render,
 		.default_viewport = {{-1.5, 1.5, -1.0, 1.0}},
 		.default_mat = {{1, 0, 0, 1}},

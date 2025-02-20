@@ -41,16 +41,17 @@ gradient_get(const t_gradient *g, float f)
 	else if (f > 1.0)
 		f = modff(f, &v);
 	else if (f < 0.0)
-		f = modff(f, &v);
-	else if (f == 0 || g->size == 1)
+		f = modff(-f, &v);
+	if (f == 0 || g->size == 1)
 		return (g->colors[0].color);
-
+	else if (f == 1)
+		return (g->colors[g->size - 1].color);
 
 	int index = 0;
 	float next = (g->colors[0].weight + g->colors[1].weight) / 2;
 	float start = 0;
 	f *= g->scale;
-	while (next < f)
+	while (next < f && index < g->size - 2)
 	{
 		++index;
 		start = next;
