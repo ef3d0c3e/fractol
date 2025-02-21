@@ -22,13 +22,6 @@ void
 		return (ptr);
 	new = malloc(size);
 	ft_memcpy(new, ptr, old);
-	for (size_t i = 0; i < old; ++i)
-	{
-		if (((char*)ptr)[i] != ((char*)new)[i])
-		{
-			printf("Mismatch at %zu/%zu\n", i, old);
-		}
-	}
 	free(ptr);
 	return (new);
 }

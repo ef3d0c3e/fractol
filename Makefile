@@ -14,6 +14,7 @@ src/app/viewport/viewport_fragment.c \
 src/app/viewport/viewport_linear.c \
 src/app/move.c \
 src/app/selector.c \
+src/app/bar.c \
 src/util/vector.c \
 src/util/pos.c \
 src/util/realloc.c \

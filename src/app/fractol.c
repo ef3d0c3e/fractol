@@ -33,6 +33,8 @@ static inline void	init_kernel(t_fractol *f, t_pos size)
 	f->kernel_id = 0;
 	f->kernel = kernel_init(0, &f->view, &f->kernel_settings);
 	f->last_view = f->view;
+	f->post_pass = false;
+	f->max_iter = 500;
 	f->kernel_count = 0;
 	while (kernel_name(f->kernel_count))
 		++f->kernel_count;
@@ -42,7 +44,7 @@ static void	fractol_loop(t_fractol *f)
 {
 	fractol_selector(f);
 	fractol_move(f);
-	/*fractol_bar(f)*/;
+	fractol_bar(f);
 	fractol_render(f);
 }
 

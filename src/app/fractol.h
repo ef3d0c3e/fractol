@@ -40,8 +40,10 @@ typedef struct	s_fractol
 	const t_kernel		*kernel;
 	t_kernel_settings	kernel_settings;
 	int					kernel_id;
+	int					max_iter;
+	bool				post_pass;
 	// Widgets
-	size_t		kernel_count;
+	int			kernel_count;
 	int			selector_id;
 	bool		selector_shown;
 	/**
@@ -59,15 +61,22 @@ typedef struct	s_fractol
 	void		*filter_buffer;
 }	t_fractol;
 
-void	fractol_run();
+void
+fractol_run();
 
 // Render the selector widget
-void		fractol_selector(t_fractol *f);
+void
+fractol_selector(t_fractol *f);
 
 // Rendering ui
-void		fractol_render(t_fractol *f);
+void
+fractol_render(t_fractol *f);
+
+void
+fractol_bar(t_fractol *f);
 
 // Move ui
-void		fractol_move(t_fractol *f);
+void
+fractol_move(t_fractol *f);
 
 #endif // FRACTOL_H
