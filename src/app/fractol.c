@@ -68,7 +68,7 @@ void fractol_run()
 	init_kernel(&f, size);
 	init_ui(&f, size);
 
-	//ui_update(&f);
+	ui_update(&f);
 	mlx_loop(f.mlx);
 
 	ui_deinit(&f, &f.ui);

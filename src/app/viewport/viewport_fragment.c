@@ -88,6 +88,8 @@ void
 #pragma omp for schedule(dynamic)
 		for (i = 0; i < size; ++i)
 		{
+			if (data->post_pass && ((t_color *)shared)[i].color != 0)
+				continue;
 			const t_pos pos = (t_pos){i % data->viewport->size.x, i / data->viewport->size.x};
 			const t_color color =
 				shader(pos, data->viewport->screen_to_space(data->viewport, pos, (t_vec2d){0, 0}), closure);

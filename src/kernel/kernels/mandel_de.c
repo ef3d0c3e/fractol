@@ -31,7 +31,7 @@ static inline t_color
 		if (m >= 1e16)
 		{
 			m = 2 * log2(sqrt(m)) * sqrt(m) / sqrt(pow(d.x, 2) + pow(d.y, 2));
-			return (gradient_get(&data->settings->gradient, 0.4 * log(m)));
+			return (gradient_get(&data->settings->gradient, log10(m) ));
 		}
 		++i;
 	}

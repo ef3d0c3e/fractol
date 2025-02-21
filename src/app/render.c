@@ -13,18 +13,26 @@ static void	status(t_fractol *f, char *s)
 	mlx_string_put(f->mlx, f->window, x, y, 0xFFFFFF, s);
 }
 
+static void	render_keys(t_fractol *f)
+{
+	if (ev_key_pressed(&f->ui, KEY_R))
+		f->needs_render = true;
+	else if (ev_key_pressed(&f->ui, KEY_T))
+		(f->needs_render = true, f->post_pass = true);
+	else if (ev_key_pressed(&f->ui, KEY_U))
+		f->needs_resample = true;
+	else if (ev_key_held(&f->ui, KEY_Q))
+		++f->max_iter;
+	else if (ev_key_held(&f->ui, KEY_A))
+		--f->max_iter;
+}
+
 
 void	fractol_render(t_fractol *f)
 {
 	struct s_fragment_data	data;
 
-	if (ev_key_pressed(&f->ui, KEY_R))
-		f->needs_render = true;
-	else if (ev_key_pressed(&f->ui, KEY_T))
-		(f->needs_resample = true, f->post_pass = true);
-	else if (ev_key_pressed(&f->ui, KEY_U))
-		f->needs_resample = true;
-
+	render_keys(f);
 	if (f->needs_render)
 	{
 		status(f, "Rendering...");
