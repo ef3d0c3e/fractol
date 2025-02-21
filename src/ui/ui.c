@@ -54,6 +54,7 @@ int	ui_draw(t_fractol *f)
 
 	if (f->ui.needs_render)
 	{
+		f->ui.img_pos = pos_new(0, 0);
 		f->last_view = f->view;
 		data = (struct s_fragment_data){
 			.viewport = &f->view,
@@ -100,6 +101,8 @@ int	ui_draw(t_fractol *f)
 			}
 		});
 	}
+
+
 	//static const char *t = "TEST";
 	mlx_clear_window(f->mlx, f->window);
 	mlx_put_image_to_window(f->mlx, f->window, f->ui.render,

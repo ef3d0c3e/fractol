@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mandel_smooth_it.c                                 :+:      :+:    :+:   */
+/*   mandel_ext_de.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgamba <lgamba@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -9,28 +9,33 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "app/viewport/viewport.h"
+#include "kernel/gradient.h"
+#include "util/vector.h"
+#include <app/viewport/viewport.h>
+#include <complex.h>
 #include <kernel/kernel.h>
 
-static inline t_color	iter(t_pos pos, t_vec2d c, const t_closure *data)
+static inline t_color iter(t_pos pos, t_vec2d c, const t_closure *data)
 {
 	int				i;
-	double			m;
-	t_vec2d			z;
+	const double _Complex cc = *(double _Complex *)&c;
+	double _Complex z;
+	double _Complex dz;
 
-	z = (t_vec2d){0, 0};
+	z = (double _Complex){0, 0};
+	dz = (double _Complex){0, 0};
 	i = 0;
 	while (i < data->max_it)
 	{
-		z = (t_vec2d){
-			z.x * z.x - z.y * z.y + c.x,
-			2.0 * z.x * z.y + c.y,
-		};
-		m = z.x * z.x + z.y * z.y;
+		dz = 2 * z * dz + 1;
+		z = z * z + cc;
+		double m = cabs(z);
 		if (m >= 1e8)
 		{
-			m = log2( - log((double)i / data->max_it) ) - log2(0.5 * log(m));
-			return (gradient_get(&data->settings->gradient, (i + 1 + m) / 20));
+			double k = i + 1.0 - log(log(m))/log(2);
+			double potential = pow(2,-k);
+			z = potential * conj(z) * dz / (m*m*log(m));
+			return (gradient_get(&data->settings->gradient, carg(z) / 6.28));
 		}
 		++i;
 	}
@@ -48,30 +53,24 @@ static inline void
 
 	closure.view = data->viewport;
 	closure.settings = settings;
-	closure.max_it = max_it;
+	closure.max_it = max_it,
 	viewport_fragment(data, (void *)iter, &closure);
 }
 
-const t_kernel	*mandel_smooth_it(t_kernel_settings *settings)
+const t_kernel	*mandel_landing_arg(t_kernel_settings *settings)
 {
 	static const struct s_gr_color	colors[] = {
-	{{0x061F42}, 1.0f},
-	{{0x230F27}, 1.0f},
-	{{0x098FE5}, 1.0f},
-	{{0xD6F1D2}, 1.0f},
-	{{0xFFFCC0}, 1.0f},
-	{{0x061F42}, 1.0f},
+		{{0xFFFFFF}, 1.0},
+		{{0x000000}, 2.0},
 	};
-	static const t_kernel			kernel = {
-		.name = "Mandelbrot Smooth Iteration Count",
+	static const t_kernel	kernel = {
+		.name = "Mandelbrot Landing Arg",
 		.render = render,
 		.default_viewport = {{-1.5, 1.5, -1.0, 1.0}},
 		.default_mat = {{1, 0, 0, 1}},
 		.flags = USE_GRADIENT,
 	};
-
 	if (settings)
-		settings->gradient = gradient_new(colors,
-				sizeof(colors) / sizeof(colors[0]));
+		settings->gradient = gradient_new(colors, sizeof(colors) / sizeof(colors[0]));
 	return (&kernel);
 }

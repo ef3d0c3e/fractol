@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "event.h"
+#include "kernel/kernel.h"
 #include <app/fractol.h>
 
 void
@@ -25,12 +26,18 @@ int	ev_keyup(enum e_keycode code, t_fractol *f)
 	if (code == KEY_R)
 	{
 		f->ui.needs_render = true;
-		f->ui.img_pos = pos_new(0, 0);
 	}
 	else if (code == KEY_S)
 		f->ui.selector_shown = !f->ui.selector_shown;
 	else if (code == KEY_U)
 		f->ui.needs_resample = true;
+	else if (code == KEY_T && f->ui.selector_shown && f->ui.selector_id != f->kernel_id)
+	{
+		kernel_deinit(f->kernel, &f->kernel_settings);
+		f->kernel_id = f->ui.selector_id;
+		f->kernel = kernel_init(f->ui.selector_id, f->ui.size, &f->view, &f->kernel_settings);
+		f->ui.needs_render = true;
+	}
 	else
 		return (0);
 	return (ui_draw(f), 0);

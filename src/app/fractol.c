@@ -32,6 +32,7 @@ t_fractol fractol_init()
 
 	s.ui = ui_init(&s, size);
 	s.kernel = kernel_init(0, size, &s.view, &s.kernel_settings);
+	s.kernel_id = 0;
 	//pmat(&((struct s_viewport_linear_data*)s.view.data)->mat);
 	printf("\n");
 	s.last_view = s.view;

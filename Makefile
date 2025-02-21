@@ -21,6 +21,7 @@ src/util/matrix.c \
 src/kernel/kernels/mandel_exp.c \
 src/kernel/kernels/mandel_smooth_it.c \
 src/kernel/kernels/mandel_de.c \
+src/kernel/kernels/mandel_landing_arg.c \
 src/kernel/gradient.c \
 src/kernel/color.c \
 src/kernel/kernel.c \

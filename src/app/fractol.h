@@ -39,6 +39,7 @@ typedef struct	s_fractol
 	 */
 	const t_kernel		*kernel;
 	t_kernel_settings	kernel_settings;
+	int					kernel_id;
 }	t_fractol;
 
 t_fractol	fractol_init();
