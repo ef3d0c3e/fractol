@@ -40,8 +40,34 @@ typedef struct	s_fractol
 	const t_kernel		*kernel;
 	t_kernel_settings	kernel_settings;
 	int					kernel_id;
+	// Widgets
+	size_t		kernel_count;
+	int			selector_id;
+	bool		selector_shown;
+	/**
+	 * @brief Set to true when in need fo re-rendering next frame
+	 */
+	bool		needs_render;
+	/**
+	 * @brief Set to true when in need or supersampling
+	 */
+	bool		needs_resample;
+	/**
+	 * @brief Post processing buffer suitably aligned to hold least
+	 * WIDTH*HEIGHT*16 bytes
+	 */
+	void		*filter_buffer;
 }	t_fractol;
 
-t_fractol	fractol_init();
+void	fractol_run();
+
+// Render the selector widget
+void		fractol_selector(t_fractol *f);
+
+// Rendering ui
+void		fractol_render(t_fractol *f);
+
+// Move ui
+void		fractol_move(t_fractol *f);
 
 #endif // FRACTOL_H

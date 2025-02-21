@@ -57,7 +57,7 @@ static inline void
 	viewport_fragment(data, (void *)iter, &closure);
 }
 
-const t_kernel	*mandel_exp(t_kernel_settings *settings)
+const t_kernel	*mandel_electric(t_kernel_settings *settings)
 {
 	static const struct s_gr_color	colors[] = {
     {{66 << 16 | 30 << 8 | 15}, 1.0},
@@ -79,7 +79,7 @@ const t_kernel	*mandel_exp(t_kernel_settings *settings)
     {{66 << 16 | 30 << 8 | 15}, 1.0},
 	};
 	static const t_kernel	kernel = {
-		.name = "Mandelbrot Exponential",
+		.name = "Mandelbrot Electric",
 		.render = render,
 		.default_viewport = {{-1.5, 1.5, -1.0, 1.0}},
 		.default_mat = {{1, 0, 0, 1}},

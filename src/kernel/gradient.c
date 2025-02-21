@@ -14,11 +14,16 @@
 #include <math.h>
 #include <stdio.h>
 
-static t_color	get_color(const struct s_gr_color *colors, size_t size, const float total_weight, float f)
+static t_color	get_color(
+	const struct s_gr_color *colors,
+	size_t size,
+	const float total_weight,
+	float f)
 {
 	int		index;
 	float	next;
 	float	start;
+	float	center;
 
 	if (size == 1)
 		return (colors[0].color);
@@ -30,7 +35,6 @@ static t_color	get_color(const struct s_gr_color *colors, size_t size, const flo
 		return (colors[0].color);
 	else if (f == 1)
 		return (colors[size - 1].color);
-
 	index = 0;
 	next = (colors[0].weight + colors[1].weight) / 2;
 	start = 0;
@@ -41,14 +45,12 @@ static t_color	get_color(const struct s_gr_color *colors, size_t size, const flo
 		start = next;
 		next += (colors[index].weight + colors[index + 1].weight) / 2;
 	}
-
-	float	range = (colors[index + 1].weight + colors[index].weight) / 2;
-	float	center = start + colors[index].weight / 2;
+	center = start + colors[index].weight / 2;
 	if (f <= center)
 		f = (f - start) / (colors[index].weight / 2) / 2;
 	else
 		f = 0.5 + (f - center) / (colors[index + 1].weight / 2) / 2;
-	return color_lerp(colors[index].color, colors[index + 1].color, f);
+	return (color_lerp(colors[index].color, colors[index + 1].color, f));
 }
 
 t_gradient
@@ -82,29 +84,16 @@ gradient_free(t_gradient *g)
 inline t_color
 gradient_get(const t_gradient *g, float f)
 {
-	int		index;
-	float	next;
-	float	start;
+	float	v;
 
 	if (f > 1.0)
-		f = modff(f, &next);
+		f = modff(f, &v);
 	else if (f < 0.0)
-		f = modff(-f, &next);
+		f = modff(-f, &v);
 	if (f == 0)
 		return (g->colors[0]);
 	else if (f == 1)
 		return (g->colors[g->size - 1]);
 
 	return (g->colors[(int)(4096 * f)]);
-
-	/*
-	f = modff(f * g->scale / 2, &v);
-	col_a = &g->colors[(int)v % g->size];
-	col_b = &g->colors[((int)v + 1) % g->size];
-	v = col_a->weight + col_b->weight;
-	v = ((f * v - col_a->weight)
-		+ (f * v - col_b->weight))
-		/ v;
-	return (color_lerp(col_a->color, col_b->color, v));
-	*/
 }

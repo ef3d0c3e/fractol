@@ -79,6 +79,11 @@ typedef struct s_kernel_closure
 /**
  * @brief Initializes a kernel by id
  *
+ * This function will initialize the kernel with it's default given settings.
+ * It will overwrite the given `viewport` and `settings` for the newly loaded
+ * kernel. It may allocate a temporary buffer to store data for the viewport.
+ * Which is the reason why `kernel_deinit` has to be called.
+ *
  * @param id Id of the kernel
  * @param size Kernel raster sizes
  * @param viewport Output viewport
@@ -95,6 +100,8 @@ const t_kernel
 
 /**
  * @brief Cleanly deinitializes the current kernel
+ *
+ * Must initialize another kernel before calling to `ui_update`
  *
  * @param kernel Kernel to deinitialize
  * @param settings Settings for the kernel

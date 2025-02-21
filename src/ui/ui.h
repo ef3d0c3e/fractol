@@ -16,9 +16,8 @@
  * @file Fractol's ui manager
  */
 
+# include <ui/event.h>
 # include <ui/draw.h>
-# include <util/pos.h>
-# include <stdbool.h>
 
 typedef struct s_fractol	t_fractol;
 
@@ -32,31 +31,18 @@ typedef struct s_ui
 	 */
 	t_pos		size;
 	// Events
-	bool		mouse_down;
+	enum e_mousecode	mouse_down;
+	/**
+	 * @brief Mouse position during last event
+	 */
 	t_pos		mouse_pos;
-	t_pos		mouse_delta;
-	t_pos		img_pos;
-	// Selector widget
-	size_t		kernel_count;
-	int			selector_id;
-	bool		selector_shown;
-	/**
-	 * @brief Set to true when in need fo re-rendering next frame
-	 */
-	bool		needs_render;
-	/**
-	 * @brief Set to true when in need or supersampling
-	 */
-	bool		needs_resample;
+	t_event		event;
+	void	(*ui_loop)(t_fractol *f);
 	/*
 	 * @brief Render :ramebuffer
 	 */
 	t_img		*render;
-	/**
-	 * @brief Post processing buffer suitably aligned to hold least
-	 * WIDTH*HEIGHT*16 bytes
-	 */
-	void		*filter_buffer;
+	t_pos		img_pos;
 	/**
 	 * @brief UI Draw list
 	 */
@@ -74,9 +60,10 @@ ui_init(t_fractol *f, const t_pos size);
 void
 ui_deinit(t_fractol *f, t_ui *ui);
 /**
- * @brief Draws the ui
+ * @brief Updates the ui
  */
-int
-ui_draw(t_fractol *f);
+void
+ui_update(t_fractol *f);
+
 
 #endif // UI_H

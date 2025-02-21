@@ -13,6 +13,6 @@
 
 int	main(int argc, char **argv)
 {
-	(void)fractol_init();
+	fractol_run();
 	return (0);
 }

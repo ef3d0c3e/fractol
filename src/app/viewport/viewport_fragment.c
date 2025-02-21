@@ -13,6 +13,19 @@
 #include "ui/image.h"
 #include "util/vector.h"
 #include "viewport.h"
+#include <math.h>
+
+static float	gauss_kernel(size_t size, int x, int y)
+{
+	static const float	kernel_sums[] = {[3] = 4.897640403536304,
+		[5] = 6.168924081028881, [7] = 6.2797847959347015,
+		[9] = 6.283147856202572, [11] = 6.283185221483608,
+		[13] = 6.2831853741872, [15] = 6.283185374416782};
+
+	if (size <= 15)
+		return expf(-(x*x + y*y) / 2.f) / kernel_sums[size];
+	return expf(-(x*x + y*y) / 2.f) / kernel_sums[15];
+}
 
 static void	
 	fragment_oversample(
@@ -31,6 +44,7 @@ static void
 		for (i = 0; i < size; ++i)
 		{
 			const int	oversample = data->oversampling_data[i] * 2;
+
 			const	float factor = 1.f / (2.f * oversample + 1.f);
 			const	float factor2 = factor * factor;
 			const t_pos pos = (t_pos){i % data->viewport->size.x, i / data->viewport->size.x};
@@ -42,9 +56,10 @@ static void
 				{
 					const t_vec2d z = data->viewport->screen_to_space(data->viewport, pos, (t_vec2d){x * factor, y * factor});
 					color = shader(pos, z, closure);
-					cols[0] += color.channels.r / 255.f * factor2;
-					cols[1] += color.channels.g / 255.f * factor2;
-					cols[2] += color.channels.b / 255.f * factor2;
+					const float f = gauss_kernel(oversample * 2 + 1, x, y);
+					cols[0] += color.channels.r / 255.f * f;
+					cols[1] += color.channels.g / 255.f * f;
+					cols[2] += color.channels.b / 255.f * f;
 				}
 			}
 			((t_color *)shared)[i].channels.r = cols[0]  * 255.f;

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   event_keyboard.c                                   :+:      :+:    :+:   */
+/*   post_processing.h                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgamba <lgamba@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -9,19 +9,19 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include <ui/ui.h>
-#include <app/fractol.h>
+#ifndef POST_PROCESSING_H
+# define POST_PROCESSING_H
 
-int	ev_keyup(enum e_keycode code, t_fractol *f)
-{
-	f->ui.event.type = UI_KEY_RELEASE;
-	f->ui.event.event.keyboard.code = code;
-	return (ui_update(f), 0);
-}
+# include <mlx_int.h>
 
-int	ev_keydown(enum e_keycode code, t_fractol *f)
-{
-	f->ui.event.type = UI_KEY_PRESS;
-	f->ui.event.event.keyboard.code = code;
-	return (ui_update(f), 0);
-}
+/**
+ * @brief Performs sobel filter with a 3x3 gaussian blu.
+ *
+ * Requires in to be able to hold 2 * (4 bytes) * img_size
+ *
+ * 
+ * @returns Address of buffer + img_size
+ */
+float	*sobel(t_img *img, float *in);
+
+#endif // SOBEL_H

@@ -16,7 +16,11 @@
  * @file Event handlers
  */
 
+# include <util/pos.h>
+# include <stdbool.h>
+
 typedef struct s_fractol	t_fractol;
+typedef struct s_ui			t_ui;
 
 /**
  * Enum for keycodes
@@ -49,7 +53,8 @@ enum	e_keycode
 	KEY_X,
 	KEY_Y,
 	KEY_Z,
-	// Arrows
+	KEY_RETURN = 0xff0d,
+	// Arrow
 	KEY_ARROW_LEFT = 65361,
 	KEY_ARROW_UP,
 	KEY_ARROW_RIGHT,
@@ -58,6 +63,7 @@ enum	e_keycode
 
 enum e_mousecode
 {
+	MOUSE_NONE,
 	MOUSE_LEFT = 1,
 	MOUSE_MIDDLE = 2,
 	MOUSE_RIGHT = 3,
@@ -108,7 +114,106 @@ enum e_evmask
 
 /**
  * @brief Sets up the events
+ *
+ * Registers handlers to mlx
+ *
+ * @param fractol Program
  */
 void	event_setup(t_fractol *fractol);
+
+/**
+ * @brief Types of event
+ */
+enum e_ev_type
+{
+	UI_NONE,
+	UI_KEY_PRESS,
+	UI_KEY_RELEASE,
+	UI_MOUSE_PRESS,
+	UI_MOUSE_RELEASE,
+	UI_MOUSE_MOVE,
+	UI_WNIDOW_RESIZE,
+};
+
+/**
+ * @brief Event data
+ */
+typedef struct s_event
+{
+	enum e_ev_type type;
+
+	union u_event
+	{
+		/**
+		 * @brief Keyboard press/release event
+		 */
+		struct s_ev_keyboard
+		{
+			enum e_keycode		code;
+		}	keyboard;
+		/**
+		 * @brief Mouse button event
+		 */
+		struct s_ev_mouse
+		{
+			t_pos				from;
+			t_pos				to;
+			enum e_mousecode	code;
+		}	mouse;
+		/**
+		 * @brief Mouse move event
+		 */
+		struct s_ev_mouse_move
+		{
+			t_pos				from;
+			t_pos				to;
+		}	mouse_move;
+	}	event;
+}	t_event;
+
+/**
+ * @brief Returns true if key `code` has been pressed (e.g released)
+ *
+ * @param ui The ui
+ * @param code The keycode
+ *
+ * @returns true if key `code` is released
+ */
+bool	ev_key_pressed(t_ui *ui, enum e_keycode code);
+/**
+ * @brief Returns true if key `code` is held
+ *
+ * @param ui The ui
+ * @param code The keycode
+ *
+ * @returns true if key `code` is held
+ */
+bool	ev_key_held(t_ui *ui, enum e_keycode code);
+/**
+ * @brief Returns true if button `code` has been pressed (e.g released)
+ *
+ * @param ui The ui
+ * @param code The button code
+ *
+ * @returns true if key `code` is released
+ */
+bool	ev_mouse_pressed(t_ui *ui, enum e_mousecode code);
+/**
+ * @brief Returns true if button `code` is held
+ *
+ * @param ui The ui
+ * @param code The button code
+ *
+ * @returns true if key `code` is held
+ */
+bool	ev_mouse_held(t_ui *ui, enum e_mousecode code);
+/**
+ * @brief Gets the mouse wheel delta
+ *
+ * @param ui The ui
+ *
+ * @returns +1 for scroll up, -1 for down
+ */
+int		ev_wheel_delta(t_ui *ui);
 
 #endif // EVENT_H

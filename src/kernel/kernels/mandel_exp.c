@@ -9,33 +9,25 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "kernel/gradient.h"
-#include "util/vector.h"
-#include <app/viewport/viewport.h>
-#include <complex.h>
 #include <kernel/kernel.h>
+#include <complex.h>
 
 static inline t_color iter(t_pos pos, t_vec2d c, const t_closure *data)
 {
 	int				i;
 	const double _Complex cc = *(double _Complex *)&c;
 	double _Complex z;
-	double _Complex dz;
 
 	z = (double _Complex){0, 0};
-	dz = (double _Complex){0, 0};
 	double k = 0;
 	i = 0;
 	while (i < data->max_it)
 	{
-		dz = 2 * z * dz + 1;
 		z = z * z + cc;
 		double m = cabs(z);
 		k += exp(-m);
 		if (m >= 1e8)
-		{
-			return (gradient_get(&data->settings->gradient, log(k) ));
-		}
+			return (gradient_get(&data->settings->gradient, log(k)));
 		++i;
 	}
 	return ((t_color){0x000000});

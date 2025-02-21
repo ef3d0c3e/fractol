@@ -18,6 +18,7 @@ const t_kernel	*mandel_de(t_kernel_settings *settings);
 const t_kernel	*mandel_exp(t_kernel_settings *settings);
 const t_kernel	*mandel_smooth_it(t_kernel_settings *settings);
 const t_kernel	*mandel_landing_arg(t_kernel_settings *settings);
+const t_kernel	*mandel_electric(t_kernel_settings *settings);
 
 static const t_kernel	*kernel_list(size_t id, t_kernel_settings *settings)
 {
@@ -26,6 +27,7 @@ static const t_kernel	*kernel_list(size_t id, t_kernel_settings *settings)
 		mandel_de,
 		mandel_smooth_it,
 		mandel_landing_arg,
+		mandel_electric,
 	};
 
 	if (id >= sizeof(list)/sizeof(list[0]))
@@ -43,13 +45,6 @@ const t_kernel
 	const t_kernel					*kernel = kernel_list(id, settings);
 	struct s_viewport_linear_data	*view_data;
 
-	viewport->size = size,
-	viewport->view = (t_mat2d){{
-		-(double)size.x / size.y,
-		(double)size.x / size.y,
-		-1.0,
-		1.0
-	}},
 	viewport->screen_to_space = view_linear_screen_to_space,
 	viewport->space_to_screen = view_linear_space_to_screen,
 

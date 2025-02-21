@@ -1,5 +1,4 @@
-#include "sobel.h"
-#include "ui/image.h"
+#include "post_processing.h"
 #include <kernel/color.h>
 #include <stdio.h>
 #include <util/math.h>
