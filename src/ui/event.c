@@ -31,7 +31,9 @@ void
 	if (!zoom_delta)
 		view_move(&f->view, start, end, 1.0);
 	else
-		view_zoom(&f->view, f->last_view.screen_to_space(&f->last_view, start), zoom_delta);
+	{
+		view_zoom(&f->view, f->last_view.screen_to_space(&f->last_view, start, (t_vec2d){0, 0}), zoom_delta);
+	}
 
 	const t_pos tl = f->last_view.space_to_screen(&f->last_view,
 			(t_vec2d){f->view.view.data[0], f->view.view.data[2]});

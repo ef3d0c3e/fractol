@@ -1,7 +1,7 @@
 NAME   := fractol
-CC     := clang
-CFLAGS := -Wall -Wextra -ggdb  -fsanitize=address -fopenmp
-#CFLAGS := -Wall -Wextra -fopenmp -fsanitize=thread -O3 -Ofast -ffast-math
+CC     := gcc
+#CFLAGS := -Wall -Wextra -ggdb -fsanitize=address -fopenmp
+CFLAGS := -Wall -Wextra -fopenmp -fsanitize=address -O3 -Ofast -ffast-math
 IFLAGS := -Iminilibx-linux -Isrc
 LFLAGS := -L/usr/lib -lX11 -lXext -lm
 
@@ -9,10 +9,12 @@ SOURCES := \
 src/main.c \
 src/app/fractol.c \
 src/app/viewport/viewport.c \
+src/app/viewport/viewport_fragment.c \
 src/app/viewport/viewport_linear.c \
 src/util/vector.c \
 src/util/pos.c \
 src/util/realloc.c \
+src/kernel/sobel.c \
 src/util/math.c \
 src/util/memcpy.c \
 src/util/matrix.c \

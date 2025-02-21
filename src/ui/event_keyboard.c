@@ -22,24 +22,27 @@ move_event(
 
 int	ev_keyup(enum e_keycode code, t_fractol *f)
 {
-	double	delta_x;
-	double	delta_y;
-
 	if (code == KEY_R)
 	{
 		f->ui.needs_render = true;
 		f->ui.img_pos = pos_new(0, 0);
-		ui_draw(f);
 	}
 	else if (code == KEY_S)
-	{
 		f->ui.selector_shown = !f->ui.selector_shown;
-		ui_draw(f);
-	}
-	return (0);
+	else if (code == KEY_U)
+		f->ui.needs_resample = true;
+	else
+		return (0);
+	return (ui_draw(f), 0);
 }
 
 int	ev_keydown(enum e_keycode code, t_fractol *f)
 {
-	return (0);
+	if (code == KEY_ARROW_DOWN && f->ui.selector_shown)
+		++f->ui.selector_id;
+	else if (code == KEY_ARROW_UP && f->ui.selector_shown)
+		--f->ui.selector_id;
+	else
+		return (0);
+	return (ui_draw(f), 0);
 }

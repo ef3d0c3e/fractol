@@ -27,25 +27,36 @@ typedef struct s_fractol	t_fractol;
  */
 typedef struct s_ui
 {
-	bool		mouse_down;
-	t_pos		mouse_pos;
-	t_pos		mouse_delta;
-	t_pos		img_pos;
 	/**
 	 * @brief UI sizes in pixels
 	 */
 	t_pos		size;
-
+	// Events
+	bool		mouse_down;
+	t_pos		mouse_pos;
+	t_pos		mouse_delta;
+	t_pos		img_pos;
+	// Selector widget
+	size_t		kernel_count;
+	int			selector_id;
+	bool		selector_shown;
 	/**
 	 * @brief Set to true when in need fo re-rendering next frame
 	 */
 	bool		needs_render;
-
-	bool		selector_shown;
 	/**
-	 * @brief Buffer from the rendered fractal
+	 * @brief Set to true when in need or supersampling
+	 */
+	bool		needs_resample;
+	/*
+	 * @brief Render :ramebuffer
 	 */
 	t_img		*render;
+	/**
+	 * @brief Post processing buffer suitably aligned to hold least
+	 * WIDTH*HEIGHT*16 bytes
+	 */
+	void		*filter_buffer;
 	/**
 	 * @brief UI Draw list
 	 */

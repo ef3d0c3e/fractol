@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   kernel.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lgamba <lgamba@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/18 11:54:01 by lgamba            #+#    #+#             */
+/*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "kernel.h"
 #include "app/viewport/viewport.h"
 #include "app/viewport/viewport_linear.h"
@@ -11,15 +22,14 @@ static const t_kernel	*kernel_list(size_t id, t_kernel_settings *settings)
 {
 	static t_kernel const* (*list[])(t_kernel_settings *settings) = {
 		mandel_de,
-		mandel_smooth_it,
 		mandel_exp,
+		mandel_smooth_it,
 	};
 
 	if (id >= sizeof(list)/sizeof(list[0]))
 		return (NULL);
 	return (list[id])(settings);
 }
-
 
 const t_kernel
 	*kernel_init(

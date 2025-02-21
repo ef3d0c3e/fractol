@@ -8,7 +8,7 @@
 t_viewport
 viewport_create(
 		t_pos size,
-		t_vec2d(*screen_to_space)(const t_viewport *this, const t_pos pos),
+		t_vec2d(*screen_to_space)(const t_viewport *this, const t_pos pos, const t_vec2d delta),
 		t_pos(*space_to_screen)(const t_viewport *this, const t_vec2d pos),
 		const void *data)
 {
@@ -39,8 +39,8 @@ void
 		const t_pos end,
 		const double factor)
 {
-	const t_vec2d	s = this->screen_to_space(this, start);
-	const t_vec2d	e = this->screen_to_space(this, end);
+	const t_vec2d	s = this->screen_to_space(this, start, (t_vec2d){0, 0});
+	const t_vec2d	e = this->screen_to_space(this, end, (t_vec2d){0, 0});
 	const t_vec2d	delta = {s.x - e.x, s.y - e.y};
 
 	this->view.data[0] = (this->view.data[0] + delta.x * factor);
@@ -72,29 +72,4 @@ void
 	this->view.data[1] = c.x + (this->view.data[1] - c.x) * factor;
 	this->view.data[2] = c.y - (c.y - this->view.data[2]) * factor;
 	this->view.data[3] = c.y + (this->view.data[3] - c.y) * factor;
-}
-
-void
-viewport_fragment(
-		const t_viewport *this,
-		t_img *img,
-		t_color (*callback)(t_pos pos, t_vec2d z, void *data),
-		void *closure)
-{
-	char *shared = img->data;
-
-#pragma omp parallel shared(shared)
-	{
-		int y;
-#pragma omp for private(y) schedule(dynamic)
-		for (y = 0; y < this->size.y; ++y)
-		{
-			for (int x = 0; x < this->size.x; ++x)
-			{	
-				const t_color color =
-					callback((t_pos){x, y}, this->screen_to_space(this, (t_pos){x, y}), closure);
-				image_pixel(img, (t_pos){x, y}, color);
-			}
-		}
-	}
 }

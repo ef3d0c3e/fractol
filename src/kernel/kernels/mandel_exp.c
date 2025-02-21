@@ -44,18 +44,17 @@ static inline t_color iter(t_pos pos, t_vec2d c, const t_closure *data)
 
 static inline void
 	render(
-			const struct s_viewport *viewport,
+			struct s_fragment_data *data,
 			const t_kernel_settings *settings,
-			t_img *img,
 			const int max_it
 			)
 {
 	struct s_kernel_closure	closure;
 
-	closure.view = viewport;
+	closure.view = data->viewport;
 	closure.settings = settings;
 	closure.max_it = max_it,
-	viewport_fragment(viewport, img, (void *)iter, &closure);
+	viewport_fragment(data, (void *)iter, &closure);
 }
 
 const t_kernel	*mandel_exp(t_kernel_settings *settings)
@@ -74,6 +73,7 @@ const t_kernel	*mandel_exp(t_kernel_settings *settings)
 		.render = render,
 		.default_viewport = {{-1.5, 1.5, -1.0, 1.0}},
 		.default_mat = {{1, 0, 0, 1}},
+		.flags = USE_GRADIENT,
 	};
 	if (settings)
 		settings->gradient = gradient_new(colors, sizeof(colors) / sizeof(colors[0]));

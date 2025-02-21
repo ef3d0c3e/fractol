@@ -33,11 +33,12 @@ view_linear_data(t_mat2d mat);
  *
  * @param this The viewport
  * @param pos Screen coordinates
+ * @param delta Local delta for supersampling
  *
  * @returns Screen coordinates mapped to render space coordinates
  */
 t_vec2d
-view_linear_screen_to_space(const t_viewport *this, const t_pos pos);
+view_linear_screen_to_space(const t_viewport *this, const t_pos pos, const t_vec2d delta);
 
 /**
  * @brief Linear transfor from space coordinates to screen coordinates

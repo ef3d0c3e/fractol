@@ -21,6 +21,15 @@ typedef struct s_vec2d
 	double	y;
 }	t_vec2d;
 
+/**
+ * @brief Single Vector struct
+ */
+typedef struct s_vec2f
+{
+	float	x;
+	float	y;
+}	t_vec2f;
+
 void
 vec_add(t_vec2d *a, const t_vec2d *const b);
 void

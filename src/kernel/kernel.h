@@ -42,9 +42,8 @@ typedef struct s_kernel
 	 */
 	void		(*init)(const t_viewport* view);
 	void		(*render)(
-			const t_viewport* view,
+			struct s_fragment_data *data,
 			const t_kernel_settings *settings,
-			t_img *img,
 			const int max_it);
 	/**
 	 * @brief Default viewport
