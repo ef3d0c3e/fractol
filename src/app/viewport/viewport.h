@@ -15,7 +15,15 @@
 # include <util/math.h>
 # include <kernel/color.h>
 # include <mlx_int.h>
+# include <stdbool.h>
 
+/**
+ * @brief Viewport for rendering
+ *
+ * This maps screen coordinates to render coordinates and vice versa.
+ * Sadly using integers for screen coordinates was a mistake because they incur
+ * precision loss.
+ */
 typedef struct s_viewport
 {
 	/**
@@ -32,7 +40,7 @@ typedef struct s_viewport
 	t_vec2d(*screen_to_space)(const struct s_viewport * this, const t_pos pos,
 			const t_vec2d delta);
 	t_pos(*space_to_screen)(const struct s_viewport * this, const t_vec2d pos);
-	const void	*data;
+	void	*data;
 }	t_viewport;
 
 t_viewport
@@ -41,7 +49,7 @@ viewport_create(
 	t_vec2d(*screen_to_space)(const t_viewport *this, const t_pos pos,
 		const t_vec2d delta),
 	t_pos(*space_to_screen)(const t_viewport *this, const t_vec2d pos),
-	const void *data);
+	void *data);
 
 void
 viewport_free(t_viewport *this);
@@ -62,11 +70,28 @@ view_zoom(
 	const int zoom);
 
 
+/**
+ * @brief Data passed to the fragment shader processor
+ */
 struct s_fragment_data
 {
+	/**
+	 * @brief Fragment viewport
+	 */
 	const t_viewport	*viewport;
+	/**
+	 * @brief Draw buffer
+	 */
 	t_img				*img;
+	/**
+	 * @brief Array containing resampling weights for each pixels.
+	 * NULL for none
+	 */
 	float				*oversampling_data;
+	/**
+	 * @brief Indicates the processor to only recompute black pixels
+	 */
+	bool				post_pass;
 };
 
 /**

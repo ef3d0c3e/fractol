@@ -56,11 +56,13 @@ void		fractol_selector(t_fractol *f)
 			.str = ">",
 		}
 	});
-	if (ev_key_pressed(&f->ui, KEY_RETURN))
+	if (ev_key_pressed(&f->ui, KEY_RETURN) && f->kernel_id != f->selector_id)
 	{
 		kernel_deinit(f->kernel, &f->kernel_settings);
 		f->kernel_id = f->selector_id;
-		f->kernel = kernel_init(f->selector_id, f->ui.size, &f->view, &f->kernel_settings);
+		free(f->view.data);
+		f->kernel = kernel_init(f->selector_id, &f->view, &f->kernel_settings);
+		f->last_view = f->view;
 		f->needs_render = true;
 	}
 }

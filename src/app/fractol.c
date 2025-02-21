@@ -31,7 +31,7 @@ static inline void	init_kernel(t_fractol *f, t_pos size)
 		1.0
 	}};
 	f->kernel_id = 0;
-	f->kernel = kernel_init(0, size, &f->view, &f->kernel_settings);
+	f->kernel = kernel_init(0, &f->view, &f->kernel_settings);
 	f->last_view = f->view;
 	f->kernel_count = 0;
 	while (kernel_name(f->kernel_count))
@@ -42,6 +42,7 @@ static void	fractol_loop(t_fractol *f)
 {
 	fractol_selector(f);
 	fractol_move(f);
+	/*fractol_bar(f)*/;
 	fractol_render(f);
 }
 
@@ -51,7 +52,7 @@ static inline void	init_ui(t_fractol *f, t_pos size)
 	f->ui.ui_loop = fractol_loop;
 	f->selector_id = 0;
 	f->selector_shown = true;
-	f->needs_render = true;
+	f->needs_render = false;
 	f->needs_resample = false;
 	f->filter_buffer = malloc(sizeof(float) * size.x * size.y * 4);
 }

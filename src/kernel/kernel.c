@@ -38,7 +38,6 @@ static const t_kernel	*kernel_list(size_t id, t_kernel_settings *settings)
 const t_kernel
 	*kernel_init(
 			size_t id,
-			t_pos size,
 			t_viewport *viewport,
 			t_kernel_settings *settings)
 {
@@ -48,6 +47,7 @@ const t_kernel
 	viewport->screen_to_space = view_linear_screen_to_space,
 	viewport->space_to_screen = view_linear_space_to_screen,
 
+	printf("allocated data\n");
 	view_data = malloc(sizeof(struct s_viewport_linear_data));
 	*view_data = view_linear_data(kernel->default_mat);
 	viewport->data = view_data;

@@ -94,7 +94,6 @@ typedef struct s_kernel_closure
 const t_kernel
 	*kernel_init(
 			size_t id,
-			t_pos size,
 			t_viewport *viewport,
 			t_kernel_settings *settings);
 
