@@ -74,7 +74,11 @@ const t_kernel	*mandel_exp(t_kernel_settings *settings)
 		.name = "Mandelbrot Exponential",
 		.render = render,
 		.default_viewport = {{-1.5, 1.5, -1.0, 1.0}},
-		.default_mat = {{1, 0, 0, 1}},
+		//.default_mat = {{-0.4161468365, -0.9092974268,
+		//	0.9092974268, -0.4161468365}},
+		.default_mat = {{1, 0,
+			0, 1}},
+
 		.flags = USE_GRADIENT,
 	};
 	if (settings)

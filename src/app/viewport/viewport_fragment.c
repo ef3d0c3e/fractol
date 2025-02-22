@@ -43,7 +43,7 @@ static void
 #pragma omp for schedule(dynamic)
 		for (i = 0; i < size; ++i)
 		{
-			const int	oversample = data->oversampling_data[i] * 3;
+			const int	oversample = data->oversampling_data[i] * 2;
 
 			const	float factor = 1.f / (2.f * oversample + 1.f);
 			const t_pos pos = (t_pos){i % data->viewport->size.x, i / data->viewport->size.x};

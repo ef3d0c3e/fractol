@@ -39,6 +39,7 @@ void
 		const t_pos end,
 		const double factor)
 {
+	/*
 	const t_vec2d	s = this->screen_to_space(this, start, (t_vec2d){0, 0});
 	const t_vec2d	e = this->screen_to_space(this, end, (t_vec2d){0, 0});
 	//const t_vec2d	s = {
@@ -58,7 +59,15 @@ void
 	this->view.data[0] = (this->view.data[0] + delta.x * factor);
 	this->view.data[1] = (this->view.data[1] + delta.x * factor);
 	this->view.data[2] = (this->view.data[2] + delta.y * factor);
-	this->view.data[3] = (this->view.data[3] + delta.y * factor);
+	this->view.data[3] = (this->view.data[3] + delta.y * factor);*/
+	const t_vec2d s = this->screen_to_space(this, start, (t_vec2d){0, 0});
+	const t_vec2d e = this->screen_to_space(this, end, (t_vec2d){0, 0});
+	const t_vec2d delta = {(s.x - e.x) * factor, (s.y - e.y) * factor};
+
+	this->view.data[0] += delta.x;
+	this->view.data[1] += delta.x;
+	this->view.data[2] += delta.y;
+	this->view.data[3] += delta.y;
 }
 
 void
@@ -67,6 +76,7 @@ void
 	const t_vec2d center,
 	const int zoom)
 {
+	/*
 	const double	factor = pow(0.9, zoom);
 	const t_pos		screen_center = {this->size.x / 2, this->size.y / 2};
 	t_vec2d			c;
@@ -81,4 +91,22 @@ void
 	this->view.data[1] = c.x + (this->view.data[1] - c.x) * factor;
 	this->view.data[2] = c.y - (c.y - this->view.data[2]) * factor;
 	this->view.data[3] = c.y + (this->view.data[3] - c.y) * factor;
+	*/	
+	const double factor = pow(0.9, zoom);
+	t_vec2d new_size;
+	t_vec2d delta;
+
+	// Compute new viewport size
+	new_size.x = (this->view.data[1] - this->view.data[0]) * factor;
+	new_size.y = (this->view.data[3] - this->view.data[2]) * factor;
+
+	// Compute new viewport bounds centered around `center`
+	delta.x = center.x - (this->view.data[0] + this->view.data[1]);
+	delta.y = center.y - (this->view.data[2] + this->view.data[3]);
+
+	this->view.data[0] = center.x - new_size.x / 2.0 + delta.x * (1.0 - factor);
+	this->view.data[1] = center.x + new_size.x / 2.0 + delta.x * (1.0 - factor);
+	this->view.data[2] = center.y - new_size.y / 2.0 + delta.y * (1.0 - factor);
+	this->view.data[3] = center.y + new_size.y / 2.0 + delta.y * (1.0 - factor);
+
 }
