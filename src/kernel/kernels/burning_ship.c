@@ -20,15 +20,13 @@ static inline t_color iter(t_pos pos, t_vec2d c, const t_closure *data)
 	int				i;
 	const double _Complex cc = *(double _Complex *)&c;
 	double _Complex z;
-	double _Complex dz;
 
 	z = (double _Complex){0, 0};
-	dz = (double _Complex){0, 0};
 	double k = 0;
 	i = 0;
 	while (i < data->max_it)
 	{
-		dz = 2 * z * dz + 1;
+		z = fabs(creal(z)) + I * fabs(cimag(z));
 		z = z * z + cc;
 		double m = cabs(z);
 		k += exp(-m);
@@ -37,7 +35,7 @@ static inline t_color iter(t_pos pos, t_vec2d c, const t_closure *data)
 			//double k = i + 1.0 - log2(log(m));
 			//double potential = pow(2, -k);
 			//z = potential * conj(z) * dz / (m*m*log(m));
-			return (gradient_get(&data->settings->gradient, k ));
+			return (gradient_get(&data->settings->gradient, log(k) ));
 		}
 		++i;
 	}
@@ -59,7 +57,7 @@ static inline void
 	viewport_fragment(data, (void *)iter, &closure);
 }
 
-const t_kernel	*mandel_exp(t_kernel_settings *settings)
+const t_kernel	*burning_ship(t_kernel_settings *settings)
 {
 	static const struct s_gr_color	colors[] = {
     {{66 << 16 | 30 << 8 | 15}, 1.0},
@@ -81,7 +79,7 @@ const t_kernel	*mandel_exp(t_kernel_settings *settings)
     {{66 << 16 | 30 << 8 | 15}, 1.0},
 	};
 	static const t_kernel	kernel = {
-		.name = "Mandelbrot Exponential",
+		.name = "Burning Ship",
 		.render = render,
 		.default_viewport = {{-1.5, 1.5, -1.0, 1.0}},
 		.default_mat = {{1, 0, 0, 1}},

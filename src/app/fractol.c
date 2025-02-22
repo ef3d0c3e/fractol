@@ -27,8 +27,8 @@ static inline void	init_kernel(t_fractol *f, t_pos size)
 	f->view.view = (t_mat2d){{
 		-(double)size.x / size.y,
 		(double)size.x / size.y,
-		-1.0,
-		1.0
+		1.0,
+		-1.0
 	}};
 	f->kernel_id = 0;
 	f->kernel = kernel_init(0, &f->view, &f->kernel_settings);

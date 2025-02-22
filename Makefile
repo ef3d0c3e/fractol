@@ -23,6 +23,7 @@ src/util/memcpy.c \
 src/util/matrix.c \
 src/kernel/kernels/mandel_electric.c \
 src/kernel/kernels/mandel_exp.c \
+src/kernel/kernels/burning_ship.c \
 src/kernel/kernels/mandel_de.c \
 src/kernel/kernels/mandel_landing_arg.c \
 src/kernel/kernels/mandel_smooth_it.c \

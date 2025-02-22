@@ -41,6 +41,18 @@ void
 {
 	const t_vec2d	s = this->screen_to_space(this, start, (t_vec2d){0, 0});
 	const t_vec2d	e = this->screen_to_space(this, end, (t_vec2d){0, 0});
+	//const t_vec2d	s = {
+	//	(this->view.data[0] + (((double)start.x) / this->size.x)
+	//		* (this->view.data[1] - this->view.data[0])),
+	//	(this->view.data[2] + (((double)start.y) / this->size.y)
+	//	 	* (this->view.data[3] - this->view.data[2]))
+	//};
+	//const t_vec2d	e = {
+	//	(this->view.data[0] + (((double)end.x) / this->size.x)
+	//		* (this->view.data[1] - this->view.data[0])),
+	//	(this->view.data[2] + (((double)end.y) / this->size.y)
+	//	 	* (this->view.data[3] - this->view.data[2]))
+	//};
 	const t_vec2d	delta = {s.x - e.x, s.y - e.y};
 
 	this->view.data[0] = (this->view.data[0] + delta.x * factor);
@@ -56,14 +68,11 @@ void
 	const int zoom)
 {
 	const double	factor = pow(0.9, zoom);
-	t_pos			old_c;
+	const t_pos		screen_center = {this->size.x / 2, this->size.y / 2};
 	t_vec2d			c;
 
-	old_c = this->space_to_screen(this, (t_vec2d){
-		(this->view.data[1] + this->view.data[0]) / 2.0,
-		(this->view.data[3] + this->view.data[2]) / 2.0
-	});
-	view_move(this, this->space_to_screen(this, center), old_c, 1);
+	t_pos ss = this->space_to_screen(this, center);
+	view_move(this, ss, screen_center, 1);
 	c = (t_vec2d){
 		(this->view.data[1] + this->view.data[0]) / 2.0,
 		(this->view.data[3] + this->view.data[2]) / 2.0

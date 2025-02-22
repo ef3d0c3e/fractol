@@ -28,7 +28,7 @@ void
 	if (!zoom_delta)
 		view_move(&f->view, start, end, 1.0);
 	else
-		view_zoom(&f->view, f->last_view.screen_to_space(&f->last_view, start, (t_vec2d){0, 0}), -zoom_delta);
+		view_zoom(&f->view, f->last_view.screen_to_space(&f->last_view, end, (t_vec2d){0, 0}), -zoom_delta);
 }
 
 /* Displays reticles and move area */
@@ -66,11 +66,12 @@ static double	move_reticle(t_fractol *f)
 void fractol_move(t_fractol *f)
 {	
 	if (ev_wheel_delta(&f->ui))
-		move_viewport(f, f->ui.event.event.mouse.to,
-				(t_pos){0, 0}, ev_wheel_delta(&f->ui));
+		move_viewport(f, (t_pos){0, 0}, f->ui.event.event.mouse.to, ev_wheel_delta(&f->ui));
 	else if (f->ui.event.type == UI_MOUSE_MOVE && f->ui.mouse_down == MOUSE_LEFT)
+	{
 		move_viewport(f, f->ui.event.event.mouse.from,
 				f->ui.event.event.mouse.to, 0);
+	}
 	double r = move_reticle(f);
 	if (f->ui.event.type == UI_MOUSE_MOVE && f->ui.mouse_down == MOUSE_LEFT)
 	{

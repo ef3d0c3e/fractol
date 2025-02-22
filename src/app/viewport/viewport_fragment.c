@@ -46,7 +46,6 @@ static void
 			const int	oversample = data->oversampling_data[i] * 3;
 
 			const	float factor = 1.f / (2.f * oversample + 1.f);
-			const	float factor2 = factor * factor;
 			const t_pos pos = (t_pos){i % data->viewport->size.x, i / data->viewport->size.x};
 			float			cols[3];
 			cols[0] = cols[1] = cols[2] = 0.f;
