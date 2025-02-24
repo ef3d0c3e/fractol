@@ -15,22 +15,38 @@
 
 static inline t_color iter(t_pos pos, t_vec2d c, const t_closure *data)
 {
-	int				i;
-	const double _Complex cc = *(double _Complex *)&c;
-	double _Complex z;
+	const int max_ref_it = creal(*((const double _Complex *)data->data));
+	const double _Complex *refs = ((const double _Complex *)data->data) + 1;
+	const double _Complex cc = c.x + I * c.y;
 
-	z = (double _Complex){0, 0};
-	double k = 0;
-	i = 0;
-	while (i < data->max_it)
-	{
-		z = z * z + cc;
-		double m = cabs(z);
-		k += exp(-m);
-		if (m >= 1e8)
-			return (gradient_get(&data->settings->gradient, log(k)));
-		++i;
+
+	double _Complex dz = 0;
+	double _Complex dc = cc - refs[0];
+	int iter = 0;
+	int ref_iter = 0;
+	double dist = 0;
+	while (iter < data->max_it) {
+		// pt: the perturbation iteration equation
+		dz = 2 * dz * refs[ref_iter] + dz * dz + dc;
+		++ref_iter;
+
+		// pt: add the delta orbit to the reference orbit
+		double _Complex z = refs[ref_iter] + dz;
+		// pt: if the combined reference and delta orbit escapes, bail out
+		dist += exp(-cabs(z));
+		if (cabs(z) > 1000) {
+			return (gradient_get(&data->settings->gradient, log(dist)));
+		};
+		// pt: if the delta is larger than the reference, or of the
+		//       reference orbit has already escaped, reset back to
+		//       the beginning of the SAME reference orbit!
+		if (cabs(z) < cabs(dz) || ref_iter == max_ref_it) {
+			dz = z;
+			ref_iter = 0;
+		}
+		iter++;
 	}
+
 	return ((t_color){0x000000});
 }
 
@@ -41,15 +57,34 @@ static inline void
 			const int max_it
 			)
 {
+	t_vec2d					center;
+	double _Complex			*refs;
 	struct s_kernel_closure	closure;
 
+	refs = malloc(sizeof(double _Complex) * (max_it + 1));
+	center = data->viewport->screen_to_space(data->viewport, (t_pos){data->viewport->size.x / 2, data->viewport->size.y / 2}, (t_vec2d){0, 0});
 	closure.view = data->viewport;
 	closure.settings = settings;
-	closure.max_it = max_it,
+	closure.max_it = max_it;
+	closure.data = refs;
+
+	double _Complex z = 0;
+	refs[0] = max_it;
+	for (int i = 1; i < max_it + 1; ++i)
+	{
+		refs[i] = z;
+		z = z*z + center.x + I * center.y;
+		if (cabs(z) >= 1000)
+		{
+			refs[0] = i;
+			break;
+		}
+    }
 	viewport_fragment(data, (void *)iter, &closure);
+	free(refs);
 }
 
-const t_kernel	*mandel_exp(t_kernel_settings *settings)
+const t_kernel	*mandel_exp_pt(t_kernel_settings *settings)
 {
 	static const struct s_gr_color	colors[] = {
     {{66 << 16 | 30 << 8 | 15}, 1.0},
@@ -71,10 +106,13 @@ const t_kernel	*mandel_exp(t_kernel_settings *settings)
     {{66 << 16 | 30 << 8 | 15}, 1.0},
 	};
 	static const t_kernel	kernel = {
-		.name = "Mandelbrot Exponential",
+		.name = "Mandelbrot Exponential PT",
 		.render = render,
 		.default_viewport = {{-1.5, 1.5, -1.0, 1.0}},
+		//.default_mat = {{-0.4161468365, -0.9092974268,
+		//	0.9092974268, -0.4161468365}},
 		.default_mat = {{1, 0, 0, 1}},
+
 		.flags = USE_GRADIENT,
 	};
 	if (settings)

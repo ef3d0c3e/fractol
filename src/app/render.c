@@ -9,6 +9,7 @@ static void	status(t_fractol *f, char *s)
 	const int	x = f->ui.size.x * 0.05f;
 	const int	y = 7 * f->ui.size.y / 8;
 
+	mlx_string_put(f->mlx, f->window, x + 2, y + 2, 0x2f2f2f, s);
 	f->mlx->do_flush = 1;
 	mlx_string_put(f->mlx, f->window, x, y, 0xFFFFFF, s);
 }

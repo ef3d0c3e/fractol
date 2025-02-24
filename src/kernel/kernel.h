@@ -74,6 +74,10 @@ typedef struct s_kernel_closure
 	 * @brief Max iteration count
 	 */
 	int						max_it;
+	/**
+	 * @brief Custom data passed by the kernel
+	 */
+	void					*data;
 }	t_closure;
 
 /**

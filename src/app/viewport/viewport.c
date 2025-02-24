@@ -101,12 +101,11 @@ void
 	new_size.y = (this->view.data[3] - this->view.data[2]) * factor;
 
 	// Compute new viewport bounds centered around `center`
-	delta.x = center.x - (this->view.data[0] + this->view.data[1]);
-	delta.y = center.y - (this->view.data[2] + this->view.data[3]);
+	delta.x = center.x - (this->view.data[0] + this->view.data[1]) / 2.0;
+	delta.y = center.y - (this->view.data[2] + this->view.data[3]) / 2.0;
 
 	this->view.data[0] = center.x - new_size.x / 2.0 + delta.x * (1.0 - factor);
 	this->view.data[1] = center.x + new_size.x / 2.0 + delta.x * (1.0 - factor);
 	this->view.data[2] = center.y - new_size.y / 2.0 + delta.y * (1.0 - factor);
 	this->view.data[3] = center.y + new_size.y / 2.0 + delta.y * (1.0 - factor);
-
 }

@@ -42,12 +42,17 @@ static void pmat(const t_mat2d *mat)
 /* Displays reticles and move area */
 static double	move_reticle(t_fractol *f)
 {
-	const t_pos tl = f->last_view.space_to_screen(&f->view,
+	t_pos tl = f->last_view.space_to_screen(&f->last_view,
 			(t_vec2d){f->view.view.data[0], f->view.view.data[3]});
-	const t_pos br = f->last_view.space_to_screen(&f->view,
+	t_pos br = f->last_view.space_to_screen(&f->last_view,
 			(t_vec2d){f->view.view.data[1], f->view.view.data[2]});
 
-	//printf("TL=%d %d BR=%d %d\n", tl.x, tl.y, br.x, br.y);
+	if (br.x <= tl.x)
+		(tl.x ^= br.x, br.x ^= tl.x, tl.x ^= br.x);
+	if (br.y <= tl.y)
+		(tl.y ^= br.y, br.y ^= tl.y, tl.y ^= br.y);
+	//pmat(&f->view.view);
+	printf("TL=%d %d BR=%d %d\n", tl.x, tl.y, br.x, br.y);
 	// Render rectangle
 	drawqueue_push(&f->ui.ui_queue, (t_draw_item){
 		.item = DRAW_RECT,
