@@ -86,11 +86,12 @@ inline void
 	*((t_char32 *)d) = *((t_char32 *)s);
 	d += 32;
 	s += 32;
-	do {
+	while (d < last_word_d)
+	{
 		*((t_char32 *)d) = *((t_char32 *)s);
 		d += 32;
 		s += 32;
-	} while (d < last_word_d);
+	}
 	*((t_char32 *)last_word_d) = *((t_char32 *)last_word_s);
 	return (dest);
 }

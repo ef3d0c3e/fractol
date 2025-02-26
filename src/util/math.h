@@ -21,8 +21,7 @@
 # include "pos.h"
 # include <math.h>
 
-
-float lerpf(const float a, const float b, const float f);
+float	lerpf(const float a, const float b, const float f);
 
 // TODO: FASTLOG/EXP
 

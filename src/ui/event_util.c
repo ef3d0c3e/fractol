@@ -36,7 +36,7 @@ bool	ev_mouse_held(t_ui *ui, enum e_mousecode code)
 		&& ui->event.event.mouse.code == code);
 }
 
-int		ev_wheel_delta(t_ui *ui)
+int	ev_wheel_delta(t_ui *ui)
 {
 	if (ui->event.type != UI_MOUSE_RELEASE)
 		return (0);

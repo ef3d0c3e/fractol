@@ -29,24 +29,24 @@ typedef struct s_ui
 	/**
 	 * @brief UI sizes in pixels
 	 */
-	t_pos		size;
+	t_pos				size;
 	// Events
 	enum e_mousecode	mouse_down;
 	/**
 	 * @brief Mouse position during last event
 	 */
-	t_pos		mouse_pos;
-	t_event		event;
-	void	(*ui_loop)(t_fractol *f);
+	t_pos				mouse_pos;
+	t_event				event;
+	void				(*ui_loop)(t_fractol *f);
 	/*
 	 * @brief Render :ramebuffer
 	 */
-	t_img		*render;
-	t_pos		img_pos;
+	t_img				*render;
+	t_pos				img_pos;
 	/**
 	 * @brief UI Draw list
 	 */
-	t_drawqueue	ui_queue;
+	t_drawqueue			ui_queue;
 }	t_ui;
 
 /**
@@ -64,6 +64,5 @@ ui_deinit(t_fractol *f, t_ui *ui);
  */
 void
 ui_update(t_fractol *f);
-
 
 #endif // UI_H

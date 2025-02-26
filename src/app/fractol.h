@@ -22,18 +22,18 @@
 /**
  * @brief Program data
  */
-typedef struct	s_fractol
+typedef struct s_fractol
 {
 	// mlx data
-	t_xvar			*mlx;
-	t_win_list		*window;
+	t_xvar				*mlx;
+	t_win_list			*window;
 
 	// ui
-	t_ui			ui;
+	t_ui				ui;
 
 	// Rendering data
-	t_viewport		view;
-	t_viewport		last_view;
+	t_viewport			view;
+	t_viewport			last_view;
 	/**
 	 * @brief Current selected kernel
 	 */
@@ -43,22 +43,22 @@ typedef struct	s_fractol
 	int					max_iter;
 	bool				post_pass;
 	// Widgets
-	int			kernel_count;
-	int			selector_id;
-	bool		selector_shown;
+	int					kernel_count;
+	int					selector_id;
+	bool				selector_shown;
 	/**
 	 * @brief Set to true when in need fo re-rendering next frame
 	 */
-	bool		needs_render;
+	bool				needs_render;
 	/**
 	 * @brief Set to true when in need or supersampling
 	 */
-	bool		needs_resample;
+	bool				needs_resample;
 	/**
 	 * @brief Post processing buffer suitably aligned to hold least
 	 * WIDTH*HEIGHT*16 bytes
 	 */
-	void		*filter_buffer;
+	void				*filter_buffer;
 }	t_fractol;
 
 void

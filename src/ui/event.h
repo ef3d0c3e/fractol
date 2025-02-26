@@ -140,7 +140,7 @@ enum e_ev_type
  */
 typedef struct s_event
 {
-	enum e_ev_type type;
+	enum e_ev_type	type;
 
 	union u_event
 	{

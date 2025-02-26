@@ -37,10 +37,11 @@ typedef struct s_viewport
 	/**
 	 * @brief View function
 	 */
-	t_vec2d(*screen_to_space)(const struct s_viewport * this, const t_pos pos,
-			const t_vec2d delta);
-	t_pos(*space_to_screen)(const struct s_viewport * this, const t_vec2d pos);
-	void	*data;
+	t_vec2d	(*screen_to_space)(const struct s_viewport * this, const t_pos pos,
+		const t_vec2d delta);
+	t_pos	(*space_to_screen)(const struct s_viewport * this,
+		const t_vec2d pos);
+	void		*data;
 }	t_viewport;
 
 t_viewport
@@ -68,7 +69,6 @@ view_zoom(
 	t_viewport *this,
 	const t_vec2d center,
 	const int zoom);
-
 
 /**
  * @brief Data passed to the fragment shader processor

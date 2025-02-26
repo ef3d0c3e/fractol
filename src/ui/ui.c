@@ -20,11 +20,11 @@ t_ui	ui_init(t_fractol *f, const t_pos size)
 	t_ui	ui;
 
 	event_setup(f);
-	ui.mouse_down = false,
-	ui.img_pos = pos_new(0, 0),
-	ui.mouse_pos = pos_new(0, 0),
+	ui.mouse_down = false;
+	ui.img_pos = pos_new(0, 0);
+	ui.mouse_pos = pos_new(0, 0);
 	ui.event.type = UI_NONE;
-	ui.size = size,
+	ui.size = size;
 	ui.render = mlx_new_image(f->mlx, size.x, size.y);
 	ui.ui_queue = drawqueue_new();
 	return (ui);

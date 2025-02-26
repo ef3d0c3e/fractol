@@ -59,7 +59,7 @@ static inline void	init_ui(t_fractol *f, t_pos size)
 	f->filter_buffer = malloc(sizeof(float) * size.x * size.y * 4);
 }
 
-void fractol_run()
+void	fractol_run()
 {
 	const t_pos	size = pos_new(1920, 1080);
 	t_fractol	f;
@@ -67,10 +67,10 @@ void fractol_run()
 	init_mlx(&f, size);
 	init_kernel(&f, size);
 	init_ui(&f, size);
-
+	// Start
 	ui_update(&f);
 	mlx_loop(f.mlx);
-
+	// Stop
 	ui_deinit(&f, &f.ui);
 	kernel_deinit(f.kernel, &f.kernel_settings);
 	free(f.filter_buffer);

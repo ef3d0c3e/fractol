@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 #include <util/math.h>
 
-inline float lerpf(const float a, const float b, const float f)
+inline float	lerpf(const float a, const float b, const float f)
 {
-    return (a * (1.f - f)) + (b * f);
+	return ((a * (1.f - f)) + (b * f));
 }

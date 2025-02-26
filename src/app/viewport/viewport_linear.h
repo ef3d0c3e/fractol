@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   viewport_linear.h                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lgamba <lgamba@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/18 11:54:01 by lgamba            #+#    #+#             */
+/*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #ifndef VIEWPORT_LINEAR_H
 # define VIEWPORT_LINEAR_H
 
@@ -38,7 +49,11 @@ view_linear_data(t_mat2d mat);
  * @returns Screen coordinates mapped to render space coordinates
  */
 t_vec2d
-view_linear_screen_to_space(const t_viewport *this, const t_pos pos, const t_vec2d delta);
+view_linear_screen_to_space(
+	const t_viewport *this,
+	const t_pos pos,
+	const t_vec2d delta
+	);
 
 /**
  * @brief Linear transfor from space coordinates to screen coordinates
