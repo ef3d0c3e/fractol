@@ -23,11 +23,12 @@ const t_kernel	*mandel_landing_arg(t_kernel_settings *settings);
 const t_kernel	*mandel_electric(t_kernel_settings *settings);
 const t_kernel	*burning_ship(t_kernel_settings *settings);
 const t_kernel	*julia_exp(t_kernel_settings *settings);
+const t_kernel	*julia_arg(t_kernel_settings *settings);
 
 static const t_kernel	*kernel_list(size_t id, t_kernel_settings *settings)
 {
 	static t_kernel const* (*list[])(t_kernel_settings *settings) = {
-		julia_exp,
+		julia_arg,
 		mandel_arg,
 		mandel_exp,
 		mandel_de,
@@ -36,6 +37,7 @@ static const t_kernel	*kernel_list(size_t id, t_kernel_settings *settings)
 		mandel_electric,
 		mandel_exp_pt,
 		burning_ship,
+		julia_exp,
 	};
 
 	if (id >= sizeof(list)/sizeof(list[0]))

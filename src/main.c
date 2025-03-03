@@ -12,8 +12,6 @@
 #include "util/pos.h"
 #include "util/util.h"
 #include <app/fractol.h>
-#include <stddef.h>
-#include <stdio.h>
 
 static void	print_usage(const char *program)
 {

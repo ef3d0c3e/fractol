@@ -44,4 +44,16 @@ color_lerp(
 		const t_color second,
 		const double f);
 
+/**
+ * @brief Creates a color from HSV values
+ *
+ * @param h [0,1] Hue
+ * @param s [0,1] Saturation
+ * @param v [0,1] Value
+ *
+ * @returns A color constructed from HSV
+ */
+t_color
+color_from_hsv(double h, double s, double v);
+
 #endif // COLOR_H

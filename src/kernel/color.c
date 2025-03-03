@@ -32,3 +32,25 @@ inline t_color
 		.a = 0,
 	}};
 }
+
+inline t_color
+	color_from_hsv(double h, double s, double v)
+{
+	const int		t = 6 * h;
+	double			*a;
+
+	a = (double [6]){v * (1 - s), v * (1 - s * (6 * h - floor(6 * h))),
+		v * (1 - s * (1 - (6 * h - floor(6 * h)))), v, v, v};
+	if (s != 0.0)
+	{
+		a[3] = a[(const int []){3, 1, 0, 0, 2, 3}[t]];
+		a[4] = a[(const int []){2, 4, 4, 1, 0, 0}[t]];
+		a[5] = a[(const int []){0, 0, 2, 5, 5, 1}[t]];
+	}
+	return ((t_color){.channels = {
+			.r = fmin(fmax(255 * a[3] + 0.5, 0), 255),
+			.g = fmin(fmax(255 * a[4] + 0.5, 0), 255),
+			.b = fmin(fmax(255 * a[5] + 0.5, 0), 255),
+			.a = 0
+		}});
+}

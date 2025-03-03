@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mandel_ext_de.c                                    :+:      :+:    :+:   */
+/*   julia_arg.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgamba <lgamba@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -13,21 +13,24 @@
 #include <kernel/kernel.h>
 #include <complex.h>
 
-static inline t_color iter(t_pos pos, double _Complex c, const t_closure *data)
+static inline t_color	iter(
+		t_pos pos,
+		double _Complex c,
+		const t_closure *data)
 {
 	int				i;
 	double _Complex z;
 	double _Complex dz;
-	const double ratio = (data->view->view.data[1] - data->view->view.data[0]) / (data->view->size.x / 2.0);
+	const double ratio = (data->view->view.data[1] - data->view->view.data[0]) / (data->view->size.x / 4.0);
 
-	z = 0;
+	z = c;
 	dz = 1;
 	double k = 0;
 	i = 0;
 	while (i < data->max_it)
 	{
 		dz = 2 * dz * z + 1;
-		z = z * z + c;
+		z = z * z + data->settings->zparam;
 		double m = cabs(z);
 		k += exp(-m);
 		if (m >= 1e8)
@@ -43,7 +46,6 @@ static inline t_color iter(t_pos pos, double _Complex c, const t_closure *data)
 				val = tanh(cabs(de) / ratio);
 			}
 
-			// hsv to rgb conversion
 			return color_from_hsv(hue, sat, val);
 		}
 		++i;
@@ -66,14 +68,14 @@ static inline void
 	viewport_fragment(data, (void *)iter, &closure);
 }
 
-const t_kernel	*mandel_arg(t_kernel_settings *settings)
+const t_kernel	*julia_arg(t_kernel_settings *settings)
 {
 	static const t_kernel	kernel = {
-		.name = "Mandelbrot Arg",
+		.name = "Julia Argument",
 		.render = render,
 		.default_viewport = {{-1.5, 1.5, -1.0, 1.0}},
 		.default_mat = {{1, 0, 0, 1}},
-		.flags = 0,
+		.flags = USE_ZPARAM,
 		.default_color = {0xFFFFFF},
 	};
 	return (&kernel);
