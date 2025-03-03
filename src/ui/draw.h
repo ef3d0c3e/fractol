@@ -29,6 +29,7 @@ enum	e_draw_item
 	DRAW_RECT,
 	DRAW_LINE,
 	DRAW_TEXT,
+	DRAW_TEXT_SHADOW,
 };
 
 /**
@@ -59,6 +60,13 @@ typedef struct s_draw_item
 			t_pos				pos;
 			const char			*str;
 		} text;
+		struct s_draw_text_shadow
+		{
+			uint32_t			color;
+			uint32_t			shadow;
+			t_pos				pos;
+			const char			*str;
+		} text_shadow;
 	} draw;
 }	t_draw_item;
 

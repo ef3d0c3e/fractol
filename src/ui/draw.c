@@ -88,6 +88,33 @@ static inline void
 		);
 }
 
+static inline void
+	draw_text_shadow(
+		t_xvar *mlx,
+		t_win_list *win,
+		const struct s_draw_text_shadow *text
+		)
+{
+	XGCValues	xgcv;
+
+	xgcv.foreground = text->shadow;
+	XChangeGC(mlx->display, win->gc, GCForeground, &xgcv);
+	XDrawString(
+		mlx->display, win->window, win->gc,
+		text->pos.x + 1,
+		text->pos.y + 1,
+		text->str, strlen(text->str)
+		);
+	xgcv.foreground = text->color;
+	XChangeGC(mlx->display, win->gc, GCForeground, &xgcv);
+	XDrawString(
+		mlx->display, win->window, win->gc,
+		text->pos.x,
+		text->pos.y,
+		text->str, strlen(text->str)
+		);
+}
+
 inline void	draw(t_xvar *mlx, t_win_list *win, const t_draw_item *item)
 {
 	static	void (*const drawer_table[])
@@ -95,6 +122,7 @@ inline void	draw(t_xvar *mlx, t_win_list *win, const t_draw_item *item)
 	[DRAW_RECT] = (void*)draw_rect,
 	[DRAW_LINE] = (void*)draw_line,
 	[DRAW_TEXT] = (void*)draw_text,
+	[DRAW_TEXT_SHADOW] = (void*)draw_text_shadow,
 	};
 
 	drawer_table[item->item](mlx, win, (void *)&item->draw);

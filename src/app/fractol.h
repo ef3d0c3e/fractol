@@ -62,7 +62,7 @@ typedef struct s_fractol
 }	t_fractol;
 
 void
-fractol_run();
+fractol_start(t_pos win_size);
 
 // Render the selector widget
 void

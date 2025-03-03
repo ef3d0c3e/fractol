@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   util.c                                             :+:      :+:    :+:   */
+/*   strcmp.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgamba <lgamba@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -9,24 +9,13 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#ifndef UTIL_H
-# define UTIL_H
 
-# include <stdlib.h>
+#include "util.h"
 
-# ifdef __clang__
-
-typedef char	t_char32 __attribute__((ext_vector_type(32), aligned(1)));
-# else
-
-typedef char	t_char32 __attribute__((vector_size(32), aligned(1)));
-# endif // __clang__
-
-void
-*ft_memcpy(void *dest, const void *src, size_t n);
-int
-ft_strcmp(const char *l, const char *r);
-void
-*ft_realloc(void *ptr, const size_t old, const size_t size);
-
-#endif // UTIL_H
+inline int
+	ft_strcmp(const char *l, const char *r)
+{
+	while (*l == *r && *l)
+		++l, ++r;
+	return (*l-*r);
+}

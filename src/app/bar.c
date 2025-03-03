@@ -1,4 +1,5 @@
 #include "fractol.h"
+#include "ui/draw.h"
 #include "util/util.h"
 #include <math.h>
 
@@ -20,10 +21,11 @@ static inline void	iter_count(t_fractol *f)
 	}
 	buf[6 + length + 1] = '\0';
 	drawqueue_push(&f->ui.ui_queue, (t_draw_item){
-		.item = DRAW_TEXT,
-		.draw.text = {
+		.item = DRAW_TEXT_SHADOW,
+		.draw.text_shadow = {
 			.pos = {2, f->ui.size.y - 8},
 			.color = 0xFFFFFF,
+			.shadow = 0x000000,
 			.str = buf,
 		}
 	});

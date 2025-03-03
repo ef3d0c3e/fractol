@@ -19,6 +19,7 @@ src/app/bar.c \
 src/util/vector.c \
 src/util/pos.c \
 src/util/realloc.c \
+src/util/strcmp.c \
 src/util/math.c \
 src/util/memcpy.c \
 src/util/matrix.c \
