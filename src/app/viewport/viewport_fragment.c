@@ -35,7 +35,7 @@ static inline float	gauss_kernel(size_t size, int x, int y)
 static void	
 	fragment_oversample(
 		struct s_fragment_data *data,
-		t_color (*shader)(t_pos pos, double _Complex z, void *data),
+		t_color (*shader)(double _Complex z, void *data),
 		void *closure)
 {
 	const size_t	size = data->viewport->size.y * data->viewport->size.x;
@@ -60,7 +60,7 @@ static void
 				for (int x = -oversample; x <= oversample; ++x)
 				{
 					const t_vec2d z = data->viewport->screen_to_space(data->viewport, pos, (t_vec2d){x * factor, y * factor});
-					color = shader(pos, z.x + I * z.y, closure);
+					color = shader(z.x + I * z.y, closure);
 					const float f = gauss_kernel(oversample * 2 + 1, x, y);
 					cols[0] += color.channels.r / 255.f * f;
 					cols[1] += color.channels.g / 255.f * f;
@@ -78,7 +78,7 @@ static void
 void
 	viewport_fragment(
 		struct s_fragment_data *data,
-		t_color (*shader)(t_pos pos, double _Complex z, void *data),
+		t_color (*shader)(double _Complex z, void *data),
 		void *closure)
 {
 	const size_t size = data->viewport->size.y * data->viewport->size.x;
@@ -98,7 +98,7 @@ void
 			const t_pos pos = (t_pos){i % data->viewport->size.x, i / data->viewport->size.x};
 			const t_vec2d z = data->viewport->screen_to_space(data->viewport, pos, (t_vec2d){0, 0});
 			const t_color color =
-				shader(pos, z.x + I * z.y, closure);
+				shader(z.x + I * z.y, closure);
 			((t_color *)shared)[i] = color;
 		}
 #pragma omp barrier

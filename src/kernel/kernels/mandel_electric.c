@@ -15,7 +15,7 @@
 #include <complex.h>
 #include <kernel/kernel.h>
 
-static inline t_color iter(t_pos pos, t_vec2d c, const t_closure *data)
+static inline t_color iter(t_vec2d c, const t_closure *data)
 {
 	int				i;
 	const double _Complex cc = *(double _Complex *)&c;

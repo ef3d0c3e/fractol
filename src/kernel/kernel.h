@@ -12,7 +12,7 @@
 #ifndef KERNEL_H
 # define KERNEL_H
 
-#include "kernel/color.h"
+# include "kernel/color.h"
 # include <util/math.h>
 # include <ui/image.h>
 # include <kernel/gradient.h>
@@ -29,7 +29,7 @@ typedef struct s_kernel_settings
 	/**
 	 * @brief Additional parameter used for julia fractals
 	 */
-	double _Complex zparam;
+	double _Complex	zparam;
 }	t_kernel_settings;
 
 /**
@@ -55,12 +55,12 @@ typedef struct s_kernel
 	/**
 	 * @brief Kernel's display name
 	 */
-	const char	*name;
+	const char				*name;
 	/**
 	 * @brief Initializes the kernel
 	 */
-	void		(*init)(const t_viewport* view);
-	void		(*render)(
+	void					(*init)(const t_viewport *view);
+	void					(*render)(
 			struct s_fragment_data *data,
 			const t_kernel_settings *settings,
 			const int max_it);
@@ -124,10 +124,10 @@ typedef struct s_kernel_closure
  * @returns A static address to the initialized kernel
  */
 const t_kernel
-	*kernel_init(
-			size_t id,
-			t_viewport *viewport,
-			t_kernel_settings *settings);
+*kernel_init(
+	size_t id,
+	t_viewport *viewport,
+	t_kernel_settings *settings);
 
 /**
  * @brief Cleanly deinitializes the current kernel
@@ -139,9 +139,9 @@ const t_kernel
  */
 void
 kernel_deinit(
-		const t_kernel *kernel,
-		t_kernel_settings *settings
-		);
+	const t_kernel *kernel,
+	t_kernel_settings *settings
+	);
 
 /**
  * @brief Gets the name of a kernel
@@ -151,6 +151,6 @@ kernel_deinit(
  * @returns The name of the kernel or NULL
  */
 const char
-	*kernel_name(size_t id);
+*kernel_name(size_t id);
 
 #endif // KERNEL_H

@@ -14,6 +14,7 @@
 #include <math.h>
 #include <stdio.h>
 
+/* Generates the color */
 static t_color	get_color(
 	const struct s_gr_color *colors,
 	size_t size,
@@ -25,16 +26,8 @@ static t_color	get_color(
 	float	start;
 	float	center;
 
-	if (size == 1)
-		return (colors[0].color);
-	else if (f > 1.0)
-		f = modff(f, &next);
-	else if (f < 0.0)
-		f = modff(-f, &next);
-	if (f == 0 || size == 1)
-		return (colors[0].color);
-	else if (f == 1)
-		return (colors[size - 1].color);
+	if (f == 0 || f == 1 || size == 1)
+		return (colors[(int)f * (size - 1)].color);
 	index = 0;
 	next = (colors[0].weight + colors[1].weight) / 2;
 	start = 0;
@@ -54,7 +47,7 @@ static t_color	get_color(
 }
 
 t_gradient
-gradient_new(const struct s_gr_color *colors, size_t size)
+	gradient_new(const struct s_gr_color *colors, size_t size)
 {
 	size_t	i;
 	float	scale;
@@ -76,13 +69,13 @@ gradient_new(const struct s_gr_color *colors, size_t size)
 }
 
 void
-gradient_free(t_gradient *g)
+	gradient_free(t_gradient *g)
 {
 	free(g->colors);
 }
 
 inline t_color
-gradient_get(const t_gradient *g, float f)
+	gradient_get(const t_gradient *g, float f)
 {
 	float	v;
 
@@ -94,6 +87,5 @@ gradient_get(const t_gradient *g, float f)
 		return (g->colors[0]);
 	else if (f == 1)
 		return (g->colors[g->size - 1]);
-
 	return (g->colors[(int)(4096 * f)]);
 }

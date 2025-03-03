@@ -12,7 +12,7 @@
 #include <kernel/kernel.h>
 
 static inline t_color
-	iter(t_pos pos, t_vec2d c, const t_closure *data)
+	iter(t_vec2d c, const t_closure *data)
 {
 	int				i;
 	double			m;

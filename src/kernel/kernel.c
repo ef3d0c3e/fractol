@@ -27,7 +27,7 @@ const t_kernel	*julia_arg(t_kernel_settings *settings);
 
 static const t_kernel	*kernel_list(size_t id, t_kernel_settings *settings)
 {
-	static t_kernel const* (*list[])(t_kernel_settings *settings) = {
+	static const t_kernel *(*const	list[])(t_kernel_settings *settings) = {
 		julia_arg,
 		mandel_arg,
 		mandel_exp,
@@ -40,9 +40,9 @@ static const t_kernel	*kernel_list(size_t id, t_kernel_settings *settings)
 		julia_exp,
 	};
 
-	if (id >= sizeof(list)/sizeof(list[0]))
+	if (id >= sizeof(list) / sizeof(list[0]))
 		return (NULL);
-	return (list[id])(settings);
+	return ((list[id])(settings));
 }
 
 const t_kernel
@@ -54,13 +54,11 @@ const t_kernel
 	const t_kernel					*kernel = kernel_list(id, settings);
 	struct s_viewport_linear_data	*view_data;
 
-	viewport->screen_to_space = view_linear_screen_to_space,
-	viewport->space_to_screen = view_linear_space_to_screen,
-
+	viewport->screen_to_space = view_linear_screen_to_space;
+	viewport->space_to_screen = view_linear_space_to_screen;
 	view_data = malloc(sizeof(struct s_viewport_linear_data));
 	*view_data = view_linear_data(kernel->default_mat);
 	viewport->data = view_data;
-
 	return (kernel);
 }
 

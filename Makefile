@@ -25,6 +25,7 @@ src/util/memcpy.c \
 src/util/matrix.c \
 src/kernel/kernels/mandel_electric.c \
 src/kernel/kernels/julia_exp.c \
+src/kernel/kernels/julia_arg.c \
 src/kernel/kernels/mandel_exp.c \
 src/kernel/kernels/mandel_exp_pt.c \
 src/kernel/kernels/burning_ship.c \

@@ -108,7 +108,7 @@ struct s_fragment_data
 void
 viewport_fragment(
 	struct s_fragment_data *data,
-	t_color (*shader)(t_pos pos, double _Complex z, void *data),
+	t_color (*shader)(double _Complex z, void *data),
 	void *closure);
 
 #endif // VIEWPORT_H

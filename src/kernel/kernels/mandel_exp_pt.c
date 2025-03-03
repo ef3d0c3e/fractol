@@ -13,7 +13,7 @@
 #include <kernel/kernel.h>
 #include <complex.h>
 
-static inline t_color iter(t_pos pos, double _Complex c, const t_closure *data)
+static inline t_color iter(double _Complex c, const t_closure *data)
 {
 	const int max_ref_it = creal(*((const double _Complex *)data->data));
 	const double _Complex *refs = ((const double _Complex *)data->data) + 1;

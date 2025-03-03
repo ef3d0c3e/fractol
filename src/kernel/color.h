@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   color.h                                             :+:      :+:    :+:   */
+/*   color.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgamba <lgamba@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,7 +12,7 @@
 #ifndef COLOR_H
 # define COLOR_H
 
-#include <stdint.h>
+# include <stdint.h>
 
 /**
  * @brief Color definition
@@ -40,9 +40,9 @@ typedef union u_color
  */
 t_color
 color_lerp(
-		const t_color first,
-		const t_color second,
-		const double f);
+	const t_color first,
+	const t_color second,
+	const double f);
 
 /**
  * @brief Creates a color from HSV values

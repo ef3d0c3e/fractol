@@ -13,7 +13,7 @@
 #include <kernel/kernel.h>
 #include <complex.h>
 
-static inline t_color iter(t_pos pos, double _Complex c, const t_closure *data)
+static inline t_color iter(double _Complex c, const t_closure *data)
 {
 	int				i;
 	double _Complex z;

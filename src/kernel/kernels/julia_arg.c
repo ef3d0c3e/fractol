@@ -14,39 +14,28 @@
 #include <complex.h>
 
 static inline t_color	iter(
-		t_pos pos,
 		double _Complex c,
 		const t_closure *data)
 {
 	int				i;
-	double _Complex z;
-	double _Complex dz;
-	const double ratio = (data->view->view.data[1] - data->view->view.data[0]) / (data->view->size.x / 4.0);
+	double _Complex	z;
+	double _Complex	dz;
+	double _Complex	de;
+	const double	ratio = (4.0 / data->view->size.x)
+		* (data->view->view.data[1] - data->view->view.data[0]);
 
 	z = c;
 	dz = 1;
-	double k = 0;
 	i = 0;
 	while (i < data->max_it)
 	{
 		dz = 2 * dz * z + 1;
 		z = z * z + data->settings->zparam;
-		double m = cabs(z);
-		k += exp(-m);
-		if (m >= 1e8)
+		if (cabs(z) >= 1e8)
 		{
-			// color
-			double hue = 0, sat = 0, val = 1; // interior color = white
-
-			if (k < data->max_it)
-			{ // exterior and boundary color
-				double _Complex de = 2 * z * log(cabs(z)) / dz;
-				hue = fmod(1 + carg(de) / (2 * M_PI), 1); // ? slope of de
-				sat = 0.25;
-				val = tanh(cabs(de) / ratio);
-			}
-
-			return color_from_hsv(hue, sat, val);
+			de = 2 * z * log(cabs(z)) / dz;
+			return (color_from_hsv(fmod(1 + carg(de) / (2 * M_PI), 1), 0.33,
+					tanh(cabs(de) / ratio)));
 		}
 		++i;
 	}
@@ -64,7 +53,7 @@ static inline void
 
 	closure.view = data->viewport;
 	closure.settings = settings;
-	closure.max_it = max_it,
+	closure.max_it = max_it;
 	viewport_fragment(data, (void *)iter, &closure);
 }
 
@@ -78,5 +67,6 @@ const t_kernel	*julia_arg(t_kernel_settings *settings)
 		.flags = USE_ZPARAM,
 		.default_color = {0xFFFFFF},
 	};
+
 	return (&kernel);
 }

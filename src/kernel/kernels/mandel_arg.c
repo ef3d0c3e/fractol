@@ -13,12 +13,14 @@
 #include <kernel/kernel.h>
 #include <complex.h>
 
-static inline t_color iter(t_pos pos, double _Complex c, const t_closure *data)
+static inline t_color iter(double _Complex c, const t_closure *data)
 {
 	int				i;
-	double _Complex z;
-	double _Complex dz;
-	const double ratio = (data->view->view.data[1] - data->view->view.data[0]) / (data->view->size.x / 2.0);
+	double _Complex	z;
+	double _Complex	dz;
+	double _Complex	de;
+	const double	ratio = (4.0 / data->view->size.x)
+		* (data->view->view.data[1] - data->view->view.data[0]);
 
 	z = 0;
 	dz = 1;
@@ -30,21 +32,11 @@ static inline t_color iter(t_pos pos, double _Complex c, const t_closure *data)
 		z = z * z + c;
 		double m = cabs(z);
 		k += exp(-m);
-		if (m >= 1e8)
+		if (cabs(z) >= 1e8)
 		{
-			// color
-			double hue = 0, sat = 0, val = 1; // interior color = white
-
-			if (k < data->max_it)
-			{ // exterior and boundary color
-				double _Complex de = 2 * z * log(cabs(z)) / dz;
-				hue = fmod(1 + carg(de) / (2 * M_PI), 1); // ? slope of de
-				sat = 0.25;
-				val = tanh(cabs(de) / ratio);
-			}
-
-			// hsv to rgb conversion
-			return color_from_hsv(hue, sat, val);
+			de = 2 * z * log(cabs(z)) / dz;
+			return (color_from_hsv(fmod(1 + carg(de) / (2 * M_PI), 1), 0.33,
+					tanh(cabs(de) / ratio)));
 		}
 		++i;
 	}
