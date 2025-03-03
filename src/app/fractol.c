@@ -13,6 +13,7 @@
 #include "app/viewport/viewport.h"
 #include "kernel/kernel.h"
 #include "util/matrix.h"
+#include <complex.h>
 #include <mlx.h>
 
 static inline void	init_mlx(t_fractol *f, t_pos size)
@@ -31,6 +32,7 @@ static inline void	init_kernel(t_fractol *f, t_pos size)
 		1.0
 	}};
 	f->kernel_id = 0;
+	f->kernel_settings.zparam = -0.8 + I * 0.156;
 	f->kernel = kernel_init(0, &f->view, &f->kernel_settings);
 	f->last_view = f->view;
 	f->post_pass = false;
@@ -45,6 +47,7 @@ static void	fractol_loop(t_fractol *f)
 	fractol_selector(f);
 	fractol_move(f);
 	fractol_bar(f);
+	fractol_zparam(f);
 	fractol_render(f);
 }
 

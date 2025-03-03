@@ -15,13 +15,17 @@
 # include <mlx_int.h>
 
 /**
- * @brief Performs sobel filter with a 3x3 gaussian blu.
+ * @brief Performs edge detection then blurring.
  *
- * Requires in to be able to hold 2 * (4 bytes) * img_size
+ * The result of this function is a float array which contains weights to use
+ * for supersampling. The filter is applied to the input `img` parameter
  *
- * 
- * @returns Address of buffer + img_size
+ * @param img Input image to apply the filter to
+ * @param in An array large enough to contain at least twice the number of
+ * pixels as floats. E.g: `2 * WIDTH * HEIGHT * sizeof(float)`
+ *
+ * @returns Address of `in + img_size`
  */
-float	*sobel(t_img *img, float *in);
+float	*postprocess_edge_filter(t_img *img, float *in);
 
 #endif // SOBEL_H

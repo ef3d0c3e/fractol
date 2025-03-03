@@ -80,6 +80,10 @@ struct s_fragment_data
 	 */
 	const t_viewport	*viewport;
 	/**
+	 * @brief Default background color
+	 */
+	t_color				dafault_color;
+	/**
 	 * @brief Draw buffer
 	 */
 	t_img				*img;
@@ -104,7 +108,7 @@ struct s_fragment_data
 void
 viewport_fragment(
 	struct s_fragment_data *data,
-	t_color (*shader)(t_pos pos, t_vec2d z, void *data),
+	t_color (*shader)(t_pos pos, double _Complex z, void *data),
 	void *closure);
 
 #endif // VIEWPORT_H

@@ -75,6 +75,10 @@ fractol_render(t_fractol *f);
 void
 fractol_bar(t_fractol *f);
 
+// Renders zparam and handles mouse movement
+void
+fractol_zparam(t_fractol *f);
+
 // Move ui
 void
 fractol_move(t_fractol *f);

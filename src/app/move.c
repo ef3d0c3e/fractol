@@ -11,11 +11,14 @@
 /* ************************************************************************** */
 
 /**
- * @file Handles camera movements
+ * @file Handles mouse movements
  */
 
 #include "fractol.h"
 #include "ui/event.h"
+#include "util/vector.h"
+#include <complex.h>
+#include <stdio.h>
 
 void
 	move_viewport(

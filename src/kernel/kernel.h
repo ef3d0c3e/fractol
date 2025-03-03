@@ -12,20 +12,39 @@
 #ifndef KERNEL_H
 # define KERNEL_H
 
+#include "kernel/color.h"
 # include <util/math.h>
 # include <ui/image.h>
 # include <kernel/gradient.h>
 # include <app/viewport/viewport.h>
 # include <stdint.h>
 
-typedef union u_kernel_settings
+typedef struct s_kernel_settings
 {
-	t_gradient	gradient;
+	/**
+	 * @brief Colors gradient for fractals that use it
+	 * This should be freed accordingly by checking the `USE_GRADIENT` flag.
+	 */
+	t_gradient		gradient;
+	/**
+	 * @brief Additional parameter used for julia fractals
+	 */
+	double _Complex zparam;
 }	t_kernel_settings;
 
+/**
+ * @brief Sets of flags for internal kernel data
+ */
 typedef enum e_kernel_flags
 {
+	/**
+	 * @brief Whether the kernel uses a gradient
+	 */
 	USE_GRADIENT = (1L<<0),
+	/**
+	 * @brief Additional complex argument
+	 */
+	USE_ZPARAM = (1L<<1),
 }	t_kernel_flags;
 
 /**
@@ -53,7 +72,16 @@ typedef struct s_kernel
 	 * @brief Default transformation matrix
 	 */
 	const t_mat2d			default_mat;
-
+	/**
+	 * @brief Default color for pixels 'inside the set'
+	 *
+	 * This is the color checked against for re-rendering pixels when pressing
+	 * `T`.
+	 */
+	const t_color			default_color;
+	/**
+	 * @brief Flags used for cleaning up custom kernel data
+	 */
 	const t_kernel_flags	flags;
 }	t_kernel;
 

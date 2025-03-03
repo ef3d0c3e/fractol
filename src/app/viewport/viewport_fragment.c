@@ -10,12 +10,17 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "kernel/color.h"
-#include "ui/image.h"
 #include "util/vector.h"
 #include "viewport.h"
+#include <complex.h>
 #include <math.h>
 
-static float	gauss_kernel(size_t size, int x, int y)
+/* Gauss kernel data, used for computing sampling weight
+ * This function returns an approximation of:
+ *  $$\frac{\exp(-\tfrac{1}{2} (x^2 + y^2))}
+ *  {\int_{-size}^{+size} \exp(-t^2) \mathtt dt}$$
+ * */
+static inline float	gauss_kernel(size_t size, int x, int y)
 {
 	static const float	kernel_sums[] = {[3] = 4.897640403536304,
 		[5] = 6.168924081028881, [7] = 6.2797847959347015,
@@ -30,7 +35,7 @@ static float	gauss_kernel(size_t size, int x, int y)
 static void	
 	fragment_oversample(
 		struct s_fragment_data *data,
-		t_color (*shader)(t_pos pos, t_vec2d z, void *data),
+		t_color (*shader)(t_pos pos, double _Complex z, void *data),
 		void *closure)
 {
 	const size_t	size = data->viewport->size.y * data->viewport->size.x;
@@ -55,7 +60,7 @@ static void
 				for (int x = -oversample; x <= oversample; ++x)
 				{
 					const t_vec2d z = data->viewport->screen_to_space(data->viewport, pos, (t_vec2d){x * factor, y * factor});
-					color = shader(pos, z, closure);
+					color = shader(pos, z.x + I * z.y, closure);
 					const float f = gauss_kernel(oversample * 2 + 1, x, y);
 					cols[0] += color.channels.r / 255.f * f;
 					cols[1] += color.channels.g / 255.f * f;
@@ -73,7 +78,7 @@ static void
 void
 	viewport_fragment(
 		struct s_fragment_data *data,
-		t_color (*shader)(t_pos pos, t_vec2d z, void *data),
+		t_color (*shader)(t_pos pos, double _Complex z, void *data),
 		void *closure)
 {
 	const size_t size = data->viewport->size.y * data->viewport->size.x;
@@ -88,11 +93,12 @@ void
 #pragma omp for schedule(dynamic)
 		for (i = 0; i < size; ++i)
 		{
-			if (data->post_pass && ((t_color *)shared)[i].color != 0)
+			if (data->post_pass && ((t_color *)shared)[i].color != data->dafault_color.color)
 				continue;
 			const t_pos pos = (t_pos){i % data->viewport->size.x, i / data->viewport->size.x};
+			const t_vec2d z = data->viewport->screen_to_space(data->viewport, pos, (t_vec2d){0, 0});
 			const t_color color =
-				shader(pos, data->viewport->screen_to_space(data->viewport, pos, (t_vec2d){0, 0}), closure);
+				shader(pos, z.x + I * z.y, closure);
 			((t_color *)shared)[i] = color;
 		}
 #pragma omp barrier

@@ -3,7 +3,8 @@
 #include <stdio.h>
 #include <util/math.h>
 
-static inline t_vec2f	convolve(const float *in, size_t line_length, t_pos pos)
+/* Uses Sobel edge detection algorithm */
+static inline t_vec2f	sobel_filter(const float *in, size_t line_length, t_pos pos)
 {
 	static const float	sobel_x[] = {-1, 0, 1, -2, 0, 2, -1, 0, 1};
 	static const float	sobel_y[] = {1, 2, 1, 0, 0, 0, -1, -2, -1};
@@ -27,7 +28,8 @@ static inline t_vec2f	convolve(const float *in, size_t line_length, t_pos pos)
 	return (r);
 }
 
-static inline float	blur(const float *in, size_t line_length, t_pos pos)
+/* Performs 5x5 gaussian blur over a float matrix */
+static inline float	gauss_blur_5x5(const float *in, size_t line_length, t_pos pos)
 {
 	static const float	gauss5[] = {0.00296902, 0.01330621, 0.02193823,
 		0.01330621, 0.00296902, 0.01330621, 0.0596343, 0.09832033, 0.0596343,
@@ -53,7 +55,7 @@ static inline float	blur(const float *in, size_t line_length, t_pos pos)
 	return (r);
 }
 
-float	*sobel(t_img *img, float *buffer)
+float	*postprocess_edge_filter(t_img *img, float *buffer)
 {
 	const size_t	size = img->width * img->height;
 	size_t			i;
@@ -76,7 +78,7 @@ float	*sobel(t_img *img, float *buffer)
 			buffer[x + y * img->width + size] = 0;
 			if (y == 0 || y + 2 == img->height || x == 0 || x + 2 == img->width)
 				continue ;
-			t_vec2f d = convolve(buffer, img->width, (t_pos){x, y});
+			t_vec2f d = sobel_filter(buffer, img->width, (t_pos){x, y});
 			buffer[x + y * img->width + size] = sqrt(d.x * d.x + d.y * d.y);
 		}
 	}
@@ -89,20 +91,9 @@ float	*sobel(t_img *img, float *buffer)
 			buffer[x + y * img->width] = 0;
 			if (y <= 1 || y + 3 == img->height || x <= 1 || x + 3 == img->width)
 				continue ;
-			buffer[x + y * img->width] = blur(buffer + size, img->width, (t_pos){x, y});
+			buffer[x + y * img->width] = gauss_blur_5x5(buffer + size, img->width, (t_pos){x, y});
 		}
 	}
 
-	// Blur
-	for (int y = 0; y < img->height; ++y)
-	{
-		for (int x = 0; x < img->width; ++x)
-		{
-			if (y <= 1 || y + 3 == img->height || x <= 1 || x + 3 == img->width)
-				continue ;
-			buffer[x + y * img->width + size] = blur(buffer, img->width, (t_pos){x, y});
-		}
-	}
-
-	return (buffer + size);
+	return (buffer);
 }

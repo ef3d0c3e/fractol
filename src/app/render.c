@@ -4,6 +4,7 @@
 #include <kernel/post_processing.h>
 #include <ui/event.h>
 
+/* Renders text by bypassing the draqueue */
 static void	status(t_fractol *f, char *s)
 {
 	const int	x = f->ui.size.x * 0.05f;
@@ -52,8 +53,9 @@ void	fractol_render(t_fractol *f)
 	else if (f->needs_resample)
 	{
 		status(f, "Upsampling...");
-		data = (struct s_fragment_data){&f->view, f->ui.render,
-			sobel(f->ui.render, f->filter_buffer), false};
+		data = (struct s_fragment_data){&f->view,  f->kernel->default_color,
+			f->ui.render,
+			postprocess_edge_filter(f->ui.render, f->filter_buffer), false};
 		f->kernel->render(&data, &f->kernel_settings, f->max_iter);
 		f->needs_resample = false;
 	}

@@ -14,6 +14,7 @@ src/app/viewport/viewport_fragment.c \
 src/app/viewport/viewport_linear.c \
 src/app/move.c \
 src/app/selector.c \
+src/app/zparam.c \
 src/app/bar.c \
 src/util/vector.c \
 src/util/pos.c \
@@ -22,11 +23,13 @@ src/util/math.c \
 src/util/memcpy.c \
 src/util/matrix.c \
 src/kernel/kernels/mandel_electric.c \
+src/kernel/kernels/julia_exp.c \
 src/kernel/kernels/mandel_exp.c \
 src/kernel/kernels/mandel_exp_pt.c \
 src/kernel/kernels/burning_ship.c \
 src/kernel/kernels/mandel_de.c \
 src/kernel/kernels/mandel_landing_arg.c \
+src/kernel/kernels/mandel_arg.c \
 src/kernel/kernels/mandel_smooth_it.c \
 src/kernel/gradient.c \
 src/kernel/color.c \
