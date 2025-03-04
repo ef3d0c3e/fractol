@@ -14,20 +14,20 @@
 #include <kernel/kernel.h>
 #include <complex.h>
 
-static inline t_color iter(double _Complex c, const t_closure *data)
+static inline t_color	iter(double _Complex c, const t_closure *data)
 {
 	int				i;
-	double _Complex z;
+	double			k;
+	double _Complex	z;
 
 	z = c;
-	double _Complex k = 0;
 	i = 0;
+	k = 0;
 	while (i < data->max_it)
 	{
 		z = z * z + data->settings->zparam;
-		double m = cabs(z);
-		k += exp(-(1+cos(z))/m - m/16 - log(1+m)/m - (m*m)/100);
-		if (m >= 1e8)
+		k += exp(-cabs(z));
+		if (cabs(z) >= 1e8)
 			return (gradient_get(&data->settings->gradient, log(cabs(k))));
 		++i;
 	}
@@ -45,24 +45,23 @@ static inline void
 
 	closure.view = data->viewport;
 	closure.settings = settings;
-	closure.max_it = max_it,
+	closure.max_it = max_it;
 	viewport_fragment(data, (void *)iter, &closure);
 }
 
 const t_kernel	*julia_exp(t_kernel_settings *settings)
 {
 	static const struct s_gr_color	colors[] = {
-    {{66 << 16 | 30 << 8 | 15}, 1.0}, {{25 << 16 | 7 << 8 | 26}, 1.0},
-    {{9 << 16 | 1 << 8 | 47}, 1.0}, {{4 << 16 | 4 << 8 | 73}, 1.0},
-    {{0 << 16 | 7 << 8 | 100}, 1.0}, {{12 << 16 | 44 << 8 | 138}, 1.0},
-    {{24 << 16 | 82 << 8 | 177}, 1.0}, {{57 << 16 | 125 << 8 | 209}, 1.0},
-    {{134 << 16 | 181 << 8 | 229}, 1.0}, {{211 << 16 | 236 << 8 | 248}, 1.0},
-    {{241 << 16 | 233 << 8 | 191}, 1.0}, {{248 << 16 | 201 << 8 | 95}, 1.0},
-    {{255 << 16 | 170 << 8 | 0}, 1.0}, {{204 << 16 | 128 << 8 | 0}, 1.0},
-    {{153 << 16 | 87 << 8 | 0}, 1.0}, {{106 << 16 | 52 << 8 | 3}, 1.0},
-    {{66 << 16 | 30 << 8 | 15}, 1.0}, 
-	};
-	static const t_kernel	kernel = {
+	{{66 << 16 | 30 << 8 | 15}, 1.0},
+	{{25 << 16 | 7 << 8 | 26}, 1.0}, {{9 << 16 | 1 << 8 | 47}, 1.0},
+	{{4 << 16 | 4 << 8 | 73}, 1.0}, {{0 << 16 | 7 << 8 | 100}, 1.0},
+	{{12 << 16 | 44 << 8 | 138}, 1.0}, {{24 << 16 | 82 << 8 | 177}, 1.0},
+	{{57 << 16 | 125 << 8 | 209}, 1.0}, {{134 << 16 | 181 << 8 | 229}, 1.0},
+	{{211 << 16 | 236 << 8 | 248}, 1.0}, {{241 << 16 | 233 << 8 | 191}, 1.0},
+	{{248 << 16 | 201 << 8 | 95}, 1.0}, {{255 << 16 | 170 << 8 | 0}, 1.0},
+	{{204 << 16 | 128 << 8 | 0}, 1.0}, {{153 << 16 | 87 << 8 | 0}, 1.0},
+	{{106 << 16 | 52 << 8 | 3}, 1.0}, {{66 << 16 | 30 << 8 | 15}, 1.0}};
+	static const t_kernel			kernel = {
 		.name = "Julia Exponential",
 		.render = render,
 		.default_viewport = {{-1.5, 1.5, -1.0, 1.0}},
@@ -70,7 +69,9 @@ const t_kernel	*julia_exp(t_kernel_settings *settings)
 		.flags = USE_GRADIENT | USE_ZPARAM,
 		.default_color = {0x000000},
 	};
+
 	if (settings)
-		settings->gradient = gradient_new(colors, sizeof(colors) / sizeof(colors[0]));
+		settings->gradient
+			= gradient_new(colors, sizeof(colors) / sizeof(colors[0]));
 	return (&kernel);
 }

@@ -13,7 +13,7 @@
 #include <kernel/kernel.h>
 #include <complex.h>
 
-static inline t_color iter(double _Complex c, const t_closure *data)
+static inline t_color	iter(double _Complex c, const t_closure *data)
 {
 	int				i;
 	double _Complex	z;
@@ -24,19 +24,16 @@ static inline t_color iter(double _Complex c, const t_closure *data)
 
 	z = 0;
 	dz = 1;
-	double k = 0;
 	i = 0;
 	while (i < data->max_it)
 	{
 		dz = 2 * dz * z + 1;
 		z = z * z + c;
-		double m = cabs(z);
-		k += exp(-m);
 		if (cabs(z) >= 1e8)
 		{
 			de = 2 * z * log(cabs(z)) / dz;
 			return (color_from_hsv(fmod(1 + carg(de) / (2 * M_PI), 1), 0.33,
-					tanh(cabs(de) / ratio)));
+					tanh(cabs(de) / ratio * 4)));
 		}
 		++i;
 	}
@@ -54,7 +51,7 @@ static inline void
 
 	closure.view = data->viewport;
 	closure.settings = settings;
-	closure.max_it = max_it,
+	closure.max_it = max_it;
 	viewport_fragment(data, (void *)iter, &closure);
 }
 
@@ -68,5 +65,7 @@ const t_kernel	*mandel_arg(t_kernel_settings *settings)
 		.flags = 0,
 		.default_color = {0xFFFFFF},
 	};
+
+	(void)settings;
 	return (&kernel);
 }

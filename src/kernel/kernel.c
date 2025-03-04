@@ -16,12 +16,11 @@
 
 const t_kernel	*mandel_de(t_kernel_settings *settings);
 const t_kernel	*mandel_exp(t_kernel_settings *settings);
-const t_kernel	*mandel_exp_pt(t_kernel_settings *settings);
 const t_kernel	*mandel_arg(t_kernel_settings *settings);
 const t_kernel	*mandel_smooth_it(t_kernel_settings *settings);
 const t_kernel	*mandel_landing_arg(t_kernel_settings *settings);
 const t_kernel	*mandel_electric(t_kernel_settings *settings);
-const t_kernel	*burning_ship(t_kernel_settings *settings);
+const t_kernel	*burning_ship_exp(t_kernel_settings *settings);
 const t_kernel	*julia_exp(t_kernel_settings *settings);
 const t_kernel	*julia_arg(t_kernel_settings *settings);
 const t_kernel	*ui_debug(t_kernel_settings *settings);
@@ -37,8 +36,7 @@ static const t_kernel	*kernel_list(size_t id, t_kernel_settings *settings)
 		mandel_smooth_it,
 		mandel_landing_arg,
 		mandel_electric,
-		mandel_exp_pt,
-		burning_ship,
+		burning_ship_exp,
 		julia_exp,
 	};
 

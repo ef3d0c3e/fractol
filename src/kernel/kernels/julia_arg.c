@@ -35,7 +35,7 @@ static inline t_color	iter(
 		{
 			de = 2 * z * log(cabs(z)) / dz;
 			return (color_from_hsv(fmod(1 + carg(de) / (2 * M_PI), 1), 0.33,
-					tanh(cabs(de) / ratio)));
+					tanh(cabs(de) / ratio * 4)));
 		}
 		++i;
 	}
@@ -68,5 +68,6 @@ const t_kernel	*julia_arg(t_kernel_settings *settings)
 		.default_color = {0xFFFFFF},
 	};
 
+	(void)settings;
 	return (&kernel);
 }

@@ -16,6 +16,9 @@ inline int
 	ft_strcmp(const char *l, const char *r)
 {
 	while (*l == *r && *l)
-		++l, ++r;
-	return (*l-*r);
+	{
+		++l;
+		++r;
+	}
+	return (*l - *r);
 }

@@ -13,11 +13,11 @@
 #include "kernel/gradient.h"
 #include <stdint.h>
 
-static inline uint32_t	xorshift()
+static inline uint32_t	xorshift(void)
 {
 	static uint32_t	state = 1;
 	uint32_t		v;
-	
+
 	v = state;
 	state ^= state << 13;
 	state ^= state >> 17;

@@ -20,7 +20,7 @@ static inline t_color	iter(double _Complex c, const t_closure *data)
 	double			m;
 	double _Complex	z;
 
-	z = (double _Complex){0, 0};
+	z = 0;
 	i = 0;
 	k = 0;
 	while (i < data->max_it)
