@@ -39,7 +39,9 @@ void	fractol_render(t_fractol *f)
 	{
 		status(f, "Rendering...");
 		f->ui.img_pos = pos_new(0, 0);
-		f->last_view = f->view;
+		if (f->has_next_view)
+			f->view = f->next_view;
+		f->has_next_view = false;
 		data = (struct s_fragment_data){
 			.viewport = &f->view,
 			.oversampling_data = NULL,

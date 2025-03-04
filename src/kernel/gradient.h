@@ -74,4 +74,13 @@ gradient_free(t_gradient *g);
 t_color
 gradient_get(const t_gradient *g, float f);
 
+/**
+ * @brief Creates a new gradient with random colors
+ *
+ * @param g Gradient to randomize
+ * @param color Number of random colors
+ */
+void
+gradient_randomize(t_gradient *g, size_t colors);
+
 #endif // GRADIENT_H

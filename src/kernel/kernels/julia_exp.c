@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "kernel/color.h"
+#include "kernel/gradient.h"
 #include <kernel/kernel.h>
 #include <complex.h>
 
@@ -19,15 +20,15 @@ static inline t_color iter(double _Complex c, const t_closure *data)
 	double _Complex z;
 
 	z = c;
-	double k = 0;
+	double _Complex k = 0;
 	i = 0;
 	while (i < data->max_it)
 	{
 		z = z * z + data->settings->zparam;
 		double m = cabs(z);
-		k += exp(-m);
+		k += exp(-(1+cos(z))/m - m/16 - log(1+m)/m - (m*m)/100);
 		if (m >= 1e8)
-			return (gradient_get(&data->settings->gradient, log(k)));
+			return (gradient_get(&data->settings->gradient, log(cabs(k))));
 		++i;
 	}
 	return ((t_color){0x000000});

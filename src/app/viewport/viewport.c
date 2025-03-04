@@ -45,13 +45,11 @@ void
 void
 	view_move(
 		t_viewport *this,
-		const t_pos start,
-		const t_pos end,
+		const t_vec2d start,
+		const t_vec2d end,
 		const double factor)
 {
-	const t_vec2d	s = this->screen_to_space(this, start, (t_vec2d){0, 0});
-	const t_vec2d	e = this->screen_to_space(this, end, (t_vec2d){0, 0});
-	const t_vec2d	delta = {(s.x - e.x) * factor, (s.y - e.y) * factor};
+	const t_vec2d	delta = {(start.x - end.x) * factor, (start.y - end.y) * factor};
 
 	this->view.data[0] += delta.x;
 	this->view.data[1] += delta.x;
@@ -72,10 +70,10 @@ void
 	};
 	t_vec2d			delta;
 
-	delta.x = center.x - (this->view.data[0] + this->view.data[1]) / 2.0;
-	delta.y = center.y - (this->view.data[2] + this->view.data[3]) / 2.0;
-	this->view.data[0] = center.x - new_size.x / 2.0 + delta.x * (1.0 - factor);
-	this->view.data[1] = center.x + new_size.x / 2.0 + delta.x * (1.0 - factor);
-	this->view.data[2] = center.y - new_size.y / 2.0 + delta.y * (1.0 - factor);
-	this->view.data[3] = center.y + new_size.y / 2.0 + delta.y * (1.0 - factor);
+	delta.x = center.x;// - (this->view.data[0] + this->view.data[1]) / 2.0;
+	delta.y = center.y;// - (this->view.data[2] + this->view.data[3]) / 2.0;
+	this->view.data[0] = center.x - new_size.x / 2.0;// + delta.x * (1.0 - factor);
+	this->view.data[1] = center.x + new_size.x / 2.0;// + delta.x * (1.0 - factor);
+	this->view.data[2] = center.y - new_size.y / 2.0;// + delta.y * (1.0 - factor);
+	this->view.data[3] = center.y + new_size.y / 2.0;// + delta.y * (1.0 - factor);
 }

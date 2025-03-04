@@ -33,7 +33,8 @@ typedef struct s_fractol
 
 	// Rendering data
 	t_viewport			view;
-	t_viewport			last_view;
+	t_viewport			next_view;
+	bool				has_next_view;
 	/**
 	 * @brief Current selected kernel
 	 */

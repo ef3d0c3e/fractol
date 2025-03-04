@@ -34,7 +34,8 @@ static inline void	init_kernel(t_fractol *f, t_pos size)
 	f->kernel_id = 0;
 	f->kernel_settings.zparam = -0.8 + I * 0.156;
 	f->kernel = kernel_init(0, &f->view, &f->kernel_settings);
-	f->last_view = f->view;
+	f->next_view = f->view;
+	f->has_next_view = false;
 	f->post_pass = false;
 	f->max_iter = 500;
 	f->kernel_count = 0;

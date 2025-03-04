@@ -36,7 +36,7 @@ t_vec2d
 {
 	const t_vec2d	factor = {
 		(this->view.data[1] - this->view.data[0]) / this->size.x,
-		- (this->view.data[3] - this->view.data[2]) / this->size.y};
+		(this->view.data[3] - this->view.data[2]) / this->size.y};
 	t_vec2d			vec;
 
 	vec.x = (pos.x - (this->size.x / 2.0) + delta.x) * factor.x;
@@ -54,7 +54,7 @@ t_pos
 	const t_vec2d	factor = {
 		this->size.x / (this->view.data[1] - this->view.data[0]),
 		-this->size.y / (this->view.data[3] - this->view.data[2])};
-	const t_mat2d	*mat = &((struct s_viewport_linear_data *)this->data)->mat;
+	const t_mat2d	*mat = &((struct s_viewport_linear_data *)this->data)->inv;
 	t_vec2d			vec;
 
 	vec = (t_vec2d){

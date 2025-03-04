@@ -61,8 +61,8 @@ viewport_free(t_viewport *this);
 void
 view_move(
 	t_viewport *this,
-	const t_pos start,
-	const t_pos end,
+	const t_vec2d start,
+	const t_vec2d end,
 	const double factor);
 void
 view_zoom(

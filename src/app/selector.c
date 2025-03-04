@@ -75,7 +75,8 @@ void		fractol_selector(t_fractol *f)
 		f->kernel_id = f->selector_id;
 		free(f->view.data);
 		f->kernel = kernel_init(f->selector_id, &f->view, &f->kernel_settings);
-		f->last_view = f->view;
+		f->next_view = f->view;
+		f->has_next_view = false;
 		f->needs_render = true;
 	}
 }

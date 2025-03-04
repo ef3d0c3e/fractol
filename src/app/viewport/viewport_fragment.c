@@ -15,10 +15,12 @@
 #include <complex.h>
 #include <math.h>
 
-/* Gauss kernel data, used for computing sampling weight
+/**
+ * @brief Gauss kernel data, used for computing sampling weight
+ *
  * This function returns an approximation of:
- *  $$\frac{\exp(-\tfrac{1}{2} (x^2 + y^2))}
- *  {\int_{-size}^{+size} \exp(-t^2) \mathtt dt}$$
+ *  \f$\frac{\exp(-\frac{1}{2} (x^2 + y^2))}
+ *  {\int_{-size}^{+size} \exp(-t^2) \mathtt dt}\f$
  * */
 static inline float	gauss_kernel(size_t size, int x, int y)
 {

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mandel_exp.c                                       :+:      :+:    :+:   */
+/*   ui_debug.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgamba <lgamba@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,29 +10,21 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "kernel/color.h"
-#include <kernel/kernel.h>
+#include "kernel/gradient.h"
+#include "util/vector.h"
+#include <app/viewport/viewport.h>
 #include <complex.h>
+#include <kernel/kernel.h>
 
 static inline t_color	iter(double _Complex c, const t_closure *data)
 {
 	int				i;
-	double			k;
-	double			m;
-	double _Complex	z;
+	double _Complex z;
 
-	z = (double _Complex){0, 0};
-	i = 0;
-	k = 0;
-	while (i < data->max_it)
-	{
-		z = z * z + c;
-		m = cabs(z);
-		k += exp(-m);
-		if (m >= 1e8)
-			return (gradient_get(&data->settings->gradient, log(k)));
-		++i;
-	}
-	return ((t_color){0x000000});
+	t_vec2d d = { creal(c) - floor(creal(c)), (cimag(c) - floor(cimag(c))) };
+	if (fabs(d.x) < 0.01 || fabs(d.y) < 0.01)
+		return ((t_color){0x000000});
+	return (color_lerp((t_color){0xFF0000}, (t_color){0xFFFFFF}, creal(c) / 5));
 }
 
 static inline void
@@ -46,32 +38,19 @@ static inline void
 
 	closure.view = data->viewport;
 	closure.settings = settings;
-	closure.max_it = max_it;
+	closure.max_it = max_it,
 	viewport_fragment(data, (void *)iter, &closure);
 }
 
-const t_kernel	*mandel_exp(t_kernel_settings *settings)
+const t_kernel	*ui_debug(t_kernel_settings *settings)
 {
-	static const struct s_gr_color	colors[] = {
-	{{66 << 16 | 30 << 8 | 15}, 1.0},
-	{{25 << 16 | 7 << 8 | 26}, 1.0}, {{9 << 16 | 1 << 8 | 47}, 1.0},
-	{{4 << 16 | 4 << 8 | 73}, 1.0}, {{0 << 16 | 7 << 8 | 100}, 1.0},
-	{{12 << 16 | 44 << 8 | 138}, 1.0}, {{24 << 16 | 82 << 8 | 177}, 1.0},
-	{{57 << 16 | 125 << 8 | 209}, 1.0}, {{134 << 16 | 181 << 8 | 229}, 1.0},
-	{{211 << 16 | 236 << 8 | 248}, 1.0}, {{241 << 16 | 233 << 8 | 191}, 1.0},
-	{{248 << 16 | 201 << 8 | 95}, 1.0}, {{255 << 16 | 170 << 8 | 0}, 1.0},
-	{{204 << 16 | 128 << 8 | 0}, 1.0}, {{153 << 16 | 87 << 8 | 0}, 1.0},
-	{{106 << 16 | 52 << 8 | 3}, 1.0}, {{66 << 16 | 30 << 8 | 15}, 1.0}};
-	static const t_kernel			kernel = {
-		.name = "Mandelbrot Exponential",
+	static const t_kernel	kernel = {
+		.name = "UI Debug",
 		.render = render,
 		.default_viewport = {{-1.5, 1.5, -1.0, 1.0}},
 		.default_mat = {{1, 0, 0, 1}},
-		.flags = USE_GRADIENT,
+		.flags = 0,
+		.default_color = {0x000000},
 	};
-
-	if (settings)
-		settings->gradient
-			= gradient_new(colors, sizeof(colors) / sizeof(colors[0]));
 	return (&kernel);
 }

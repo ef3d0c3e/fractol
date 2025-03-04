@@ -12,12 +12,10 @@
 #ifndef KERNEL_H
 # define KERNEL_H
 
-# include "kernel/color.h"
 # include <util/math.h>
-# include <ui/image.h>
 # include <kernel/gradient.h>
+# include <ui/image.h>
 # include <app/viewport/viewport.h>
-# include <stdint.h>
 
 typedef struct s_kernel_settings
 {

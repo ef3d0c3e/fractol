@@ -28,12 +28,14 @@ src/kernel/kernels/julia_exp.c \
 src/kernel/kernels/julia_arg.c \
 src/kernel/kernels/mandel_exp.c \
 src/kernel/kernels/mandel_exp_pt.c \
+src/kernel/kernels/ui_debug.c \
 src/kernel/kernels/burning_ship.c \
 src/kernel/kernels/mandel_de.c \
 src/kernel/kernels/mandel_landing_arg.c \
 src/kernel/kernels/mandel_arg.c \
 src/kernel/kernels/mandel_smooth_it.c \
 src/kernel/gradient.c \
+src/kernel/gradient_randomize.c \
 src/kernel/color.c \
 src/kernel/post_processing.c \
 src/kernel/kernel.c \

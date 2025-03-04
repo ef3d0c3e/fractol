@@ -14,6 +14,7 @@
  * @file Handles mouse movements
  */
 
+#include "app/viewport/viewport.h"
 #include "fractol.h"
 #include "ui/event.h"
 #include "util/vector.h"
@@ -28,41 +29,62 @@ void
 	const int zoom_delta
 	)
 {
+	t_viewport	*view;
+
+	view = &f->view;
+	if (f->has_next_view)
+		view = &f->next_view;
 	if (!zoom_delta)
-		view_move(&f->view, start, end, 1.0);
+	{
+		view_move(view,
+			f->view.screen_to_space(view, start, (t_vec2d){0, 0}),
+			f->view.screen_to_space(view, end, (t_vec2d){0, 0}),
+			1.0);
+	}
 	else
 	{
 		printf("end=%d %d\n", end.x, end.y);
-		view_zoom(&f->view, f->last_view.screen_to_space(&f->last_view, end, (t_vec2d){0, 0}), -zoom_delta);
+		t_vec2d end2 = f->view.screen_to_space(&f->view, end, (t_vec2d){0, 0});
+		printf("end2=%f %f\n", end2.x, end2.y);
+		f->has_next_view = true;
+		view_zoom(&f->next_view, f->view.screen_to_space(&f->view, end, (t_vec2d){0, 0}), -zoom_delta);
 	}
 }
 
 static void pmat(const t_mat2d *mat)
 {
 	printf("[[%F %F] [%F %F]]\n", mat->data[0], mat->data[1], mat->data[2], mat->data[3]);
+	printf("CENTER=%F %F\n", (mat->data[1] + mat->data[0]) / 2, (mat->data[3] + mat->data[2]) / 2);
 }
 
 /* Displays reticles and move area */
 static double	move_reticle(t_fractol *f)
 {
-	t_pos tl = f->last_view.space_to_screen(&f->last_view,
-			(t_vec2d){f->view.view.data[0], f->view.view.data[3]});
-	t_pos br = f->last_view.space_to_screen(&f->last_view,
-			(t_vec2d){f->view.view.data[1], f->view.view.data[2]});
+	double *data;
+	
+	data = f->view.view.data;
+	if (f->has_next_view)
+		data = f->next_view.view.data;
+	t_pos tl = f->view.space_to_screen(&f->view,
+			(t_vec2d){data[0], data[3]});
+	t_pos br = f->view.space_to_screen(&f->view,
+			(t_vec2d){data[1], data[2]});
 
 	if (br.x <= tl.x)
 		(tl.x ^= br.x, br.x ^= tl.x, tl.x ^= br.x);
 	if (br.y <= tl.y)
 		(tl.y ^= br.y, br.y ^= tl.y, tl.y ^= br.y);
-	//pmat(&f->view.view);
-	printf("TL=%d %d BR=%d %d\n", tl.x, tl.y, br.x, br.y);
+	pmat(&f->next_view.view);
+	pmat(&f->view.view);
+	printf("------- \n");
+	//printf("TL=%d %d BR=%d %d\n", tl.x, tl.y, br.x, br.y);
 	// Render rectangle
 	drawqueue_push(&f->ui.ui_queue, (t_draw_item){
 		.item = DRAW_RECT,
 		.draw.rect = {
 			.top_left = tl,
 			.bottom_right = br,
-			.color = 0x00FF00,
+			.color = 0x00FF00 + 0xFF * f->has_next_view,
 			.fill = false,
 		}
 	});
@@ -77,7 +99,7 @@ static double	move_reticle(t_fractol *f)
 			.fill = false,
 		}
 	});
-	return ((f->view.view.data[1] - f->view.view.data[0]) / (f->last_view.view.data[1] - f->last_view.view.data[0]));
+	return ((f->next_view.view.data[1] - f->next_view.view.data[0]) / (f->view.view.data[1] - f->view.view.data[0]));
 }
 
 void fractol_move(t_fractol *f)
@@ -92,6 +114,7 @@ void fractol_move(t_fractol *f)
 	double r = move_reticle(f);
 	if (f->ui.event.type == UI_MOUSE_MOVE && f->ui.mouse_down == MOUSE_LEFT)
 	{
+		printf("r=%F\n", r);
 		f->ui.img_pos.x += r * (f->ui.event.event.mouse.to.x - f->ui.event.event.mouse.from.x);
 		f->ui.img_pos.y += r * (f->ui.event.event.mouse.to.y - f->ui.event.event.mouse.from.y);
 	}

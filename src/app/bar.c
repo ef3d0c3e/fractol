@@ -1,5 +1,8 @@
 #include "fractol.h"
+#include "kernel/gradient.h"
+#include "kernel/kernel.h"
 #include "ui/draw.h"
+#include "ui/event.h"
 #include "util/util.h"
 #include <math.h>
 
@@ -35,4 +38,9 @@ static inline void	iter_count(t_fractol *f)
 void	fractol_bar(t_fractol *f)
 {
 	iter_count(f);
+	if (ev_key_pressed(&f->ui, KEY_F) && f->kernel->flags & USE_GRADIENT)
+	{
+		t_gradient *gr = &f->kernel_settings.gradient;
+		gradient_randomize(gr, 8);
+	}
 }

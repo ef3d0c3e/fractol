@@ -29,7 +29,7 @@ static inline t_color	iter(t_vec2d c, const t_closure *data)
 		m = z.x * z.x + z.y * z.y;
 		if (m >= 1e8)
 		{
-			m = log2( - log((double)i / data->max_it) ) - log2(0.5 * log(m));
+			m = log2(-log((double)i / data->max_it)) - log2(0.5 * log(m));
 			return (gradient_get(&data->settings->gradient, (i + 1 + m) / 20));
 		}
 		++i;
@@ -55,12 +55,8 @@ static inline void
 const t_kernel	*mandel_smooth_it(t_kernel_settings *settings)
 {
 	static const struct s_gr_color	colors[] = {
-	{{0x061F42}, 1.0f},
-	{{0x230F27}, 1.0f},
-	{{0x098FE5}, 1.0f},
-	{{0xD6F1D2}, 1.0f},
-	{{0xFFFCC0}, 1.0f},
-	{{0x061F42}, 1.0f},
+	{{0x061F42}, 1.0f}, {{0x230F27}, 1.0f}, {{0x098FE5}, 1.0f},
+	{{0xD6F1D2}, 1.0f}, {{0xFFFCC0}, 1.0f}, {{0x061F42}, 1.0f},
 	};
 	static const t_kernel			kernel = {
 		.name = "Mandelbrot Smooth Iteration Count",
