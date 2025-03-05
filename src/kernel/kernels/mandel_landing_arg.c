@@ -13,6 +13,7 @@
 #include <app/viewport/viewport.h>
 #include <complex.h>
 #include <kernel/kernel.h>
+#include <math.h>
 
 static inline t_color	iter(double _Complex c, const t_closure *data)
 {
@@ -34,7 +35,8 @@ static inline t_color	iter(double _Complex c, const t_closure *data)
 		{
 			k = i + 1.0 - log(log(m)) / log(2);
 			z = pow(2, -k) * conj(z) * dz / (m * m * log(m));
-			return (gradient_get(&data->settings->gradient, carg(z) / 6.28));
+			return (gradient_get(&data->settings->gradient,
+					carg(z) / (2 * M_PI)));
 		}
 		++i;
 	}

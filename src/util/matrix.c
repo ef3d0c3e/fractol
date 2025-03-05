@@ -30,6 +30,14 @@ inline t_vec2d	mat_mul_vec(const t_mat2d *const mat, const t_vec2d *const vec)
 	});
 }
 
+inline t_vec2d	vec_mul_mat(const t_vec2d *const vec, const t_mat2d *const mat)
+{
+	return ((t_vec2d){
+		.x = mat->data[0] * vec->x + mat->data[2] * vec->y,
+		.y = mat->data[1] * vec->x + mat->data[3] * vec->y,
+	});
+}
+
 inline void	mat_invert(t_mat2d *mat)
 {
 	const double	scale = 1.0

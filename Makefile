@@ -6,45 +6,47 @@ IFLAGS := -Iminilibx-linux -Isrc
 LFLAGS := -L/usr/lib -lX11 -lXext -lm
 
 SOURCES := \
-src/main.c \
-src/app/fractol.c \
-src/app/render.c \
-src/app/viewport/viewport.c \
-src/app/viewport/viewport_fragment.c \
-src/app/viewport/viewport_linear.c \
-src/app/move.c \
-src/app/selector.c \
-src/app/zparam.c \
-src/app/bar.c \
-src/util/vector.c \
-src/util/pos.c \
-src/util/realloc.c \
-src/util/strcmp.c \
-src/util/math.c \
-src/util/memcpy.c \
-src/util/matrix.c \
-src/kernel/kernels/mandel_electric.c \
-src/kernel/kernels/julia_exp.c \
-src/kernel/kernels/julia_arg.c \
-src/kernel/kernels/mandel_exp.c \
-src/kernel/kernels/ui_debug.c \
-src/kernel/kernels/burning_ship.c \
-src/kernel/kernels/mandel_de.c \
-src/kernel/kernels/mandel_landing_arg.c \
-src/kernel/kernels/mandel_arg.c \
-src/kernel/kernels/mandel_smooth_it.c \
-src/kernel/gradient.c \
-src/kernel/gradient_randomize.c \
-src/kernel/color.c \
-src/kernel/post_processing.c \
-src/kernel/kernel.c \
-src/ui/draw_queue.c \
-src/ui/image.c \
-src/ui/draw.c \
-src/ui/event_keyboard.c \
-src/ui/event.c \
-src/ui/event_util.c \
-src/ui/ui.c \
+src/main.c\
+src/app/fractol.c\
+src/app/zparam.c\
+src/app/render.c\
+src/app/viewport/viewport.c\
+src/app/viewport/viewport_fragment.c\
+src/app/viewport/viewport_linear.c\
+src/app/move.c\
+src/app/bar.c\
+src/app/selector.c\
+src/util/vector.c\
+src/util/pos.c\
+src/util/realloc.c\
+src/util/math.c\
+src/util/strcmp.c\
+src/util/memcpy.c\
+src/util/matrix.c\
+src/kernel/kernels/mandel_electric.c\
+src/kernel/kernels/burning_ship_de.c\
+src/kernel/kernels/burning_ship_exp.c\
+src/kernel/kernels/mandel_arg.c\
+src/kernel/kernels/mandel_exp.c\
+src/kernel/kernels/mandel_de.c\
+src/kernel/kernels/julia_arg.c\
+src/kernel/kernels/ui_debug.c\
+src/kernel/kernels/mandel_landing_arg.c\
+src/kernel/kernels/fatou.c\
+src/kernel/kernels/julia_exp.c\
+src/kernel/kernels/mandel_smooth_it.c\
+src/kernel/gradient.c\
+src/kernel/gradient_randomize.c\
+src/kernel/color.c\
+src/kernel/post_processing.c\
+src/kernel/kernel.c\
+src/ui/event_util.c\
+src/ui/draw_queue.c\
+src/ui/image.c\
+src/ui/draw.c\
+src/ui/event_keyboard.c\
+src/ui/event.c\
+src/ui/ui.c\
 src/ui/event_mouse.c
 
 OBJECTS := $(addprefix objs/,$(SOURCES:.c=.o))

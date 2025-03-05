@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   julia_exp.c                                        :+:      :+:    :+:   */
+/*   fatou.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgamba <lgamba@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -16,19 +16,24 @@
 
 static inline t_color	iter(double _Complex c, const t_closure *data)
 {
-	int				i;
-	double			k;
-	double _Complex	z;
+	static const double _Complex	roots[] = {1.0,
+		-0.5 + I * sqrt(3) / 2, -0.5 - I * sqrt(3) / 2};
+	int								i;
+	size_t							k;
+	double _Complex					z;
 
 	z = c;
 	i = 0;
-	k = 0;
 	while (i < data->max_it)
 	{
-		z = z * z + data->settings->zparam;
-		k += exp(-cabs(z));
-		if (cabs(z) >= 1e8)
-			return (gradient_get(&data->settings->gradient, log(k)));
+		z -= (z * z * z - 1) / (3 * z * z);
+		k = 0;
+		while (k < sizeof(roots) / sizeof(roots[0]))
+		{
+			if (cabs(z - roots[k]) < 1e-8)
+				return (gradient_get(&data->settings->gradient, k / 2.0));
+			++k;
+		}
 		++i;
 	}
 	return ((t_color){0x000000});
@@ -49,24 +54,16 @@ static inline void
 	viewport_fragment(data, (void *)iter, &closure);
 }
 
-const t_kernel	*julia_exp(t_kernel_settings *settings)
+const t_kernel	*fatou(t_kernel_settings *settings)
 {
 	static const struct s_gr_color	colors[] = {
-	{{66 << 16 | 30 << 8 | 15}, 1.0},
-	{{25 << 16 | 7 << 8 | 26}, 1.0}, {{9 << 16 | 1 << 8 | 47}, 1.0},
-	{{4 << 16 | 4 << 8 | 73}, 1.0}, {{0 << 16 | 7 << 8 | 100}, 1.0},
-	{{12 << 16 | 44 << 8 | 138}, 1.0}, {{24 << 16 | 82 << 8 | 177}, 1.0},
-	{{57 << 16 | 125 << 8 | 209}, 1.0}, {{134 << 16 | 181 << 8 | 229}, 1.0},
-	{{211 << 16 | 236 << 8 | 248}, 1.0}, {{241 << 16 | 233 << 8 | 191}, 1.0},
-	{{248 << 16 | 201 << 8 | 95}, 1.0}, {{255 << 16 | 170 << 8 | 0}, 1.0},
-	{{204 << 16 | 128 << 8 | 0}, 1.0}, {{153 << 16 | 87 << 8 | 0}, 1.0},
-	{{106 << 16 | 52 << 8 | 3}, 1.0}, {{66 << 16 | 30 << 8 | 15}, 1.0}};
+	{{0xFF0000}, 1.0}, {{0x00FF00}, 1.0}, {{0x0000FF}, 1.0}};
 	static const t_kernel			kernel = {
-		.name = "Julia Exponential",
+		.name = "Fatou",
 		.render = render,
 		.default_viewport = {{-1.5, 1.5, -1.0, 1.0}},
 		.default_mat = {{1, 0, 0, 1}},
-		.flags = USE_GRADIENT | USE_ZPARAM,
+		.flags = USE_GRADIENT,
 		.default_color = {0x000000},
 	};
 

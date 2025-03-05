@@ -21,8 +21,23 @@
 # include "pos.h"
 # include <math.h>
 
+/**
+ * @brief Performs linear interpolation on floats
+ *
+ * @param a First value
+ * @param b Second value
+ * @param f Interpolation factor [0, 1]
+ * 
+ * @returns `(a + (b - a) * f)`
+ */
 float	lerpf(const float a, const float b, const float f);
-
-// TODO: FASTLOG/EXP
+/**
+ * @brief Returns the sign of a value
+ *
+ * @param x Value to get the sign of
+ * 
+ * @returns The sign of x, or 1 if `x == 0`
+ */
+double	fsign(double x);
 
 #endif // MATH_H

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   julia_exp.c                                        :+:      :+:    :+:   */
+/*   burning_ship_de.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgamba <lgamba@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -9,29 +9,50 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "kernel/color.h"
 #include "kernel/gradient.h"
-#include <kernel/kernel.h>
+#include "util/matrix.h"
+#include "util/vector.h"
+#include <app/viewport/viewport.h>
 #include <complex.h>
+#include <kernel/kernel.h>
+
+static inline void	update_jn(t_mat2d *j, double _Complex z)
+{
+	*j = (t_mat2d){{2 * creal(z) * j->data[0] - 2 * cimag(z) * j->data[2] + 1,
+		2 * creal(z) * j->data[1] - 2 * cimag(z) * j->data[3],
+		2 * fabs(creal(z)) * fsign(cimag(z)) * j->data[2]
+		+ 2 * fabs(cimag(z)) * fsign(creal(z)) * j->data[0],
+		2 * fabs(creal(z)) * fsign(cimag(z)) * j->data[3]
+		+ 2 * fabs(cimag(z)) * fsign(creal(z)) * j->data[1] + 1}};
+}
 
 static inline t_color	iter(double _Complex c, const t_closure *data)
 {
 	int				i;
-	double			k;
 	double _Complex	z;
+	t_mat2d			j;
+	t_vec2d			uv;
+	double			m;
 
-	z = c;
+	z = 0;
+	j = (t_mat2d){{0, 0, 0, 0}};
 	i = 0;
-	k = 0;
 	while (i < data->max_it)
 	{
-		z = z * z + data->settings->zparam;
-		k += exp(-cabs(z));
-		if (cabs(z) >= 1e8)
-			return (gradient_get(&data->settings->gradient, log(k)));
+		update_jn(&j, z);
+		z = fabs(creal(z)) + I * fabs(cimag(z));
+		z = z * z + c;
+		m = creal(z) * creal(z) + cimag(z) * cimag(z);
+		if (m >= 1e16)
+		{
+			uv = (t_vec2d){creal(z), cimag(z)};
+			uv = vec_mul_mat(&uv, &j);
+			return (gradient_get(&data->settings->gradient,
+					log10(m * 0.5 * log(m) / vec_norm(&uv))));
+		}
 		++i;
 	}
-	return ((t_color){0x000000});
+	return ((t_color){0xFFFFFF});
 }
 
 static inline void
@@ -49,7 +70,7 @@ static inline void
 	viewport_fragment(data, (void *)iter, &closure);
 }
 
-const t_kernel	*julia_exp(t_kernel_settings *settings)
+const t_kernel	*burning_ship_de(t_kernel_settings *settings)
 {
 	static const struct s_gr_color	colors[] = {
 	{{66 << 16 | 30 << 8 | 15}, 1.0},
@@ -62,16 +83,16 @@ const t_kernel	*julia_exp(t_kernel_settings *settings)
 	{{204 << 16 | 128 << 8 | 0}, 1.0}, {{153 << 16 | 87 << 8 | 0}, 1.0},
 	{{106 << 16 | 52 << 8 | 3}, 1.0}, {{66 << 16 | 30 << 8 | 15}, 1.0}};
 	static const t_kernel			kernel = {
-		.name = "Julia Exponential",
+		.name = "Burning Ship Distance Estimate",
 		.render = render,
 		.default_viewport = {{-1.5, 1.5, -1.0, 1.0}},
-		.default_mat = {{1, 0, 0, 1}},
-		.flags = USE_GRADIENT | USE_ZPARAM,
+		.default_mat = {{1, 0, 0, -1}},
+		.flags = USE_GRADIENT,
 		.default_color = {0x000000},
 	};
 
 	if (settings)
-		settings->gradient
-			= gradient_new(colors, sizeof(colors) / sizeof(colors[0]));
+		settings->gradient = gradient_new(colors,
+				sizeof(colors) / sizeof(colors[0]));
 	return (&kernel);
 }

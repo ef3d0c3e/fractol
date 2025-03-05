@@ -34,16 +34,18 @@ void	fractol_render(t_fractol *f)
 {
 	struct s_fragment_data	data;
 
+	data.dafault_color = f->kernel->default_color;
 	render_keys(f);
 	if (f->needs_render)
 	{
 		status(f, "Rendering...");
-		f->ui.img_pos = pos_new(0, 0);
+		f->ui.img_pos = (t_vec2d){0, 0};
 		if (f->has_next_view)
 			f->view = f->next_view;
 		f->has_next_view = false;
 		data = (struct s_fragment_data){
 			.viewport = &f->view,
+			.dafault_color = f->kernel->default_color,
 			.oversampling_data = NULL,
 			.img = f->ui.render,
 			.post_pass = f->post_pass,

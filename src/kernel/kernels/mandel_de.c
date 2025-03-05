@@ -70,6 +70,7 @@ const t_kernel	*mandel_de(t_kernel_settings *settings)
 		.default_viewport = {{-1.5, 1.5, -1.0, 1.0}},
 		.default_mat = {{1, 0, 0, 1}},
 		.flags = USE_GRADIENT,
+		.default_color = {0x000000},
 	};
 
 	if (settings)

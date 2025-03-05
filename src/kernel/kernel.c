@@ -21,23 +21,27 @@ const t_kernel	*mandel_smooth_it(t_kernel_settings *settings);
 const t_kernel	*mandel_landing_arg(t_kernel_settings *settings);
 const t_kernel	*mandel_electric(t_kernel_settings *settings);
 const t_kernel	*burning_ship_exp(t_kernel_settings *settings);
+const t_kernel	*burning_ship_de(t_kernel_settings *settings);
 const t_kernel	*julia_exp(t_kernel_settings *settings);
 const t_kernel	*julia_arg(t_kernel_settings *settings);
+const t_kernel	*fatou(t_kernel_settings *settings);
 const t_kernel	*ui_debug(t_kernel_settings *settings);
 
 static const t_kernel	*kernel_list(size_t id, t_kernel_settings *settings)
 {
 	static const t_kernel *(*const	list[])(t_kernel_settings *settings) = {
-		ui_debug,
-		julia_arg,
 		mandel_arg,
 		mandel_exp,
 		mandel_de,
 		mandel_smooth_it,
 		mandel_landing_arg,
 		mandel_electric,
+		burning_ship_de,
 		burning_ship_exp,
+		julia_arg,
 		julia_exp,
+		fatou,
+		ui_debug,
 	};
 
 	if (id >= sizeof(list) / sizeof(list[0]))

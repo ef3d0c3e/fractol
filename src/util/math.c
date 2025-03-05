@@ -15,3 +15,10 @@ inline float	lerpf(const float a, const float b, const float f)
 {
 	return ((a * (1.f - f)) + (b * f));
 }
+
+inline double	fsign(double x)
+{
+	if (x < 0)
+		return (-1);
+	return (1);
+}

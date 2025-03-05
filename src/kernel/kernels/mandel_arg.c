@@ -19,8 +19,8 @@ static inline t_color	iter(double _Complex c, const t_closure *data)
 	double _Complex	z;
 	double _Complex	dz;
 	double _Complex	de;
-	const double	ratio = (4.0 / data->view->size.x)
-		* (data->view->view.data[1] - data->view->view.data[0]);
+	const double	ratio = (data->view->size.x)
+		/ (data->view->view.data[1] - data->view->view.data[0]);
 
 	z = 0;
 	dz = 1;
@@ -33,7 +33,7 @@ static inline t_color	iter(double _Complex c, const t_closure *data)
 		{
 			de = 2 * z * log(cabs(z)) / dz;
 			return (color_from_hsv(fmod(1 + carg(de) / (2 * M_PI), 1), 0.33,
-					tanh(cabs(de) / ratio * 4)));
+					tanh(cabs(de) * ratio)));
 		}
 		++i;
 	}

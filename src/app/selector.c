@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "fractol.h"
+#include "ui/draw.h"
 #include "ui/event.h"
 
 static int	clamp(int x, int min, int max)
@@ -19,26 +20,6 @@ static int	clamp(int x, int min, int max)
 	else if (x > max)
 		return (max);
 	return (x);
-}
-
-static void	selector_text(t_fractol *f, const char *text, t_pos pos, uint32_t color)
-{
-	drawqueue_push(&f->ui.ui_queue, (t_draw_item){
-		.item = DRAW_TEXT,
-		.draw.text = {
-			.color = 0x0,
-			.pos = {pos.x + 1, pos.y + 1},
-			.str = text,
-		}
-	});
-	drawqueue_push(&f->ui.ui_queue, (t_draw_item){
-		.item = DRAW_TEXT,
-		.draw.text = {
-			.color = color,
-			.pos = pos,
-			.str = text,
-		}
-	});
 }
 
 
@@ -57,8 +38,15 @@ void		fractol_selector(t_fractol *f)
 	id = 0;
 	while ((name = kernel_name(id)))
 	{
-		selector_text(f, name, (t_pos){12, 12 * (id - f->selector_id + 3)}, colors[(id == f->selector_id && id != f->kernel_id)
-			+ 2 * (id == f->kernel_id)].color);
+		drawqueue_push(&f->ui.ui_queue, (t_draw_item){
+				.item = DRAW_TEXT_SHADOW,
+				.draw.text_shadow = {
+					.color = colors[(id == f->selector_id && id != f->kernel_id) + 2 * (id == f->kernel_id)].color,
+					.shadow = 0,
+					.pos = {12, 12 * (id - f->selector_id + 3)},
+					.str = name,
+				}
+		});
 		++id;
 	}
 	drawqueue_push(&f->ui.ui_queue, (t_draw_item){

@@ -30,13 +30,17 @@ static void	print_help(const char *program)
 		"> Mouse Left\tMoves the camera while held down\n"
 		"> Mouse Wheel\tZooms at the cursor's location\n"
 		"> Mouse Right\tSelect the Julia parameter at the current cursor\n"
-		"\t\tlocation\n\n"
-		"> R\t\tRender the fractal for the current camera\n"
-		"> U\t\tUpsample an already rendered fractal\n"
-		"> T\t\tRe-render pixels with the default fractal's color\n\n"
-		"> Q\t\tIncrease the number of iterations\n"
-		"> A\t\tDecrease the number of iterations\n\n"
-		"> S\t\tToggle the selector ui (toggles arrow key navigation)\n");
+		"\t\tlocation\n"
+		"[G]\t\t\n\n"
+		"[R]\t\tRender the fractal for the current camera\n"
+		"[U]\t\tUpsample an already rendered fractal\n"
+		"[T]\t\tRe-render pixels with the default fractal's color\n\n"
+		"[Q]\t\tIncrease the number of iterations\n"
+		"[A]\t\tDecrease the number of iterations\n\n"
+		"[S]\t\tToggle the selector ui (toggles arrow key navigation)\n\n"
+		"[F]\t\tRandomize colors\n"
+		"[N]\t\tRandomize colors\n"
+		);
 }
 
 static void	print_version(void)

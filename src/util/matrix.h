@@ -35,7 +35,7 @@ typedef union u_mat2d
 void
 mat_mul(t_mat2d *a, const t_mat2d *const b);
 /**
- * @brief Multiplies a matrix with a vector (i.e appliy linear transform)
+ * @brief Multiplies a matrix with a vector (i.e applies linear transform)
  *
  * @param mat The transformation matrix
  * @param vec Vector to transform
@@ -44,6 +44,16 @@ mat_mul(t_mat2d *a, const t_mat2d *const b);
  */
 t_vec2d
 mat_mul_vec(const t_mat2d *const mat, const t_vec2d *const vec);
+/**
+ * @brief Multiplies a matrix with a vector (i.e applies linear transform)
+ *
+ * @param vec Vector to transform
+ * @param mat The transformation matrix
+ *
+ * @returns vec times mat
+ */
+t_vec2d
+vec_mul_mat(const t_vec2d *const vec, const t_mat2d *const mat);
 /**
  * @brief Inverts a matrix
  *

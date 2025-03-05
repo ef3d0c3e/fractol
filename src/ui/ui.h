@@ -16,6 +16,7 @@
  * @file Fractol's ui manager
  */
 
+# include "util/vector.h"
 # include <ui/event.h>
 # include <ui/draw.h>
 
@@ -42,7 +43,7 @@ typedef struct s_ui
 	 * @brief Render :ramebuffer
 	 */
 	t_img				*render;
-	t_pos				img_pos;
+	t_vec2d				img_pos;
 	/**
 	 * @brief UI Draw list
 	 */

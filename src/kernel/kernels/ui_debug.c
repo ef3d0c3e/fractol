@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "kernel/color.h"
-#include "kernel/gradient.h"
 #include "util/vector.h"
 #include <app/viewport/viewport.h>
 #include <complex.h>
@@ -18,13 +17,16 @@
 
 static inline t_color	iter(double _Complex c, const t_closure *data)
 {
+	const double	ratio = (4.0 / data->view->size.x)
+		* (data->view->view.data[1] - data->view->view.data[0]);
 	int				i;
-	double _Complex z;
+	const t_vec2d	d = {creal(c) - floor(creal(c)), (cimag(c) - floor(cimag(c)))};
+	const t_pos		pos = {floor(creal(c)), floor(cimag(c))};
 
-	t_vec2d d = { creal(c) - floor(creal(c)), (cimag(c) - floor(cimag(c))) };
-	if (fabs(d.x) < 0.01 || fabs(d.y) < 0.01)
+
+	if (fabs(d.x) < ratio/2 || fabs(d.y) < ratio/2)
 		return ((t_color){0x000000});
-	return (color_lerp((t_color){0xFF0000}, (t_color){0xFFFFFF}, creal(c) / 5));
+	return (t_color){ (0xFFFFFF) };
 }
 
 static inline void
@@ -47,7 +49,7 @@ const t_kernel	*ui_debug(t_kernel_settings *settings)
 	static const t_kernel	kernel = {
 		.name = "UI Debug",
 		.render = render,
-		.default_viewport = {{-1.5, 1.5, -1.0, 1.0}},
+		.default_viewport = {{-15, 15, -10, 10}},
 		.default_mat = {{1, 0, 0, 1}},
 		.flags = 0,
 		.default_color = {0x000000},
