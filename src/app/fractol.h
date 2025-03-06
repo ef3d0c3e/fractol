@@ -56,6 +56,7 @@ typedef struct s_fractol
 	 */
 	bool				needs_resample;
 	bool				needs_resample_debug;
+	bool				needs_gradient_debug;
 	/**
 	 * @brief Post processing buffer suitably aligned to hold least
 	 * WIDTH*HEIGHT*16 bytes

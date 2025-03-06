@@ -1,5 +1,6 @@
 #include "fractol.h"
 #include "kernel/color.h"
+#include "kernel/gradient.h"
 #include "mlx.h"
 #include <X11/Xlib.h>
 #include <kernel/post_processing.h>
@@ -25,7 +26,7 @@ static void	render_keys(t_fractol *f)
 	else if (ev_key_pressed(&f->ui, KEY_U))
 		f->needs_resample = true;
 	else if (ev_key_held(&f->ui, KEY_Q))
-		f->max_iter += 3;
+		f->max_iter = min(20000, f->max_iter + 3);
 	else if (ev_key_held(&f->ui, KEY_A))
 		f->max_iter = max(1, f->max_iter - 3);
 }
@@ -73,5 +74,18 @@ void	fractol_render(t_fractol *f)
 		for (int i = 0; i < f->ui.render->width * f->ui.render->height; ++i)
 			((t_color *)f->ui.render->data)[i] = color_lerp((t_color){0x000000}, (t_color){0xFFFFFF}, exp(-data.oversampling_data[i] / 4));
 		f->needs_resample_debug = false;
+	}
+	else if (f->needs_gradient_debug)
+	{
+		status(f, "Gradient debug...");
+		data = (struct s_fragment_data){&f->view,  f->kernel->default_color,
+			f->ui.render,
+			postprocess_edge_filter(f->ui.render, f->filter_buffer), false};
+		for (int i = 0; i < f->ui.render->width; ++i)
+		{
+			for (int j = f->ui.render->height / 10 * 9; j < f->ui.render->height; ++j)
+				((t_color *)f->ui.render->data)[i + j * f->ui.render->width] = gradient_get(&f->kernel_settings.gradient, ((float)i) / f->ui.render->width);
+		}
+		f->needs_gradient_debug = false;
 	}
 }

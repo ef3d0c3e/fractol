@@ -11,19 +11,11 @@
 /* ************************************************************************** */
 #include "fractol.h"
 #include "kernel/color.h"
+#include "kernel/gradient.h"
 #include "kernel/kernel.h"
 #include "ui/draw.h"
 #include "ui/event.h"
 #include <stddef.h>
-
-static int	clamp(int x, int min, int max)
-{
-	if (x < min)
-		return (min);
-	else if (x > max)
-		return (max);
-	return (x);
-}
 
 static bool	draw_item(t_fractol *f, t_pos id, const char *name)
 {
@@ -59,11 +51,11 @@ void		fractol_selector(t_fractol *f)
 		return ;
 	f->selector_pos.y += ev_key_held(&f->ui, KEY_ARROW_DOWN) - ev_key_held(&f->ui, KEY_ARROW_UP);
 	f->selector_pos.x += ev_key_held(&f->ui, KEY_ARROW_RIGHT) - ev_key_held(&f->ui, KEY_ARROW_LEFT);
-	f->selector_pos.x = clamp(f->selector_pos.x, 0, 1);
+	f->selector_pos.x = min(max(f->selector_pos.x, 0), 1);
 	if (f->selector_pos.x == 0)
-		f->selector_pos.y = clamp(f->selector_pos.y, 0, f->kernel_count - 1);
+		f->selector_pos.y = min(max(f->selector_pos.y, 0), f->kernel_count - 1);
 	if (f->selector_pos.x == 1)
-		f->selector_pos.y = clamp(f->selector_pos.y, 0, 5);
+		f->selector_pos.y = min(max(f->selector_pos.y, 0), 7);
 	id = 0;
 	while ((name = kernel_name(id)))
 	{
@@ -84,14 +76,28 @@ void		fractol_selector(t_fractol *f)
 		f->needs_render = true;
 	if (draw_item(f, (t_pos){1, 1}, "Upsample"))
 		f->needs_resample = true;
-	if (draw_item(f, (t_pos){1, 2}, "+100 Iter"))
-		f->max_iter += 100;
-	if (draw_item(f, (t_pos){1, 3}, "-100 Iter"))
-		f->max_iter = max(1, f->max_iter - 100);
-	if (draw_item(f, (t_pos){1, 4}, "Randomize Gradient") && f->kernel->flags & USE_GRADIENT)
+	if (draw_item(f, (t_pos){1, 2}, "Randomize Gradient") && f->kernel->flags & USE_GRADIENT)
 		gradient_randomize(&f->kernel_settings.gradient, 8);
-	if (draw_item(f, (t_pos){1, 5}, "Oversampling Debug"))
+	if (draw_item(f, (t_pos){1, 3}, "Reset viewport"))
+	{
+		f->view.view = (t_mat2d){{
+			-(double)f->ui.size.x / f->ui.size.y,
+			(double)f->ui.size.x / f->ui.size.y,
+			f->kernel->default_viewport.data[2],
+			f->kernel->default_viewport.data[3],
+		}};
+		f->next_view = f->view;
+		f->has_next_view = false;
+		f->needs_render = true;
+	}
+	if (draw_item(f, (t_pos){1, 4}, "Iter +100"))
+		f->max_iter = min(f->max_iter + 100, 20000);
+	if (draw_item(f, (t_pos){1, 5}, "Iter -100"))
+		f->max_iter = max(f->max_iter - 100, 1);
+	if (draw_item(f, (t_pos){1, 6}, "Oversampling Debug"))
 		f->needs_resample_debug = true;
+	if (draw_item(f, (t_pos){1, 7}, "Gradient Debug") && f->kernel->flags & USE_GRADIENT)
+		f->needs_gradient_debug = true;
 	
 	drawqueue_push(&f->ui.ui_queue, (t_draw_item){
 		.item = DRAW_TEXT_SHADOW,

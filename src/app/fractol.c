@@ -61,6 +61,7 @@ static inline void	init_ui(t_fractol *f, t_pos size)
 	f->needs_render = false;
 	f->needs_resample = false;
 	f->needs_resample_debug = false;
+	f->needs_gradient_debug = false;
 	f->filter_buffer = malloc(sizeof(float) * size.x * size.y * 4);
 }
 
