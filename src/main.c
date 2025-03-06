@@ -37,7 +37,7 @@ static void	print_help(const char *program)
 		"[T]\t\tRe-render pixels with the default fractal's color\n\n"
 		"[Q]\t\tIncrease the number of iterations\n"
 		"[A]\t\tDecrease the number of iterations\n\n"
-		"[S]\t\tToggle the selector ui (toggles arrow key navigation)\n\n"
+		"[S]\t\tToggle ui (toggles arrow key navigation)\n\n"
 		"[F]\t\tRandomize colors\n"
 		"[N]\t\tRandomize colors\n"
 		);

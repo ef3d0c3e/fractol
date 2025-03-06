@@ -45,7 +45,7 @@ typedef struct s_fractol
 	bool				post_pass;
 	// Widgets
 	int					kernel_count;
-	int					selector_id;
+	t_pos				selector_pos;
 	bool				selector_shown;
 	/**
 	 * @brief Set to true when in need fo re-rendering next frame
@@ -55,6 +55,7 @@ typedef struct s_fractol
 	 * @brief Set to true when in need or supersampling
 	 */
 	bool				needs_resample;
+	bool				needs_resample_debug;
 	/**
 	 * @brief Post processing buffer suitably aligned to hold least
 	 * WIDTH*HEIGHT*16 bytes

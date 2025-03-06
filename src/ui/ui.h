@@ -40,7 +40,7 @@ typedef struct s_ui
 	t_event				event;
 	void				(*ui_loop)(t_fractol *f);
 	/*
-	 * @brief Render :ramebuffer
+	 * @brief Render framebuffer
 	 */
 	t_img				*render;
 	t_vec2d				img_pos;
@@ -52,6 +52,8 @@ typedef struct s_ui
 
 /**
  * @brief Initializes ui
+ *
+ * @param size Screen size in pixels
  */
 t_ui
 ui_init(t_fractol *f, const t_pos size);

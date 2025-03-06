@@ -1,4 +1,5 @@
 #include "fractol.h"
+#include "kernel/color.h"
 #include "mlx.h"
 #include <X11/Xlib.h>
 #include <kernel/post_processing.h>
@@ -26,7 +27,7 @@ static void	render_keys(t_fractol *f)
 	else if (ev_key_held(&f->ui, KEY_Q))
 		f->max_iter += 3;
 	else if (ev_key_held(&f->ui, KEY_A))
-		f->max_iter -= 3;
+		f->max_iter = max(1, f->max_iter - 3);
 }
 
 
@@ -62,5 +63,15 @@ void	fractol_render(t_fractol *f)
 			postprocess_edge_filter(f->ui.render, f->filter_buffer), false};
 		f->kernel->render(&data, &f->kernel_settings, f->max_iter);
 		f->needs_resample = false;
+	}
+	else if (f->needs_resample_debug)
+	{
+		status(f, "Resmampling debug...");
+		data = (struct s_fragment_data){&f->view,  f->kernel->default_color,
+			f->ui.render,
+			postprocess_edge_filter(f->ui.render, f->filter_buffer), false};
+		for (int i = 0; i < f->ui.render->width * f->ui.render->height; ++i)
+			((t_color *)f->ui.render->data)[i] = color_lerp((t_color){0x000000}, (t_color){0xFFFFFF}, exp(-data.oversampling_data[i] / 4));
+		f->needs_resample_debug = false;
 	}
 }

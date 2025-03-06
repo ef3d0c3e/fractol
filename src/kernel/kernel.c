@@ -58,11 +58,12 @@ const t_kernel
 	const t_kernel					*kernel = kernel_list(id, settings);
 	struct s_viewport_linear_data	*view_data;
 
+	if (viewport->data)
+		free(viewport->data);
 	viewport->screen_to_space = view_linear_screen_to_space;
 	viewport->space_to_screen = view_linear_space_to_screen;
-	view_data = malloc(sizeof(struct s_viewport_linear_data));
-	*view_data = view_linear_data(kernel->default_mat);
-	viewport->data = view_data;
+	viewport->data = malloc(sizeof(struct s_viewport_linear_data));
+	*((struct s_viewport_linear_data*)viewport->data) = view_linear_data(kernel->default_mat);
 	return (kernel);
 }
 

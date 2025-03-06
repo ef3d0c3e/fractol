@@ -22,3 +22,10 @@ inline double	fsign(double x)
 		return (-1);
 	return (1);
 }
+
+inline int	max(int x, int y)
+{
+	if (x < y)
+		return (y);
+	return (x);
+}

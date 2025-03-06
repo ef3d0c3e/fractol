@@ -56,10 +56,11 @@ static inline void	init_ui(t_fractol *f, t_pos size)
 {
 	f->ui = ui_init(f, size);
 	f->ui.ui_loop = fractol_loop;
-	f->selector_id = 0;
+	f->selector_pos = (t_pos){0, 0};
 	f->selector_shown = true;
 	f->needs_render = false;
 	f->needs_resample = false;
+	f->needs_resample_debug = false;
 	f->filter_buffer = malloc(sizeof(float) * size.x * size.y * 4);
 }
 

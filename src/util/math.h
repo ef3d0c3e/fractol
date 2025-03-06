@@ -39,5 +39,7 @@ float	lerpf(const float a, const float b, const float f);
  * @returns The sign of x, or 1 if `x == 0`
  */
 double	fsign(double x);
+int		max(int x, int y);
+
 
 #endif // MATH_H
