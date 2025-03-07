@@ -64,7 +64,7 @@ static void
 				for (int x = -oversample; x <= oversample; ++x)
 				{
 					const t_vec2d z = data->viewport->screen_to_space(
-						data->viewport, (t_vec2d){pos.x / (double)data->render_size.x + x * factor, pos.y / (double)data->render_size.y + y * factor}
+						data->viewport, (t_vec2d){(pos.x + x * factor) / data->render_size.x, (pos.y + y * factor) / data->render_size.y}
 					);
 					color = shader(z.x + I * z.y, closure);
 					const float f = gauss_sample_weight(oversample * 2 + 1, x, y);
@@ -93,6 +93,8 @@ void
 	t_vec2d			z;
 	t_color			*shared;
 
+	if (data->oversampling_data)
+		return fragment_oversample(data, shader, closure);
 	shared = (t_color *)data->img->data;
 #pragma omp parallel shared(shared, size) private(i, z)
 	{
@@ -101,7 +103,7 @@ void
 		{
 			if (data->post_pass && shared[i].color != data->dafault_color.color)
 				continue;
-			z = data->viewport->screen_to_space(data->viewport, (t_vec2d){(i % data->viewport->size.x) / (double)data->render_size.x, (i / (double)data->viewport->size.x) / data->render_size.y });
+			z = data->viewport->screen_to_space(data->viewport, (t_vec2d){(i % data->render_size.x) / (double)data->render_size.x, (i / (double)data->render_size.x) / data->render_size.y });
 			shared[i] = shader(z.x + I * z.y, closure);
 		}
 #pragma omp barrier

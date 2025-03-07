@@ -1,6 +1,6 @@
 NAME   := fractol
 CC     := gcc
-CFLAGS := -Wall -Wextra -std=c99 -ggdb -fopenmp -pedantic
+CFLAGS := -Wall -Wextra -std=c99 -ggdb -fsanitize=address -fopenmp -pedantic
 #CFLAGS := -Wall -Wextra -std=c99 -fopenmp -O3 -Ofast -ffast-math -pedantic
 IFLAGS := -I./minilibx-linux -I./libs/ft_printf/includes/ -I./src
 LFLAGS := -L/usr/lib -lX11 -lXext -lm

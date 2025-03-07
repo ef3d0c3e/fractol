@@ -2,6 +2,7 @@
 #include "kernel/color.h"
 #include "kernel/gradient.h"
 #include "mlx.h"
+#include "mlx_int.h"
 #include <X11/Xlib.h>
 #include <kernel/post_processing.h>
 #include <ui/event.h>
@@ -47,7 +48,7 @@ void	fractol_render(t_fractol *f)
 		f->has_next_view = false;
 		data = (struct s_fragment_data){
 			.viewport = &f->view,
-			.render_size = {f->ui.size.x, f->ui.size.y},
+			.render_size = {f->ui.size.x / 4, f->ui.size.y / 4},
 			.dafault_color = f->kernel->default_color,
 			.oversampling_data = NULL,
 			.img = f->ui.render,
@@ -56,6 +57,7 @@ void	fractol_render(t_fractol *f)
 		f->kernel->render(&data, &f->kernel_settings, f->max_iter);
 		f->needs_render = false;
 		f->post_pass = false;
+		postprocess_upscale(f->ui.render, data.render_size, f->filter_buffer);
 	}
 	else if (f->needs_resample)
 	{

@@ -12,6 +12,8 @@
 #ifndef POST_PROCESSING_H
 # define POST_PROCESSING_H
 
+# include <kernel/color.h>
+# include <util/pos.h>
 # include <mlx_int.h>
 
 /**
@@ -27,5 +29,10 @@
  * @returns Address of `in + img_size`
  */
 float	*postprocess_edge_filter(t_img *img, float *in);
+
+/**
+ * @brief Postprocess for upscaling
+ */
+void	postprocess_upscale(t_img *img, t_pos size, t_color *in);
 
 #endif // SOBEL_H

@@ -11,7 +11,10 @@
 /* ************************************************************************** */
 #include "post_processing.h"
 #include "util/pos.h"
+#include "util/util.h"
 #include <kernel/color.h>
+#include <math.h>
+#include <stddef.h>
 #include <stdio.h>
 #include <util/math.h>
 
@@ -101,20 +104,50 @@ static inline void	filter(
 
 float	*postprocess_edge_filter(
 	t_img *img,
-	float *buffer)
+	float *in)
 {
-	const size_t	size = img->width * img->height;
+	const size_t	pixel_size = img->width * img->height;
 	size_t			i;
 	t_color			color;
 
 	i = 0;
-	while (i < size)
+	while (i < pixel_size)
 	{
 		color = ((t_color *)img->data)[i];
-		buffer[i++] = (0.30f * color.channels.r + 0.59f * color.channels.g
+		in[i++] = (0.30f * color.channels.r + 0.59f * color.channels.g
 				+ 0.11f * color.channels.b) / 255.0f;
 	}
-	filter(img, (float *[2]){buffer, buffer + size}, 3, sobel_filter);
-	filter(img, (float *[2]){buffer + size, buffer}, 5, gauss_blur_5x5);
-	return (buffer);
+	filter(img, (float *[2]){in, in + pixel_size}, 3, sobel_filter);
+	filter(img, (float *[2]){in + pixel_size, in}, 5, gauss_blur_5x5);
+	return (in);
+}
+
+void	postprocess_upscale(t_img *img, t_pos size, t_color *in)
+{
+	const size_t	pixel_size = img->width * img->height;
+	size_t			i;
+	const t_color			*data = (const t_color *)img->data;
+
+	t_pos pos;
+	pos.y = 0;
+	while (pos.y < img->height)
+	{
+		pos.x = 0;
+		while (pos.x < img->width)
+		{
+			t_vec2d z = (t_vec2d){pos.x / (double)img->width * size.x, pos.y / (double)img->height * size.y};
+			t_color points[4] = {
+				data[(int)z.x + size.x * (int)z.y],
+				data[(int)z.x + ((int)z.x < size.x - 1) + size.x * ((int)z.y + ((int)z.y < size.y - 1))],
+				data[(int)z.x + size.x * (int)z.y],
+				data[(int)z.x + ((int)z.x < size.x - 1) + size.x * ((int)z.y + ((int)z.y < size.y - 1))],
+			};
+			t_color col1 = color_lerp(points[0], points[1], fmod(z.x, 1.0));
+			t_color col2 = color_lerp(points[2], points[3], fmod(z.y, 1.0));
+			in[pos.x + pos.y * img->width] = color_lerp(col1, col2, 0.5);
+			++pos.x;
+		}
+		++pos.y;
+	}
+	ft_memcpy(img->data, in, pixel_size * sizeof(t_color));
 }
