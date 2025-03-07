@@ -68,10 +68,7 @@ void
 		(this->view.data[1] - this->view.data[0]) * factor,
 		(this->view.data[3] - this->view.data[2]) * factor,
 	};
-	t_vec2d			delta;
 
-	delta.x = center.x;
-	delta.y = center.y;
 	this->view.data[0] = center.x - new_size.x / 2.0;
 	this->view.data[1] = center.x + new_size.x / 2.0;
 	this->view.data[2] = center.y - new_size.y / 2.0;

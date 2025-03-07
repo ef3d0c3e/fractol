@@ -94,7 +94,10 @@ void
 	t_color			*shared;
 
 	if (data->oversampling_data)
-		return fragment_oversample(data, shader, closure);
+	{
+		fragment_oversample(data, shader, closure);
+		return ;
+	}
 	shared = (t_color *)data->img->data;
 #pragma omp parallel shared(shared, size) private(i, z)
 	{

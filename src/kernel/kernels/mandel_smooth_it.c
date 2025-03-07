@@ -10,24 +10,22 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "app/viewport/viewport.h"
+#include <complex.h>
 #include <kernel/kernel.h>
 
-static inline t_color	iter(t_vec2d c, const t_closure *data)
+static inline t_color	iter(double _Complex c, const t_closure *data)
 {
 	int				i;
 	double			m;
-	t_vec2d			z;
+	double _Complex	z;
 
-	z = (t_vec2d){0, 0};
+	z = 0;
 	i = 0;
 	while (i < data->max_it)
 	{
-		z = (t_vec2d){
-			z.x * z.x - z.y * z.y + c.x,
-			2.0 * z.x * z.y + c.y,
-		};
-		m = z.x * z.x + z.y * z.y;
-		if (m >= 1e8)
+		z = z * z + c;
+		m = cabs(z);
+		if (m >= 1e16)
 		{
 			m = log2(-log((double)i / data->max_it)) - log2(0.5 * log(m));
 			return (gradient_get(&data->settings->gradient, (i + 1 + m) / 20));
@@ -49,7 +47,7 @@ static inline void
 	closure.view = data->viewport;
 	closure.settings = settings;
 	closure.max_it = max_it;
-	viewport_fragment(data, (void *)iter, &closure);
+	viewport_fragment(data, (t_color (*)(double _Complex, void*))iter, &closure);
 }
 
 const t_kernel	*mandel_smooth_it(t_kernel_settings *settings)

@@ -40,6 +40,11 @@ float	postprocess_gauss_blur_5(float *in, size_t line_length, t_pos pos);
 
 /**
  * @brief Performs bicubic interpolation
+ *
+ * @param in Input image
+ * @param in_size Pixel sizes of input image
+ * @param out Output image
+ * @param out_size Pixel sizes of output image
  */
 void	postprocess_bicubic(const t_color *in, t_pos in_size, t_color *out, t_pos out_size);
 
