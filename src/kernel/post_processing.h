@@ -17,6 +17,33 @@
 # include <mlx_int.h>
 
 /**
+ * @brief Sobel edge detection filter
+ *
+ * @param in Input buffer
+ * @param line_length Length of the line
+ * @param pos Position in the buffer: `pos.x + pos.y * line_length`
+ *
+ * @returns The sobel kernel evaluated at pos
+ */
+float	postprocess_sobel(float *in, size_t line_length, t_pos pos);
+
+/**
+ * @brief Sobel edge detection filter
+ *
+ * @param in Input buffer
+ * @param line_length Length of the line
+ * @param pos Position in the buffer: `pos.x + pos.y * line_length`
+ *
+ * @returns The sobel kernel evaluated at pos
+ */
+float	postprocess_gauss_blur_5(float *in, size_t line_length, t_pos pos);
+
+/**
+ * @brief Performs bicubic interpolation
+ */
+void	postprocess_bicubic(const t_color *in, t_pos in_size, t_color *out, t_pos out_size);
+
+/**
  * @brief Performs edge detection then blurring.
  *
  * The result of this function is a float array which contains weights to use

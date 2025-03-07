@@ -42,6 +42,8 @@ src/kernel/gradient.c \
 src/kernel/gradient_randomize.c \
 src/kernel/color.c \
 src/kernel/post_processing.c \
+src/kernel/post_processing_sobel.c \
+src/kernel/post_processing_gauss.c \
 src/kernel/kernel.c \
 src/ui/event_util.c \
 src/ui/draw_queue.c \

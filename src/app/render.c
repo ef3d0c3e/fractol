@@ -48,7 +48,7 @@ void	fractol_render(t_fractol *f)
 		f->has_next_view = false;
 		data = (struct s_fragment_data){
 			.viewport = &f->view,
-			.render_size = {f->ui.size.x / 4, f->ui.size.y / 4},
+			.render_size = {f->ui.size.x / 2, f->ui.size.y / 2},
 			.dafault_color = f->kernel->default_color,
 			.oversampling_data = NULL,
 			.img = f->ui.render,

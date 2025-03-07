@@ -49,7 +49,7 @@ const t_kernel	*ui_debug(t_kernel_settings *settings)
 	static const t_kernel	kernel = {
 		.name = "UI Debug",
 		.render = render,
-		.default_viewport = {{-15, 15, -10, 10}},
+		.default_viewport = {{-1.5, 1.5, -1.0, 1.0}},
 		.default_mat = {{1, 0, 0, 1}},
 		.flags = 0,
 		.default_color = {0x000000},
