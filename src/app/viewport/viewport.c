@@ -49,7 +49,8 @@ void
 		const t_vec2d end,
 		const double factor)
 {
-	const t_vec2d	delta = {(start.x - end.x) * factor, (start.y - end.y) * factor};
+	const t_vec2d	delta = {(start.x - end.x) * factor,
+		(start.y - end.y) * factor};
 
 	this->view.data[0] += delta.x;
 	this->view.data[1] += delta.x;
@@ -70,10 +71,10 @@ void
 	};
 	t_vec2d			delta;
 
-	delta.x = center.x;// - (this->view.data[0] + this->view.data[1]) / 2.0;
-	delta.y = center.y;// - (this->view.data[2] + this->view.data[3]) / 2.0;
-	this->view.data[0] = center.x - new_size.x / 2.0;// + delta.x * (1.0 - factor);
-	this->view.data[1] = center.x + new_size.x / 2.0;// + delta.x * (1.0 - factor);
-	this->view.data[2] = center.y - new_size.y / 2.0;// + delta.y * (1.0 - factor);
-	this->view.data[3] = center.y + new_size.y / 2.0;// + delta.y * (1.0 - factor);
+	delta.x = center.x;
+	delta.y = center.y;
+	this->view.data[0] = center.x - new_size.x / 2.0;
+	this->view.data[1] = center.x + new_size.x / 2.0;
+	this->view.data[2] = center.y - new_size.y / 2.0;
+	this->view.data[3] = center.y + new_size.y / 2.0;
 }

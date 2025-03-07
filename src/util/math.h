@@ -16,6 +16,10 @@
  * @file Math helpers
  */
 
+# ifndef M_2_PI
+#  define M_2_PI (2.0 * 3.14159265358979323846)
+# endif // M_2_PI
+
 # include "vector.h"
 # include "matrix.h"
 # include "pos.h"

@@ -12,18 +12,19 @@
 #include "util/pos.h"
 #include "util/util.h"
 #include <app/fractol.h>
+#include <ft_printf.h>
 
 static void	print_usage(const char *program)
 {
-	dprintf(2, "Usage: %s [opts...] WIN_WIDTH WIN_HEIGHT\n", program);
+	ft_dprintf(2, "Usage: %s [opts...] WIN_WIDTH WIN_HEIGHT\n", program);
 }
 
 static void	print_help(const char *program)
 {
-	dprintf(2, "\nfractol -- Fractal explorer program in C\n"
+	ft_dprintf(2, "\nfractol -- Fractal explorer program in C\n"
 		"Copyright (c) 2025\n\n");
 	print_usage(program);
-	dprintf(2, "\nOptions:\n"
+	ft_dprintf(2, "\nOptions:\n"
 		"  -h, --help	Show this page\n"
 		"  -v, --version	Version and license informations\n"
 		"\nControls:\n"
@@ -43,7 +44,7 @@ static void	print_help(const char *program)
 
 static void	print_version(void)
 {
-	dprintf(2, "\nfractol -- Fractal explorer program in C\n"
+	ft_dprintf(2, "\nfractol -- Fractal explorer program in C\n"
 		"Copyright (c) 2025 - Lino Gamba\n\n"
 		"version: 1.0\n\n"
 		"fractol is licensed under the GNU General Public License version 3 "
@@ -64,7 +65,7 @@ static void	parse_positional(
 
 	if (*positional == 2)
 	{
-		dprintf(2, "Error: Wrong number of positional parameters, expected: "
+		ft_dprintf(2, "Error: Wrong number of positional parameters, expected: "
 			"`WIDTH HEIGHT`\n");
 		print_usage(program);
 		exit(1);
@@ -79,7 +80,7 @@ static void	parse_positional(
 	++*positional;
 	if (!s[i])
 		return ;
-	dprintf(2, "Error: Failed to parse window size '%s' as " "number\n", s);
+	ft_dprintf(2, "Error: Failed to parse window size '%s' as " "number\n", s);
 	print_usage(program);
 	exit(1);
 }
@@ -99,13 +100,13 @@ int	main(int argc, char **argv)
 		else if (!ft_strcmp(argv[i], "-v") || !ft_strcmp(argv[i], "--version"))
 			exit((print_version(), 0));
 		else if (argv[i][0] == '-')
-			exit((dprintf(2, "Error: Unrecognized parameter `%s`\n"
+			exit((ft_dprintf(2, "Error: Unrecognized parameter `%s`\n"
 						"Try `--help` for help.\n", argv[i]), 1));
 		else
 			parse_positional(argv[0], argv[i], &positional, &win_size);
 	}
 	if (positional != 2)
-		exit((dprintf(2, "Error: Wrong number of positional parameters, "
+		exit((ft_dprintf(2, "Error: Wrong number of positional parameters, "
 					"expected: `WIDTH HEIGHT`\n"), print_usage(argv[0]), 1));
 	fractol_start(win_size);
 	return (0);

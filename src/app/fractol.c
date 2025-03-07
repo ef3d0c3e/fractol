@@ -15,6 +15,7 @@
 #include "util/matrix.h"
 #include <complex.h>
 #include <mlx.h>
+#include <omp.h>
 
 static inline void	init_mlx(t_fractol *f, t_pos size)
 {
@@ -31,6 +32,7 @@ static inline void	init_kernel(t_fractol *f, t_pos size)
 		-1.0,
 		1.0
 	}};
+	f->view.data = NULL;
 	f->kernel_id = 0;
 	f->kernel_settings.zparam = -0.8 + I * 0.156;
 	f->kernel = kernel_init(0, &f->view, &f->kernel_settings);

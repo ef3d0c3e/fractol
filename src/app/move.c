@@ -19,7 +19,6 @@
 #include "ui/event.h"
 #include "util/vector.h"
 #include <complex.h>
-#include <stdio.h>
 
 void
 	move_viewport(
@@ -43,20 +42,11 @@ void
 	}
 	if (zoom_delta)
 	{
-		printf("end=%d %d\n", end.x, end.y);
-		t_vec2d end2 = f->view.screen_to_space(&f->view, end, (t_vec2d){0, 0});
-		printf("end2=%f %f\n", end2.x, end2.y);
 		if (!f->has_next_view)
 			f->next_view = f->view;
 		f->has_next_view = true;
 		view_zoom(&f->next_view, f->view.screen_to_space(&f->view, end, (t_vec2d){0, 0}), -zoom_delta);
 	}
-}
-
-static void pmat(const t_mat2d *mat)
-{
-	printf("[[%F %F] [%F %F]]\n", mat->data[0], mat->data[1], mat->data[2], mat->data[3]);
-	printf("CENTER=%F %F\n", (mat->data[1] + mat->data[0]) / 2, (mat->data[3] + mat->data[2]) / 2);
 }
 
 /* Displays reticles and move area */
@@ -76,10 +66,6 @@ static void move_reticle(t_fractol *f)
 		(tl.x ^= br.x, br.x ^= tl.x, tl.x ^= br.x);
 	if (br.y <= tl.y)
 		(tl.y ^= br.y, br.y ^= tl.y, tl.y ^= br.y);
-	pmat(&f->next_view.view);
-	pmat(&f->view.view);
-	printf("------- \n");
-	//printf("TL=%d %d BR=%d %d\n", tl.x, tl.y, br.x, br.y);
 	// Render rectangle
 	drawqueue_push(&f->ui.ui_queue, (t_draw_item){
 		.item = DRAW_RECT,

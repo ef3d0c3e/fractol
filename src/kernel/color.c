@@ -36,11 +36,15 @@ inline t_color
 inline t_color
 	color_from_hsv(double h, double s, double v)
 {
-	const int		t = 6 * h;
-	double			*a;
+	const int		t = min(5, max(0, (6 * h)));
+	double			a[6];
 
-	a = (double [6]){v * (1 - s), v * (1 - s * (6 * h - floor(6 * h))),
-		v * (1 - s * (1 - (6 * h - floor(6 * h)))), v, v, v};
+	a[0] = v * (1 - s);
+	a[1] = v * (1 - s * (6 * h - floor(6 * h)));
+	a[2] = v * (1 - s * (1 - (6 * h - floor(6 * h))));
+	a[3] = v;
+	a[4] = v;
+	a[5] = v;
 	if (s != 0.0)
 	{
 		a[3] = a[(const int []){3, 1, 0, 0, 2, 3}[t]];

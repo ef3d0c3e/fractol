@@ -20,7 +20,7 @@
 # include <ui/event.h>
 # include <ui/draw.h>
 
-typedef struct s_fractol	t_fractol;
+struct s_fractol;
 
 /**
  * @brief Program's ui component
@@ -38,7 +38,7 @@ typedef struct s_ui
 	 */
 	t_pos				mouse_pos;
 	t_event				event;
-	void				(*ui_loop)(t_fractol *f);
+	void				(*ui_loop)(struct s_fractol *f);
 	/*
 	 * @brief Render framebuffer
 	 */
@@ -56,16 +56,16 @@ typedef struct s_ui
  * @param size Screen size in pixels
  */
 t_ui
-ui_init(t_fractol *f, const t_pos size);
+ui_init(struct s_fractol *f, const t_pos size);
 /**
  * @brief Deinitializes ui
  */
 void
-ui_deinit(t_fractol *f, t_ui *ui);
+ui_deinit(struct s_fractol *f, t_ui *ui);
 /**
  * @brief Updates the ui
  */
 void
-ui_update(t_fractol *f);
+ui_update(struct s_fractol *f);
 
 #endif // UI_H

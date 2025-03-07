@@ -34,7 +34,7 @@ static inline t_color	iter(
 		if (cabs(z) >= 1e8)
 		{
 			de = 2 * z * log(cabs(z)) / dz;
-			return (color_from_hsv(fmod(1 + carg(de) / (2 * M_PI), 1), 0.33,
+			return (color_from_hsv(fmod(1 + carg(de) / M_2_PI, 1), 0.33,
 					tanh(cabs(de) / ratio * 4)));
 		}
 		++i;

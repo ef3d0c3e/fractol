@@ -14,10 +14,10 @@
 #include <kernel/kernel.h>
 #include <complex.h>
 
-static inline t_color	iter(double _Complex c, const t_closure *data)
+static inline t_color	iter(double complex c, const t_closure *data)
 {
-	static const double _Complex	roots[] = {1.0,
-		-0.5 + I * sqrt(3) / 2, -0.5 - I * sqrt(3) / 2};
+	static const complex double	roots[] = {1.0,
+		-0.5 + I * 0.866025403785, -0.5 - I * 0.866025403785};
 	int								i;
 	size_t							k;
 	double _Complex					z;

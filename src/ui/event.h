@@ -19,8 +19,8 @@
 # include <util/pos.h>
 # include <stdbool.h>
 
-typedef struct s_fractol	t_fractol;
-typedef struct s_ui			t_ui;
+struct s_fractol;
+struct s_ui;
 
 /**
  * Enum for keycodes
@@ -119,7 +119,7 @@ enum e_evmask
  *
  * @param fractol Program
  */
-void	event_setup(t_fractol *fractol);
+void	event_setup(struct s_fractol *fractol);
 
 /**
  * @brief Types of event
@@ -179,7 +179,7 @@ typedef struct s_event
  *
  * @returns true if key `code` is released
  */
-bool	ev_key_pressed(t_ui *ui, enum e_keycode code);
+bool	ev_key_pressed(struct s_ui *ui, enum e_keycode code);
 /**
  * @brief Returns true if key `code` is held
  *
@@ -188,7 +188,7 @@ bool	ev_key_pressed(t_ui *ui, enum e_keycode code);
  *
  * @returns true if key `code` is held
  */
-bool	ev_key_held(t_ui *ui, enum e_keycode code);
+bool	ev_key_held(struct s_ui *ui, enum e_keycode code);
 /**
  * @brief Returns true if button `code` has been pressed (e.g released)
  *
@@ -197,7 +197,7 @@ bool	ev_key_held(t_ui *ui, enum e_keycode code);
  *
  * @returns true if key `code` is released
  */
-bool	ev_mouse_pressed(t_ui *ui, enum e_mousecode code);
+bool	ev_mouse_pressed(struct s_ui *ui, enum e_mousecode code);
 /**
  * @brief Returns true if button `code` is held
  *
@@ -206,7 +206,7 @@ bool	ev_mouse_pressed(t_ui *ui, enum e_mousecode code);
  *
  * @returns true if key `code` is held
  */
-bool	ev_mouse_held(t_ui *ui, enum e_mousecode code);
+bool	ev_mouse_held(struct s_ui *ui, enum e_mousecode code);
 /**
  * @brief Gets the mouse wheel delta
  *
@@ -214,6 +214,6 @@ bool	ev_mouse_held(t_ui *ui, enum e_mousecode code);
  *
  * @returns +1 for scroll up, -1 for down
  */
-int		ev_wheel_delta(t_ui *ui);
+int		ev_wheel_delta(struct s_ui *ui);
 
 #endif // EVENT_H
