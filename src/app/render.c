@@ -47,6 +47,7 @@ void	fractol_render(t_fractol *f)
 		f->has_next_view = false;
 		data = (struct s_fragment_data){
 			.viewport = &f->view,
+			.render_size = {f->ui.size.x, f->ui.size.y},
 			.dafault_color = f->kernel->default_color,
 			.oversampling_data = NULL,
 			.img = f->ui.render,
@@ -59,7 +60,7 @@ void	fractol_render(t_fractol *f)
 	else if (f->needs_resample)
 	{
 		status(f, "Upsampling...");
-		data = (struct s_fragment_data){&f->view,  f->kernel->default_color,
+		data = (struct s_fragment_data){&f->view, f->ui.size,  f->kernel->default_color,
 			f->ui.render,
 			postprocess_edge_filter(f->ui.render, f->filter_buffer), false};
 		f->kernel->render(&data, &f->kernel_settings, f->max_iter);
@@ -68,7 +69,7 @@ void	fractol_render(t_fractol *f)
 	else if (f->needs_resample_debug)
 	{
 		status(f, "Resmampling debug...");
-		data = (struct s_fragment_data){&f->view,  f->kernel->default_color,
+		data = (struct s_fragment_data){&f->view, f->ui.size, f->kernel->default_color,
 			f->ui.render,
 			postprocess_edge_filter(f->ui.render, f->filter_buffer), false};
 		for (int i = 0; i < f->ui.render->width * f->ui.render->height; ++i)
@@ -78,7 +79,7 @@ void	fractol_render(t_fractol *f)
 	else if (f->needs_gradient_debug)
 	{
 		status(f, "Gradient debug...");
-		data = (struct s_fragment_data){&f->view,  f->kernel->default_color,
+		data = (struct s_fragment_data){&f->view, f->ui.size, f->kernel->default_color,
 			f->ui.render,
 			postprocess_edge_filter(f->ui.render, f->filter_buffer), false};
 		for (int i = 0; i < f->ui.render->width; ++i)

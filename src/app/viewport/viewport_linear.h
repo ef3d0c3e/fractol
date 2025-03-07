@@ -51,9 +51,7 @@ view_linear_data(t_mat2d mat);
 t_vec2d
 view_linear_screen_to_space(
 	const t_viewport *this,
-	const t_pos pos,
-	const t_vec2d delta
-	);
+	const t_vec2d pos);
 
 /**
  * @brief Linear transfor from space coordinates to screen coordinates

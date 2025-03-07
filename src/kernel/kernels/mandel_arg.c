@@ -32,7 +32,7 @@ static inline t_color	iter(double _Complex c, const t_closure *data)
 		if (cabs(z) >= 1e8)
 		{
 			de = 2 * z * log(cabs(z)) / dz;
-			return (color_from_hsv(fmod(1 + carg(de) / M_2_PI, 1), 0.33,
+			return (color_from_hsv(6 * fmod(1 + carg(de) / M_2_PI, 1 / 6.0), 0.33,
 					tanh(cabs(de) * ratio)));
 		}
 		++i;

@@ -36,8 +36,8 @@ void
 	if (!zoom_delta && !f->has_next_view)
 	{
 		view_move(view,
-			f->view.screen_to_space(view, start, (t_vec2d){0, 0}),
-			f->view.screen_to_space(view, end, (t_vec2d){0, 0}),
+			f->view.screen_to_space(view, (t_vec2d){start.x / (double)f->ui.size.x, start.y / (double)f->ui.size.x}),
+			f->view.screen_to_space(view, (t_vec2d){end.x / (double)f->ui.size.x, end.y / (double)f->ui.size.x}),
 			1.0);
 	}
 	if (zoom_delta)
@@ -45,7 +45,7 @@ void
 		if (!f->has_next_view)
 			f->next_view = f->view;
 		f->has_next_view = true;
-		view_zoom(&f->next_view, f->view.screen_to_space(&f->view, end, (t_vec2d){0, 0}), -zoom_delta);
+		view_zoom(&f->next_view, f->view.screen_to_space(&f->view, (t_vec2d){end.x / (double)f->ui.size.x, end.y / (double)f->ui.size.y}), -zoom_delta);
 	}
 }
 

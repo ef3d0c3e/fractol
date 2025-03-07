@@ -14,6 +14,7 @@
 #include "viewport.h"
 #include <complex.h>
 #include <math.h>
+#include <stdio.h>
 
 /**
  * @brief Gets the weight of a sample
@@ -33,14 +34,13 @@ static inline float	gauss_sample_weight(size_t size, int x, int y)
 	return (expf(-(x * x + y * y) / 2.f) / kernel_sums[15]);
 }
 
-/*
 static void	
 	fragment_oversample(
 		struct s_fragment_data *data,
 		t_color (*shader)(double _Complex z, void *data),
 		void *closure)
 {
-	const size_t	size = data->viewport->size.y * data->viewport->size.x;
+	const size_t	size = data->render_size.x * data->render_size .y;
 	t_color			*shared;
 	size_t			i;
 	t_color			color;
@@ -64,10 +64,10 @@ static void
 				for (int x = -oversample; x <= oversample; ++x)
 				{
 					const t_vec2d z = data->viewport->screen_to_space(
-						data->viewport, pos, (t_vec2d){x * factor, y * factor}
+						data->viewport, (t_vec2d){pos.x / (double)data->render_size.x + x * factor, pos.y / (double)data->render_size.y + y * factor}
 					);
 					color = shader(z.x + I * z.y, closure);
-					const float f = gauss_kernel(oversample * 2 + 1, x, y);
+					const float f = gauss_sample_weight(oversample * 2 + 1, x, y);
 					cols[0] += color.channels.r / 255.f * f;
 					cols[1] += color.channels.g / 255.f * f;
 					cols[2] += color.channels.b / 255.f * f;
@@ -80,7 +80,6 @@ static void
 #pragma omp barrier
 	}
 }
-*/
 
 
 void
@@ -89,7 +88,7 @@ void
 		t_color (*shader)(double _Complex z, void *data),
 		void *closure)
 {
-	const size_t	size = data->viewport->size.y * data->viewport->size.x;
+	const size_t	size = data->render_size.x * data->render_size.y;
 	size_t			i;
 	t_vec2d			z;
 	t_color			*shared;
@@ -102,7 +101,7 @@ void
 		{
 			if (data->post_pass && shared[i].color != data->dafault_color.color)
 				continue;
-			z = data->viewport->screen_to_space(data->viewport, (t_pos){i % data->viewport->size.x, i / data->viewport->size.x}, (t_vec2d){0, 0});
+			z = data->viewport->screen_to_space(data->viewport, (t_vec2d){(i % data->viewport->size.x) / (double)data->render_size.x, (i / (double)data->viewport->size.x) / data->render_size.y });
 			shared[i] = shader(z.x + I * z.y, closure);
 		}
 #pragma omp barrier

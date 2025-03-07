@@ -17,9 +17,8 @@
 t_viewport
 	viewport_create(
 		t_pos size,
-		t_vec2d(*screen_to_space)(const t_viewport *this, const t_pos pos,
-			const t_vec2d delta),
-		t_pos(*space_to_screen)(const t_viewport *this, const t_vec2d pos),
+		t_vec2d(*screen_to_space)(const t_viewport *this, t_vec2d pos),
+		t_pos(*space_to_screen)(const t_viewport *this, t_vec2d pos),
 		void *data)
 {
 	return ((t_viewport){
