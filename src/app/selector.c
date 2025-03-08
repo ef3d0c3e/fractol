@@ -55,7 +55,7 @@ void		fractol_selector(t_fractol *f)
 	if (f->selector_pos.x == 0)
 		f->selector_pos.y = min(max(f->selector_pos.y, 0), f->kernel_count - 1);
 	if (f->selector_pos.x == 1)
-		f->selector_pos.y = min(max(f->selector_pos.y, 0), 7);
+		f->selector_pos.y = min(max(f->selector_pos.y, 0), 8);
 	id = 0;
 	while ((name = kernel_name(id)))
 	{

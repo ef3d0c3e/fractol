@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "kernel/color.h"
+#include "util/math.h"
 #include <kernel/kernel.h>
 #include <complex.h>
 
@@ -23,7 +24,7 @@ static inline t_color	iter(double _Complex c, const t_closure *data)
 		/ (data->view->view.data[1] - data->view->view.data[0]);
 
 	z = 0;
-	dz = 1;
+	dz = 0;
 	i = 0;
 	while (i < data->max_it)
 	{
@@ -32,8 +33,8 @@ static inline t_color	iter(double _Complex c, const t_closure *data)
 		if (cabs(z) >= 1e8)
 		{
 			de = 2 * z * log(cabs(z)) / dz;
-			return (color_from_hsv(6 * fmod(1 + carg(de) / M_2_PI, 1 / 6.0),
-					0.33, tanh(cabs(de) * ratio)));
+			return (color_from_hsv(fmod(1 + carg(de) / TWO_PI, 1), 0.33,
+						tanh(cabs(de) * ratio)));
 		}
 		++i;
 	}

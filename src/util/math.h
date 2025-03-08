@@ -16,9 +16,7 @@
  * @file Math helpers
  */
 
-# ifndef M_2_PI
-#  define M_2_PI 6.2831853071795864769253
-# endif // M_2_PI
+# define TWO_PI 6.2831853071795864769253
 
 # include "vector.h"
 # include "matrix.h"

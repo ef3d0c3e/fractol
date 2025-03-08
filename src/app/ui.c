@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "fractol.h"
+#include "ui/event.h"
 #include "util/util.h"
 
 /* Display iteration count */

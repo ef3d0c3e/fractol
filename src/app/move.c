@@ -20,7 +20,7 @@
 #include "util/vector.h"
 #include <complex.h>
 
-void
+t_pos
 	move_viewport(
 	t_fractol *f,
 	const t_pos start,
@@ -47,6 +47,7 @@ void
 		f->has_next_view = true;
 		view_zoom(&f->next_view, f->view.screen_to_space(&f->view, (t_vec2d){end.x / (double)f->ui.size.x, end.y / (double)f->ui.size.y}), -zoom_delta);
 	}
+	return ((t_pos){end.x - start.x, end.y - start.y});
 }
 
 /* Displays reticles and move area */
@@ -91,17 +92,34 @@ static void move_reticle(t_fractol *f)
 
 void fractol_move(t_fractol *f)
 {	
+	t_pos delta;
+
+	delta = (t_pos){0, 0};
 	if (ev_wheel_delta(&f->ui))
-		move_viewport(f, (t_pos){0, 0}, f->ui.event.event.mouse.to, ev_wheel_delta(&f->ui));
-	else if (f->ui.event.type == UI_MOUSE_MOVE && f->ui.mouse_down == MOUSE_LEFT)
-	{
-		move_viewport(f, f->ui.event.event.mouse.from,
+		delta = move_viewport(f, (t_pos){0, 0}, f->ui.event.event.mouse.to,
+				ev_wheel_delta(&f->ui));
+	else if (f->ui.event.type == UI_MOUSE_MOVE
+			&& f->ui.mouse_down == MOUSE_LEFT)
+		delta = move_viewport(f, f->ui.event.event.mouse.from,
 				f->ui.event.event.mouse.to, 0);
-	}
+	else if (!f->selector_shown && ev_key_pressed(&f->ui, KEY_ARROW_UP))
+		delta = move_viewport(f, (t_pos){0, 0}, (t_pos){0, 4}, 0);
+	else if (!f->selector_shown && ev_key_pressed(&f->ui, KEY_ARROW_DOWN))
+		delta = move_viewport(f, (t_pos){0, 0}, (t_pos){0, -4}, 0);
+	else if (!f->selector_shown && ev_key_pressed(&f->ui, KEY_ARROW_LEFT))
+		delta = move_viewport(f, (t_pos){0, 0}, (t_pos){4, 0}, 0);
+	else if (!f->selector_shown && ev_key_pressed(&f->ui, KEY_ARROW_RIGHT))
+		delta = move_viewport(f, (t_pos){0, 0}, (t_pos){-4, 0}, 0);
+	else if (ev_key_pressed(&f->ui, KEY_KP_PLUS))
+		delta = move_viewport(f, (t_pos){0, 0},
+				(t_pos){f->ui.size.x / 2, f->ui.size.y / 2}, -1);
+	else if (ev_key_pressed(&f->ui, KEY_KP_MINUS))
+		delta = move_viewport(f, (t_pos){0, 0},
+				(t_pos){f->ui.size.x / 2, f->ui.size.y / 2}, 1);
 	move_reticle(f);
-	if (!f->has_next_view && f->ui.event.type == UI_MOUSE_MOVE && f->ui.mouse_down == MOUSE_LEFT)
+	if (!f->has_next_view)
 	{
-		f->ui.img_pos.x += (f->ui.event.event.mouse.to.x - f->ui.event.event.mouse.from.x);
-		f->ui.img_pos.y += (f->ui.event.event.mouse.to.y - f->ui.event.event.mouse.from.y);
+		f->ui.img_pos.x += delta.x;
+		f->ui.img_pos.y += delta.y;
 	}
 }

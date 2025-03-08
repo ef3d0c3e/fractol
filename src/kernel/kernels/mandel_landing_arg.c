@@ -37,7 +37,7 @@ static inline t_color	iter(double _Complex c, const t_closure *data)
 			k = i + 1.0 - log(log(m)) / log(2);
 			z = pow(2, -k) * conj(z) * dz / (m * m * log(m));
 			return (gradient_get(&data->settings->gradient,
-					carg(z) / M_2_PI));
+					carg(z) / TWO_PI));
 		}
 		++i;
 	}

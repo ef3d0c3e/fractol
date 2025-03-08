@@ -26,7 +26,7 @@ static inline void	init_mlx(t_fractol *f, t_pos size)
 
 static inline void	init_kernel(t_fractol *f, t_pos size, int kernel_id)
 {
-	f->view.size = size,
+	f->view.size = size;
 	f->view.view = (t_mat2d){{
 		-(double)size.x / size.y,
 		(double)size.x / size.y,
@@ -39,7 +39,7 @@ static inline void	init_kernel(t_fractol *f, t_pos size, int kernel_id)
 		++f->kernel_count;
 	if (kernel_id >= f->kernel_count)
 		exit((ft_dprintf(2, "Error: Wrong id for kernel: %d. Expected a value "
-		"between 0 and %d.\n", kernel_id, f->kernel_count - 1), 1));
+					"between 0 and %d.\n", kernel_id, f->kernel_count - 1), 1));
 	f->kernel_id = kernel_id;
 	f->kernel_settings.zparam = -0.8 + I * 0.156;
 	f->kernel = kernel_init(f->kernel_id, &f->view, &f->kernel_settings);
@@ -79,10 +79,8 @@ void	fractol_start(t_pos win_size, int downsampling, int kernel)
 	init_mlx(&f, win_size);
 	init_kernel(&f, win_size, kernel);
 	init_ui(&f, win_size);
-	// Start
 	ui_update(&f);
 	mlx_loop(f.mlx);
-	// Stop
 	ui_deinit(&f, &f.ui);
 	kernel_deinit(f.kernel, &f.kernel_settings);
 	free(f.filter_buffer);

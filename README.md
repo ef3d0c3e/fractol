@@ -29,7 +29,7 @@ static inline t_color	iter(double complex c, const t_closure *data)
         if (m > 1e8) // c is outside the set, color it...
         {
             m = 2 * log2(m) * m / cabs(dz);
-            // Plot from gradienbt
+            // Plot from gradient
             return (gradient_get(&data->settings->gradient, log10(m)));
         }
 		++i;
