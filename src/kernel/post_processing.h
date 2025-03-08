@@ -96,6 +96,6 @@ float	*postprocess_edge_filter(t_img *img, float *in);
  *
  * @returns Upsampling weights for each screen pixels
  */
-float	*postprocess_upscale(t_img *img, t_pos size, t_color *in);
+float	*postprocess_upscale(t_img *img, t_pos size, float *in);
 
 #endif // SOBEL_H

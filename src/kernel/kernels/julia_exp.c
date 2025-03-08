@@ -46,7 +46,8 @@ static inline void
 	closure.view = data->viewport;
 	closure.settings = settings;
 	closure.max_it = max_it;
-	viewport_fragment(data, (t_color (*)(double _Complex, void*))iter, &closure);
+	viewport_fragment(data, (t_color (*)(double _Complex, void *))iter,
+		&closure);
 }
 
 const t_kernel	*julia_exp(t_kernel_settings *settings)

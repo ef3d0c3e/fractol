@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 #include "post_processing.h"
 
-
 inline float	postprocess_gauss_blur_5(
 	float *in,
 	size_t line_length,

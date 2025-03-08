@@ -91,25 +91,25 @@ static inline float	propagate(
 	return (r);
 }
 
-
-float	*postprocess_upscale(t_img *img, t_pos size, t_color *in)
+float	*postprocess_upscale(t_img *img, t_pos size, float *in)
 {
 	const size_t	pixel_size = img->width * img->height;
 	const t_color	*data = (const t_color *)img->data;
 	t_color			color;
 	size_t			i;
 
-	postprocess_bicubic(data, size, in, (t_pos){img->width, img->height});
+	postprocess_bilinear(data, size, (t_color *)in,
+		(t_pos){img->width, img->height});
 	ft_memcpy(img->data, in, (img->width * img->height) * sizeof(t_color));
 	i = 0;
 	while (i < pixel_size)
 	{
 		color = ((t_color *)img->data)[i];
-		((float*)in)[i++] = (0.30f * color.channels.r + 0.59f * color.channels.g
-				+ 0.11f * color.channels.b) / 255.0f;
+		in[i++] = (0.30f * color.channels.r
+				+ 0.59f * color.channels.g + 0.11f * color.channels.b) / 255.0f;
 	}
-	filter(img, (float *[2]){(float *)in, (float *)in + pixel_size}, 3, postprocess_sobel);
-	filter(img, (float *[2]){(float *)in + pixel_size, (float *)in}, 5, propagate);
+	filter(img, (float *[2]){in, in + pixel_size}, 3, postprocess_sobel);
+	filter(img, (float *[2]){in + pixel_size, in}, 5, propagate);
 	i = 0;
 	while (i < pixel_size)
 	{

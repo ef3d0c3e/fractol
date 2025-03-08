@@ -19,8 +19,8 @@
 # include <util/pos.h>
 # include <stdbool.h>
 
-struct s_fractol;
-struct s_ui;
+struct	s_fractol;
+struct	s_ui;
 
 /**
  * Enum for keycodes

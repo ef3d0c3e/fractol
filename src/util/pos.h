@@ -12,12 +12,19 @@
 #ifndef POS_H
 # define POS_H
 
+/**
+ * @brief Screen position structure
+ */
 typedef struct s_pos
 {
+	/**
+	 * @brief X-coordinate
+	 */
 	int	x;
+	/**
+	 * @brief Y-coordinate
+	 */
 	int	y;
 }	t_pos;
-
-t_pos	pos_new(const int x, const int y);
 
 #endif // POS_H

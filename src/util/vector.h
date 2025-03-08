@@ -30,15 +30,35 @@ typedef struct s_vec2f
 	float	y;
 }	t_vec2f;
 
+/**
+ * @brief Sums two vectors
+ *
+ * @param a Vector to add into
+ * @param b Vector to add to `a`
+ */
 void
 vec_add(t_vec2d *a, const t_vec2d *const b);
+/**
+ * @brief Multiplies a vector with a scalar
+ *
+ * @param a Vector to multiply
+ * @param f Scalar factor
+ */
 void
 vec_mul(t_vec2d *a, const double f);
+/**
+ * @brief Computes the euclidian norm of a vector
+ *
+ * @param a Vector to comnpute the norm of
+ */
 double
 vec_norm(const t_vec2d *a);
+/**
+ * @brief Computes the squared euclidian norm of a vector
+ *
+ * @param a Vector to comnpute the squared norm of
+ */
 double
 vec_norm_sqr(const t_vec2d *a);
-void
-vec_imul(t_vec2d *a, const t_vec2d *const b);
 
 #endif // VECTOR_H

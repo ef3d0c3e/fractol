@@ -37,15 +37,13 @@ void	parse_positional(
 	while (s[i] >= '0' && s[i] <= '9')
 		*num = *num * 10 + (s[i++] - '0');
 	++*positional;
+	if (*num < 256 || *num > 4096)
+		exit((ft_dprintf(2, "Error: Expected sizes between 256 and 4096, "
+					"got `%d` \n", *num), 1));
 	if (!s[i])
 		return ;
-	ft_dprintf(2, "Error: Failed to parse window size '%s' as " "number\n", s);
-	if (*num < 256)
-		exit((ft_dprintf(2, "Error: Expected sizes of at least `256x256`, got `%d` \n", *num), 1));
-	if (*num > 4096)
-		exit((ft_dprintf(2, "Error: Expected sizes of at most `4096`, got `%d` \n", *num), 1));
-	print_usage(program);
-	exit(1);
+	ft_dprintf(2, "Error: Failed to parse window size '%s' as number\n", s);
+	exit((print_usage(program), 1));
 }
 
 int
@@ -55,7 +53,7 @@ int
 	int		val;
 
 	if (!s)
-		exit((ft_dprintf(2, "Error: Downsampling expects an integer parameter\n", s), 1));
+		exit((ft_dprintf(2, "Error: Downsampling expects an integer\n", s), 1));
 	val = 0;
 	i = 0;
 	if (s[i] == '+')
@@ -63,9 +61,11 @@ int
 	while (s[i] >= '0' && s[i] <= '9')
 		val = val * 10 + (s[i++] - '0');
 	if (s[i])
-		exit((ft_dprintf(2, "Error: Unexpected character in downsampling: `%s` \n", s), 1));
+		exit((ft_dprintf(2, "Error: Unexpected character in downsampling: "
+					"`%s` \n", s), 1));
 	if (val <= 0)
-		exit((ft_dprintf(2, "Error: Downsampling expects a strictly positive integer, got `%d` \n", val), 1));
+		exit((ft_dprintf(2, "Error: Downsampling expects a strictly positive "
+					"integer, got `%d` \n", val), 1));
 	return (val);
 }
 
@@ -76,7 +76,8 @@ int
 	int		val;
 
 	if (!s)
-		exit((ft_dprintf(2, "Error: Kernel id expects an integer parameter\n", s), 1));
+		exit((ft_dprintf(2, "Error: Kernel id expects an integer parameter\n",
+					s), 1));
 	val = 0;
 	i = 0;
 	if (s[i] == '+')
@@ -84,8 +85,10 @@ int
 	while (s[i] >= '0' && s[i] <= '9')
 		val = val * 10 + (s[i++] - '0');
 	if (s[i])
-		exit((ft_dprintf(2, "Error: Unexpected character in kernel id: `%s` \n", s), 1));
+		exit((ft_dprintf(2, "Error: Unexpected character in kernel id: `%s` \n",
+					s), 1));
 	if (val < 0)
-		exit((ft_dprintf(2, "Error: Kernel id expects a positive integer, got `%d` \n", val), 1));
+		exit((ft_dprintf(2, "Error: Kernel id expects a positive integer, "
+					"got `%d` \n", val), 1));
 	return (val);
 }

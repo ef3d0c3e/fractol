@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 #include "fractol.h"
 #include "app/viewport/viewport.h"
+#include "ft_printf.h"
 #include "kernel/kernel.h"
 #include "util/matrix.h"
 #include <complex.h>
@@ -33,6 +34,12 @@ static inline void	init_kernel(t_fractol *f, t_pos size, int kernel_id)
 		1.0
 	}};
 	f->view.data = NULL;
+	f->kernel_count = 0;
+	while (kernel_name(f->kernel_count))
+		++f->kernel_count;
+	if (kernel_id >= f->kernel_count)
+		exit((ft_dprintf(2, "Error: Wrong id for kernel: %d. Expected a value "
+		"between 0 and %d.\n", kernel_id, f->kernel_count - 1), 1));
 	f->kernel_id = kernel_id;
 	f->kernel_settings.zparam = -0.8 + I * 0.156;
 	f->kernel = kernel_init(f->kernel_id, &f->view, &f->kernel_settings);
@@ -40,9 +47,6 @@ static inline void	init_kernel(t_fractol *f, t_pos size, int kernel_id)
 	f->has_next_view = false;
 	f->post_pass = false;
 	f->max_iter = 500;
-	f->kernel_count = 0;
-	while (kernel_name(f->kernel_count))
-		++f->kernel_count;
 }
 
 static void	fractol_loop(t_fractol *f)
@@ -58,7 +62,7 @@ static inline void	init_ui(t_fractol *f, t_pos size)
 {
 	f->ui = ui_init(f, size);
 	f->ui.ui_loop = fractol_loop;
-	f->selector_pos = (t_pos){0, 0};
+	f->selector_pos = (t_pos){0, f->kernel_id};
 	f->selector_shown = true;
 	f->needs_render = false;
 	f->needs_resample = false;

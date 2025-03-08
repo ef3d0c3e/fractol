@@ -35,16 +35,3 @@ inline double	vec_norm_sqr(const t_vec2d *a)
 {
 	return (a->x * a->x + a->y * a->y);
 }
-
-// split-radix
-inline void	vec_imul(t_vec2d *a, const t_vec2d *const b)
-{
-	const double	x = a->x * (b->x - b->y);
-	const double	y = a->x + a->y;
-	const double	z = a->x - a->y;
-
-	*a = (t_vec2d){
-		z * b->y + x,
-		y * b->x - x
-	};
-}

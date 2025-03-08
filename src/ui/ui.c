@@ -22,7 +22,7 @@ t_ui	ui_init(t_fractol *f, const t_pos size)
 	event_setup(f);
 	ui.mouse_down = false;
 	ui.img_pos = (t_vec2d){0, 0};
-	ui.mouse_pos = pos_new(0, 0);
+	ui.mouse_pos = (t_pos){0, 0};
 	ui.event.type = UI_NONE;
 	ui.size = size;
 	ui.render = mlx_new_image(f->mlx, size.x, size.y);

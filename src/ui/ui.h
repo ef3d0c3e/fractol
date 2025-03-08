@@ -20,7 +20,7 @@
 # include <ui/event.h>
 # include <ui/draw.h>
 
-struct s_fractol;
+struct	s_fractol;
 
 /**
  * @brief Program's ui component

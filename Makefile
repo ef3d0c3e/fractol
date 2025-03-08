@@ -22,7 +22,6 @@ src/app/move.c \
 src/app/bar.c \
 src/app/selector.c \
 src/util/vector.c \
-src/util/pos.c \
 src/util/realloc.c \
 src/util/math.c \
 src/util/strcmp.c \

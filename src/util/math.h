@@ -17,7 +17,7 @@
  */
 
 # ifndef M_2_PI
-#  define M_2_PI (2.0 * 3.14159265358979323846)
+#  define M_2_PI 6.2831853071795864769253
 # endif // M_2_PI
 
 # include "vector.h"

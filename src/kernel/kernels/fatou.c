@@ -18,9 +18,9 @@ static inline t_color	iter(double complex c, const t_closure *data)
 {
 	static const complex double	roots[] = {1.0,
 		-0.5 + I * 0.866025403785, -0.5 - I * 0.866025403785};
-	int								i;
-	size_t							k;
-	double _Complex					z;
+	int							i;
+	size_t						k;
+	double _Complex				z;
 
 	z = c;
 	i = 0;
@@ -51,7 +51,8 @@ static inline void
 	closure.view = data->viewport;
 	closure.settings = settings;
 	closure.max_it = max_it;
-	viewport_fragment(data, (t_color (*)(double _Complex, void*))iter, &closure);
+	viewport_fragment(data, (t_color (*)(double _Complex, void *))iter,
+		&closure);
 }
 
 const t_kernel	*fatou(t_kernel_settings *settings)
