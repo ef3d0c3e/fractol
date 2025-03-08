@@ -102,7 +102,7 @@ void		fractol_selector(t_fractol *f)
 		f->downsampling = max(f->downsampling - 1, 1);
 	if (draw_item(f, (t_pos){1, 9}, "Oversample +1"))
 		f->oversampling = min(f->oversampling + 1, 8);
-	if (draw_item(f, (t_pos){1, 10}, "Oversample +1"))
+	if (draw_item(f, (t_pos){1, 10}, "Oversample -1"))
 		f->oversampling = max(f->oversampling - 1, 1);
 	if (draw_item(f, (t_pos){1, 11}, "Oversampling Debug"))
 		f->needs_resample_debug = true;

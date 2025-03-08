@@ -30,7 +30,7 @@ static inline t_color	iter(double _Complex c, const t_closure *data)
 		if (m >= 1e8)
 		{
 			m = 2 * log2(m) * m / cabs(dz);
-			return (gradient_get(&data->settings->gradient, log10(m)));
+			return (gradient_get(&data->settings->gradient, log10(sqrt(m))));
 		}
 		++i;
 	}

@@ -34,7 +34,7 @@ static inline t_color	iter(double _Complex c, const t_closure *data)
 		{
 			de = 2 * z * log(cabs(z)) / dz;
 			return (color_from_hsv(fmod(1 + carg(de) / TWO_PI, 1), 0.33,
-						tanh(cabs(de) * ratio)));
+					tanh(cabs(de) * ratio)));
 		}
 		++i;
 	}

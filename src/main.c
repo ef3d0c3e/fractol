@@ -25,7 +25,8 @@ static inline bool	parse_opts(int *i, char **argv, int *args)
 		args[0] = parse_downsampling(argv[++(*i)]);
 	else if (!ft_strcmp(argv[*i], "--kernel"))
 		args[1] = parse_kernel(argv[++(*i)]);
-	else if (!ft_strcmp(argv[*i], "-o") || !ft_strcmp(argv[*i], "--oversampling"))
+	else if (!ft_strcmp(argv[*i], "-o")
+		|| !ft_strcmp(argv[*i], "--oversampling"))
 		args[2] = parse_oversampling(argv[++(*i)]);
 	else if (argv[*i][0] == '-')
 		exit((ft_dprintf(2, "Error: Unrecognized parameter `%s`\n"

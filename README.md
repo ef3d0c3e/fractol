@@ -13,16 +13,16 @@ Then you can run `make` to build the `fractol` executable. Or `make bonus` for t
 # Navigation
 
 You can navigate using the mouse:
- * Mouse wheel is responsible for zooming
- * Mouse left 'pans' the view
+ * `Mouse wheel` is responsible for zooming
+ * `Mouse left` 'pans' the view
 
 Or you can use the keyboard:
- * Numpad + or - for zooming
- * Arrow keys for moving
+ * Numpad `+` or `-` for zooming
+ * `Arrow keys` for moving
 *Note: You have to disable the [S]elector in order to use arrow key navigation.*
 
 
-## <a name="selector" style="text-decoration:none">Selector ui</a>
+## <a name="selector" style="text-decoration:none;">Selector ui</a>
 
 ![Selector hovering the 'Reset viewport' option](./docs/selector.png)
 
@@ -51,11 +51,11 @@ The program uses two different rendering pipelines according to the value chosen
         *A possible optimization to this method is to re-use the previously computed pixel data from the smaller image*
 
 
- * **When using <a name="render-upsampling" style="text-decoration:none">upsampling</a> (antialiasing): [Key = U]**
+ * **When using <a name="render-upsampling" style="text-decoration:none;">upsampling</a> (antialiasing): [Key = U]**
     - Sobel edge-detection is used to detect noisy regions that might need re-computing.
     - A 5x5 gaussian blur is used to 'propagate' noisy pixels to their neighbors.
     - From then, each pixel gets an oversampling weight assigned.\
-        *The assigned weights can be visualized using the `Oversampling debug` in the selector ui.*
+        *The assigned weights can be visualized using `Oversampling debug` in the selector ui.*
     - Each pixel is recomputed using `(2 * floor(weight) + 1) ^ 2` samples.\
         *(The original pixel is subdivided into a grid with 1 cell for each sample)*
     - They are then blended into the final pixel value using gaussian sampling.\
@@ -76,9 +76,9 @@ They must be positive integers between 256 and 4096. These will be the window's 
 ## Additional parameters
 
 The program support the following additional options:
- *  <a name="opts-downsampling" style="text-decoration:none">**Downsampling**</a> `-d N | --downsample N`\
+ *  <a name="opts-downsampling" style="text-decoration:none;">**Downsampling**</a> `-d N | --downsample N`\
     *N=Integer value between 1 and 16, default: 1*\
-    This value controls the downscaling factor for when rendering the image.\
+    This value controls the downscaling factor for when rendering the image.
  * **Choosing a kernel** `--kernel ID`\
     *ID=Positive integer, default: 0*\
     This selects the default kernel used for rendering.
@@ -108,17 +108,17 @@ static inline t_color	iter(double complex c, const t_closure *data)
 	i = 0;
 	while (i < data->max_it)
 	{
-        // Derivative
-        dz = 3 * z * z * dz + c;
-        // Main function Z(n+1) = Z(n)^3 + c
-        z = z * z * z + c;
-        m = cabs(z);
-        if (m > 1e8) // c is outside the set, color it...
-        {
-            m = 2 * log2(m) * m / cabs(dz);
-            // Plot from gradient
-            return (gradient_get(&data->settings->gradient, log10(m)));
-        }
+		// Derivative
+		dz = 3 * z * z * dz + c;
+		// Main function Z(n+1) = Z(n)^3 + c
+		z = z * z * z + c;
+		m = cabs(z);
+		if (m > 1e8) // c is outside the set, color it...
+		{
+			m = 2 * log2(m) * m / cabs(dz);
+			// Plot from gradient
+			return (gradient_get(&data->settings->gradient, log10(m)));
+		}
 		++i;
 	}
 	return ((t_color){0x000000});
@@ -137,7 +137,7 @@ static inline void
 	closure.view = data->viewport;
 	closure.settings = settings;
 	closure.max_it = max_it;
-    // Call iteration code for each pixel
+	// Call iteration code for each pixel
 	viewport_fragment(data, (t_color (*)(double _Complex, void *))iter,
 		&closure);
 }
@@ -146,7 +146,7 @@ static inline void
 // if `settings` is NULL, do not initialize anything!
 const t_kernel	*my_fractal(t_kernel_settings *settings)
 {
-    // Red/Green/Blue gradient
+	// Red/Green/Blue gradient
 	static const struct s_gr_color	colors[] = {
 	{{0xFF0000}, 1.0}, {{0x00FF00}, 1.0}, {{0x0000FF}, 1.0}};
 	static const t_kernel			kernel = {

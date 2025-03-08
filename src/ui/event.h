@@ -85,7 +85,8 @@ enum e_eventcode
 	EVENT_MOUSEUP = 5,
 	EVENT_MOUSEMOVE = 6,
 	EVENT_EXPOSE = 12,
-	EVENT_DESTROY = 17
+	EVENT_DESTROY = 17,
+	EVENT_RESIZE = 18,
 };
 
 enum e_evmask

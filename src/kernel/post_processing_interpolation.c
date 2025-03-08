@@ -88,6 +88,16 @@ static inline t_color
 	return (out);
 }
 
+#define __EXPAND(...) __VA_ARGS__
+#define EXPAND(...) __EXPAND(__VA_ARGS__)
+#define OMP_KERNEL(__a, __b, __i, __size, __s) \
+_Pragma(__a) \
+{ \
+	_Pragma(__b) \
+	for (__i = 0; (__i) < (__size); ++(__i)) \
+	{ __s } \
+}
+
 void	postprocess_bicubic(
 	const t_color *in,
 	t_pos in_size,
@@ -97,17 +107,13 @@ void	postprocess_bicubic(
 	int	i;
 
 	i = 0;
-#pragma omp parallel shared(out)
-	{
-#pragma omp for private(i)
-		for (i = 0; i < out_size.x * out_size.y; ++i)
-		{
-			out[i] = bicubic_interpolate(in, in_size, (t_vec2d){
-					((i % out_size.x) + 0.5) / (float)out_size.x * in_size.x - 0.5,
-					((i / (float)out_size.x) + 0.5)
-					/ (float)out_size.y * in_size.y - 0.5});
-		}
-	}
+	OMP_KERNEL("omp shared(out)", "omp for private(i)",
+		i, out_size.x * out_size.y, {
+		out[i] = bicubic_interpolate(in, in_size, (t_vec2d){
+			((i % out_size.x) + 0.5) / (float)out_size.x * in_size.x - 0.5,
+			((i / (float)out_size.x) + 0.5)
+			/ (float)out_size.y * in_size.y - 0.5});
+	});
 }
 
 void	postprocess_bilinear(
@@ -119,27 +125,22 @@ void	postprocess_bilinear(
 	int		i;
 	t_vec2d	pos;
 
-	i = 0;
-#pragma omp parallel shared(out)
-	{
-#pragma omp for private(i, pos)
-		for (i = 0; i < out_size.x * out_size.y; ++i)
-		{
-			pos = (t_vec2d){((i % out_size.x) + 0.5)
-				/ (float)out_size.x * in_size.x - 0.5,
-				((i / (float)out_size.x) + 0.5)
-				/ (float)out_size.y * in_size.y - 0.5};
-			out[i] = color_lerp(
-					color_lerp(
-						get_pixel_clamped(in, in_size, pos.x, pos.y),
-						get_pixel_clamped(in, in_size, pos.x + 1, pos.y),
-						fmod(pos.x, 1.0)),
-					color_lerp(
-						get_pixel_clamped(in, in_size, pos.x, pos.y + 1),
-						get_pixel_clamped(in, in_size, pos.x + 1, pos.y + 1),
-						fmod(pos.x, 1.0)),
-					fmod(pos.y, 1.0)
-					);
-		}
-	}
+	OMP_KERNEL("omp shared(out)", "omp for private(i, pos)",
+		i, out_size.x * out_size.y, EXPAND({
+		pos = (t_vec2d){((i % out_size.x) + 0.5)
+			/ (float)out_size.x * in_size.x - 0.5,
+			((i / (float)out_size.x) + 0.5)
+			/ (float)out_size.y * in_size.y - 0.5};
+		out[i] = color_lerp(
+				color_lerp(
+					get_pixel_clamped(in, in_size, pos.x, pos.y),
+					get_pixel_clamped(in, in_size, pos.x + 1, pos.y),
+					fmod(pos.x, 1.0)),
+				color_lerp(
+					get_pixel_clamped(in, in_size, pos.x, pos.y + 1),
+					get_pixel_clamped(in, in_size, pos.x + 1, pos.y + 1),
+					fmod(pos.x, 1.0)),
+				fmod(pos.y, 1.0)
+				);
+	}));
 }

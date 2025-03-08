@@ -14,6 +14,7 @@
 #include "viewport.h"
 #include <complex.h>
 #include <math.h>
+#include <stdio.h>
 
 /**
  * @brief Gets the weight of a sample
@@ -45,41 +46,40 @@ static void
 	t_color			*shared;
 	size_t			i;
 	t_color			color;
+	float			weight;
 
 	shared = (t_color *)data->img->data;
-#pragma omp parallel shared(shared, size) private(i, color)
+#pragma omp parallel for schedule(dynamic) shared(shared, size)\
+	private(i, color, weight)
+	for (size_t i = 0; i < size; ++i)
 	{
-#pragma omp for schedule(dynamic)
-		for (i = 0; i < size; ++i)
-		{
-			const int	oversample = data->oversampling_data[i] * data->oversampling_factor;
-			const	float factor = 1.f / (2.f * oversample + 1.f);
-			const t_pos pos = (t_pos){i % data->viewport->size.x,
-				i / data->viewport->size.x};
-			float			cols[3];
+		const int oversample = data->oversampling_data[i] * data->oversampling_factor;
+		const double factor = 1.f / (2.f * oversample + 1.f);
+		const t_pos pos = (t_pos){i % data->viewport->size.x, i / data->viewport->size.x};
+		float cols[3] = {0.f, 0.f, 0.f};
 
-			if (oversample < 0)
-				continue ;
-			cols[0] = cols[1] = cols[2] = 0.f;
-			for (int y = -oversample; y <= oversample; ++y)
-			{
-				for (int x = -oversample; x <= oversample; ++x)
-				{
-					const t_vec2d z = data->viewport->screen_to_space(
-						data->viewport, (t_vec2d){(pos.x + x * factor) / data->render_size.x, (pos.y + y * factor) / data->render_size.y}
-					);
-					color = shader(z.x + I * z.y, closure);
-					const float f = gauss_sample_weight(oversample * 2 + 1, x, y);
-					cols[0] += color.channels.r / 255.f * f;
-					cols[1] += color.channels.g / 255.f * f;
-					cols[2] += color.channels.b / 255.f * f;
-				}
-			}
-			((t_color *)shared)[i].channels.r = cols[0] * 255.f;
-			((t_color *)shared)[i].channels.g = cols[1] * 255.f;
-			((t_color *)shared)[i].channels.b = cols[2] * 255.f;
+		if (oversample < 0)
+			continue;
+		float weight_sum = 0.f;
+		const int total_samples = (2 * oversample + 1) * (2 * oversample + 1);
+		for (int sample = 0; sample < total_samples; ++sample)
+		{
+			int x = (sample % (2 * oversample + 1) - oversample);
+			int y = (sample / (2 * oversample + 1) - oversample);
+			t_vec2d z = data->viewport->screen_to_space(data->viewport, (t_vec2d){
+					(pos.x + 0.5 + x * factor) / (float)data->render_size.x,
+					(pos.y + 0.5 + y * factor) / (float)data->render_size.y});
+			t_color color = shader(z.x + I * z.y, closure);
+
+			float f = gauss_sample_weight(oversample * 2 + 1, x, y);
+			cols[0] += color.channels.r / 255.f * f;
+			cols[1] += color.channels.g / 255.f * f;
+			cols[2] += color.channels.b / 255.f * f;
+			weight_sum += f;
 		}
-#pragma omp barrier
+		((t_color *)shared)[i].channels.r = cols[0] * 255.f / weight_sum;
+		((t_color *)shared)[i].channels.g = cols[1] * 255.f / weight_sum;
+		((t_color *)shared)[i].channels.b = cols[2] * 255.f / weight_sum;
 	}
 }
 
@@ -108,7 +108,7 @@ void
 		{
 			if (data->post_pass && shared[i].color != data->dafault_color.color)
 				continue;
-			z = data->viewport->screen_to_space(data->viewport, (t_vec2d){(i % data->render_size.x) / (double)data->render_size.x, (i / (double)data->render_size.x) / data->render_size.y });
+			z = data->viewport->screen_to_space(data->viewport, (t_vec2d){((double)(i % data->render_size.x) + 0.5) / data->render_size.x, ((double)i + 0.5) / data->render_size.x / data->render_size.y });
 			shared[i] = shader(z.x + I * z.y, closure);
 		}
 #pragma omp barrier

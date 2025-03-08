@@ -1,7 +1,7 @@
 NAME   := fractol
 CC     := gcc
-CFLAGS := -Wall -Werror -Wextra -ggdb -fsanitize=address -fopenmp -pedantic
-#CFLAGS := -Wall -Wextra -fopenmp -O3 -Ofast -ffast-math -pedantic
+#CFLAGS := -Wall -Werror -Wextra -ggdb -fopenmp -pedantic
+CFLAGS := -Wall -Wextra -fopenmp -O3 -Ofast -ffast-math -pedantic
 IFLAGS := -I./libs/minilibx-linux -I./libs/ft_printf/includes/ -I./src
 LFLAGS := -L/usr/lib -lX11 -lXext -lm
 LIB_MLX := ./libs/minilibx-linux/libmlx_Linux.a
@@ -53,6 +53,7 @@ src/ui/draw_queue.c \
 src/ui/image.c \
 src/ui/draw.c \
 src/ui/event_keyboard.c \
+src/ui/event_misc.c \
 src/ui/event.c \
 src/ui/ui.c \
 src/ui/event_mouse.c

@@ -113,8 +113,8 @@ float	*postprocess_upscale(t_img *img, t_pos size, float *in)
 	i = 0;
 	while (i < pixel_size)
 	{
-		((float *)in)[i] = fminf(log(((float *)in)[i]) - size.x
-				/ (double)img->width, 0.f);
+		((float *)in)[i] = fmax(fminf(log(((float *)in)[i]) - size.x
+				/ (double)img->width, 0.f), -10.f);
 		++i;
 	}
 	return ((float *)in);

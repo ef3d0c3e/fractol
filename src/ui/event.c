@@ -21,6 +21,8 @@ int	ev_mousedown(enum e_mousecode code, int x, int y, t_fractol *f);
 int	ev_mouseup(enum e_mousecode code, int x, int y, t_fractol *f);
 int	ev_mousemove(int x, int y, t_fractol *f);
 
+int ev_resize(int width, int height, t_fractol *f);
+
 void	event_setup(t_fractol *f)
 {
 	mlx_hook(f->window, EVENT_MOUSEDOWN, MASK_BUTTON_PRESS, ev_mousedown, f);
@@ -28,5 +30,6 @@ void	event_setup(t_fractol *f)
 	mlx_hook(f->window, EVENT_MOUSEMOVE, MASK_POINTER_MOTION, ev_mousemove, f);
 	mlx_hook(f->window, EVENT_KEYDOWN, MASK_KEY_PRESS, ev_keydown, f);
 	mlx_hook(f->window, EVENT_KEYUP, MASK_KEY_RELEASE, ev_keyup, f);
+	mlx_hook(f->window, EVENT_RESIZE, MASK_EnterWindowMask, ev_resize, f);
 	mlx_hook(f->window, EVENT_DESTROY, MASK_NONE, mlx_loop_end, f->mlx);
 }

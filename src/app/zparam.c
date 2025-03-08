@@ -30,7 +30,7 @@ void	fractol_zparam(t_fractol *f)
 	if (f->ui.event.type == UI_MOUSE_PRESS && f->ui.mouse_down == MOUSE_RIGHT)
 		move_zparam(f);
 	center = f->view.space_to_screen(&f->view,
-		*(t_vec2d *)&f->kernel_settings.zparam);
+		(t_vec2d){creal(f->kernel_settings.zparam), cimag(f->kernel_settings.zparam)});
 	if (center.x < 0 || center.x >= f->ui.size.x || center.y < 0 || center.y >=
 		f->ui.size.y)
 		return ;
