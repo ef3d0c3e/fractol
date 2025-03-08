@@ -2,9 +2,9 @@ NAME   := fractol
 CC     := gcc
 CFLAGS := -Wall -Wextra -std=c99 -ggdb -fsanitize=address -fopenmp -pedantic
 #CFLAGS := -Wall -Wextra -std=c99 -fopenmp -O3 -Ofast -ffast-math -pedantic
-IFLAGS := -I./minilibx-linux -I./libs/ft_printf/includes/ -I./src
+IFLAGS := -I./libs/minilibx-linux -I./libs/ft_printf/includes/ -I./src
 LFLAGS := -L/usr/lib -lX11 -lXext -lm
-LIB_MLX := ./minilibx-linux/libmlx_Linux.a
+LIB_MLX := ./libs/minilibx-linux/libmlx_Linux.a
 LIB_PRINTF := ./libs/ft_printf/libftprintf.a
 
 
@@ -65,7 +65,7 @@ $(NAME): $(OBJECTS) $(LIB_MLX) $(LIB_PRINTF)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJECTS) $(LIB_MLX) $(LIB_PRINTF) $(LFLAGS)
 
 $(LIB_MLX):
-	$(MAKE) -C minilibx-linux
+	$(MAKE) -C ./libs/minilibx-linux
 
 $(LIB_PRINTF):
 	$(MAKE) -C ./libs/ft_printf
