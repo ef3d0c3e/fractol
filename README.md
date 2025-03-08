@@ -1,6 +1,6 @@
 # Fractol -- Fractal explorer program
 
-![./docs/mandel_arg.png](Fractol in action)
+![Fractol in action](./docs/mandel_arg.png)
 
 ## Defining new fractals
 
@@ -79,4 +79,4 @@ const t_kernel	*my_fractal(t_kernel_settings *settings)
 ```
 
 Don't forget to add your file to the kernel list in `./src/kernel/kernel.c` and to the makefile.
-![./docs/custom.png](Example)
+![Example custom kernel](./docs/custom.png)
