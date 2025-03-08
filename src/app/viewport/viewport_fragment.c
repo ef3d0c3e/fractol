@@ -28,7 +28,9 @@ static inline float	gauss_sample_weight(size_t size, int x, int y)
 	[5] = 6.168924081028881, [7] = 6.2797847959347015, [9] = 6.283147856202572,
 	[11] = 6.283185221483608, [13] = 6.2831853741872, [15] = 6.283185374416782};
 
-	if (size <= 15)
+	if (size == 1)
+		return (1.f);
+	else if (size <= 15)
 		return (expf(-(x * x + y * y) / 2.f) / kernel_sums[size]);
 	return (expf(-(x * x + y * y) / 2.f) / kernel_sums[15]);
 }
@@ -50,13 +52,14 @@ static void
 #pragma omp for schedule(dynamic)
 		for (i = 0; i < size; ++i)
 		{
-			const int	oversample = (0.1 + data->oversampling_data[i]);
-			if (oversample == 0)
-				continue ;
+			const int	oversample = data->oversampling_data[i];
 			const	float factor = 1.f / (2.f * oversample + 1.f);
 			const t_pos pos = (t_pos){i % data->viewport->size.x,
 				i / data->viewport->size.x};
 			float			cols[3];
+
+			if (oversample < 0)
+				continue ;
 			cols[0] = cols[1] = cols[2] = 0.f;
 			for (int y = -oversample; y <= oversample; ++y)
 			{
@@ -72,9 +75,9 @@ static void
 					cols[2] += color.channels.b / 255.f * f;
 				}
 			}
-			((t_color *)shared)[i].channels.r = cols[0]  * 255.f;
-			((t_color *)shared)[i].channels.g = cols[1]  * 255.f;
-			((t_color *)shared)[i].channels.b = cols[2]  * 255.f;
+			((t_color *)shared)[i].channels.r = cols[0] * 255.f;
+			((t_color *)shared)[i].channels.g = cols[1] * 255.f;
+			((t_color *)shared)[i].channels.b = cols[2] * 255.f;
 		}
 #pragma omp barrier
 	}

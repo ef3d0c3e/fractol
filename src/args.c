@@ -39,6 +39,7 @@ void	print_help(const char *program)
 		"[A]\t\tDecrease the number of iterations\n\n"
 		"[S]\t\tToggle ui (toggles arrow key navigation)\n\n"
 		"[F]\t\tRandomize colors\n"
+		"[Z]\t\tSave raster to 'screenshot.ppm'\n"
 		);
 }
 

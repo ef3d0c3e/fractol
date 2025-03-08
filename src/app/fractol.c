@@ -51,10 +51,9 @@ static inline void	init_kernel(t_fractol *f, t_pos size, int kernel_id)
 
 static void	fractol_loop(t_fractol *f)
 {
-	fractol_screenshot(f);
 	fractol_selector(f);
+	fractol_ui(f);
 	fractol_move(f);
-	fractol_bar(f);
 	fractol_zparam(f);
 	fractol_render(f);
 }

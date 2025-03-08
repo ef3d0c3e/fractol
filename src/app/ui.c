@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bar.c                                              :+:      :+:    :+:   */
+/*   ui.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgamba <lgamba@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -40,9 +40,15 @@ static inline void	iter_count(t_fractol *f)
 	}});
 }
 
-void	fractol_bar(t_fractol *f)
+void	fractol_ui(t_fractol *f)
 {
-	iter_count(f);
-	if (ev_key_pressed(&f->ui, KEY_F) && f->kernel->flags & USE_GRADIENT)
+	if (ev_key_held(&f->ui, KEY_Q))
+		f->max_iter = min(20000, f->max_iter + 3);
+	else if (ev_key_held(&f->ui, KEY_A))
+		f->max_iter = max(1, f->max_iter - 3);
+	else if (ev_key_pressed(&f->ui, KEY_F) && f->kernel->flags & USE_GRADIENT)
 		gradient_randomize(&f->kernel_settings.gradient, 8);
+	if (ev_key_pressed(&f->ui, KEY_Z))
+		fractol_screenshot(f);
+	iter_count(f);
 }

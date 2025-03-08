@@ -90,13 +90,15 @@ void		fractol_selector(t_fractol *f)
 		f->has_next_view = false;
 		f->needs_render = true;
 	}
-	if (draw_item(f, (t_pos){1, 4}, "Iter +100"))
+	if (draw_item(f, (t_pos){1, 4}, "Sceenshot to 'screenshot.ppm'"))
+		fractol_screenshot(f);
+	if (draw_item(f, (t_pos){1, 5}, "Iter +100"))
 		f->max_iter = min(f->max_iter + 100, 20000);
-	if (draw_item(f, (t_pos){1, 5}, "Iter -100"))
+	if (draw_item(f, (t_pos){1, 6}, "Iter -100"))
 		f->max_iter = max(f->max_iter - 100, 1);
-	if (draw_item(f, (t_pos){1, 6}, "Oversampling Debug"))
+	if (draw_item(f, (t_pos){1, 7}, "Oversampling Debug"))
 		f->needs_resample_debug = true;
-	if (draw_item(f, (t_pos){1, 7}, "Gradient Debug") && f->kernel->flags & USE_GRADIENT)
+	if (draw_item(f, (t_pos){1, 8}, "Gradient Debug") && f->kernel->flags & USE_GRADIENT)
 		f->needs_gradient_debug = true;
 	
 	drawqueue_push(&f->ui.ui_queue, (t_draw_item){

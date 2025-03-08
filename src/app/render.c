@@ -26,10 +26,6 @@ static void	render_keys(t_fractol *f)
 		(f->needs_render = true, f->post_pass = true);
 	else if (ev_key_pressed(&f->ui, KEY_U))
 		f->needs_resample = true;
-	else if (ev_key_held(&f->ui, KEY_Q))
-		f->max_iter = min(20000, f->max_iter + 3);
-	else if (ev_key_held(&f->ui, KEY_A))
-		f->max_iter = max(1, f->max_iter - 3);
 }
 
 

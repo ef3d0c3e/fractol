@@ -16,7 +16,6 @@
 
 #include "ft_printf.h"
 #include "mlx.h"
-#include "ui/event.h"
 #include <app/fractol.h>
 #include <fcntl.h>
 
@@ -40,8 +39,6 @@ void
 	char			buf[1024];
 	size_t			size;
 
-	if (!ev_key_held(&f->ui, KEY_Z))
-		return ;
 	fd = open("screenshot.ppm", O_CREAT | O_RDWR, 0777);
 	if (fd < 0)
 		exit((ft_dprintf(2, "Error: Failed to open `screenshot.ppm`\n"), 1));

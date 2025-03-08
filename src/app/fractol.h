@@ -75,16 +75,13 @@ fractol_start(t_pos win_size, int downsampling, int kernel);
 void
 fractol_selector(t_fractol *f);
 
-// Screenshots
-void
-fractol_screenshot(t_fractol *f);
-
 // Rendering ui
 void
 fractol_render(t_fractol *f);
 
+// Misc ui
 void
-fractol_bar(t_fractol *f);
+fractol_ui(t_fractol *f);
 
 // Renders zparam and handles mouse movement
 void
@@ -94,4 +91,9 @@ fractol_zparam(t_fractol *f);
 void
 fractol_move(t_fractol *f);
 
+// Screenshots
+void
+fractol_screenshot(t_fractol *f);
+
 #endif // FRACTOL_H
+
