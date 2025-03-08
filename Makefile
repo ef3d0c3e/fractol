@@ -1,7 +1,7 @@
 NAME   := fractol
 CC     := gcc
-CFLAGS := -Wall -Wextra -std=c99 -ggdb -fsanitize=address -fopenmp -pedantic
-#CFLAGS := -Wall -Wextra -std=c99 -fopenmp -O3 -Ofast -ffast-math -pedantic
+CFLAGS := -Wall -Werror -Wextra -ggdb -fsanitize=address -fopenmp -pedantic
+#CFLAGS := -Wall -Wextra -fopenmp -O3 -Ofast -ffast-math -pedantic
 IFLAGS := -I./libs/minilibx-linux -I./libs/ft_printf/includes/ -I./src
 LFLAGS := -L/usr/lib -lX11 -lXext -lm
 LIB_MLX := ./libs/minilibx-linux/libmlx_Linux.a
@@ -65,20 +65,26 @@ objs/%.o : %.c
 $(NAME): $(OBJECTS) $(LIB_MLX) $(LIB_PRINTF)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJECTS) $(LIB_MLX) $(LIB_PRINTF) $(LFLAGS)
 
+# minilibx-linux
 $(LIB_MLX):
-	$(MAKE) -C ./libs/minilibx-linux
+	cd $(dir $(LIB_MLX)) && ./configure
 
+# ft_printf
 $(LIB_PRINTF):
-	$(MAKE) -C ./libs/ft_printf
+	$(MAKE) -C $(dir $(LIB_PRINTF))
 
 .PHONY: all
 all: $(NAME)
-
 
 .PHONY: clean
 clean:
 	$(RM) $(OBJECTS)
 	$(RM) $(BONUS_OBJECTS)
+
+.PHONY: lclean
+lclean:
+	cd $(dir $(LIB_MLX)) && make clean
+	cd $(dir $(LIB_PRINTF)) && make fclean
 
 .PHONY: fclean
 fclean: clean
