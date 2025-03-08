@@ -34,7 +34,7 @@ static inline void	*memcpy_4(char *dest, const char *src, size_t n)
 static inline void	*memcpy_16(char *dest, const char *src, size_t n)
 {
 	const char	*first_s = src;
-	const char	*last_s = src + n - 8;
+	const char	*last_s = (char *)src + n - 8;
 	char		*first_d;
 	char		*last_d;
 
@@ -56,18 +56,18 @@ static inline void	*memcpy_16(char *dest, const char *src, size_t n)
 static inline void	*memcpy_32(void *dest, const void *src, size_t n)
 {
 	const char	*first_s = src;
-	const char	*last_s = src + n - 16;
+	const char	*last_s = (char *)src + n - 16;
 	char		*first_d;
 	char		*last_d;
 
 	first_d = dest;
-	last_d = dest + n - 16;
+	last_d = (char *)dest + n - 16;
 	*((uint16_t *)first_d) = *((uint16_t *)first_s);
 	*((uint16_t *)last_d) = *((uint16_t *)last_s);
 	return (dest);
 }
 
-inline void
+void
 	*ft_memcpy(void *dest, const void *src, size_t n)
 {
 	const char	*s = src;

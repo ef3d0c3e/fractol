@@ -119,10 +119,10 @@ inline void	draw(t_xvar *mlx, t_win_list *win, const t_draw_item *item)
 {
 	static	void (*const drawer_table[])
 		(t_xvar *mlx, t_win_list *win, const t_draw_item *item) = {
-	[DRAW_RECT] = (void*)draw_rect,
-	[DRAW_LINE] = (void*)draw_line,
-	[DRAW_TEXT] = (void*)draw_text,
-	[DRAW_TEXT_SHADOW] = (void*)draw_text_shadow,
+	[DRAW_RECT] = (t_draw_fn)draw_rect,
+	[DRAW_LINE] = (t_draw_fn)draw_line,
+	[DRAW_TEXT] = (t_draw_fn)draw_text,
+	[DRAW_TEXT_SHADOW] = (t_draw_fn)draw_text_shadow,
 	};
 
 	drawer_table[item->item](mlx, win, (void *)&item->draw);

@@ -12,6 +12,7 @@
 #include "post_processing.h"
 #include "kernel/color.h"
 #include "util/util.h"
+#include <math.h>
 
 /* Runs function over each pixel in a sub-view */
 static inline void	filter(
@@ -90,6 +91,7 @@ static inline float	propagate(
 	return (r);
 }
 
+
 float	*postprocess_upscale(t_img *img, t_pos size, t_color *in)
 {
 	const size_t	pixel_size = img->width * img->height;
@@ -97,7 +99,7 @@ float	*postprocess_upscale(t_img *img, t_pos size, t_color *in)
 	t_color			color;
 	size_t			i;
 
-	postprocess_bilinear(data, size, in, (t_pos){img->width, img->height});
+	postprocess_bicubic(data, size, in, (t_pos){img->width, img->height});
 	ft_memcpy(img->data, in, (img->width * img->height) * sizeof(t_color));
 	i = 0;
 	while (i < pixel_size)
@@ -108,5 +110,11 @@ float	*postprocess_upscale(t_img *img, t_pos size, t_color *in)
 	}
 	filter(img, (float *[2]){(float *)in, (float *)in + pixel_size}, 3, postprocess_sobel);
 	filter(img, (float *[2]){(float *)in + pixel_size, (float *)in}, 5, propagate);
+	i = 0;
+	while (i < pixel_size)
+	{
+		((float *)in)[i] = fminf(fmaxf(((float *)in)[i], 0.f), 1.f);
+		++i;
+	}
 	return ((float *)in);
 }

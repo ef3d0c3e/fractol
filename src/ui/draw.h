@@ -70,6 +70,8 @@ typedef struct s_draw_item
 	} draw;
 }	t_draw_item;
 
+typedef void(*t_draw_fn)(t_xvar *, t_win_list *, const t_draw_item *);
+
 /**
  * @brief Draw item to screen
  *

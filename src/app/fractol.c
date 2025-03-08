@@ -23,7 +23,7 @@ static inline void	init_mlx(t_fractol *f, t_pos size)
 	f->window = mlx_new_window(f->mlx, size.x, size.y, "Fractol");
 }
 
-static inline void	init_kernel(t_fractol *f, t_pos size)
+static inline void	init_kernel(t_fractol *f, t_pos size, int kernel_id)
 {
 	f->view.size = size,
 	f->view.view = (t_mat2d){{
@@ -33,9 +33,9 @@ static inline void	init_kernel(t_fractol *f, t_pos size)
 		1.0
 	}};
 	f->view.data = NULL;
-	f->kernel_id = 0;
+	f->kernel_id = kernel_id;
 	f->kernel_settings.zparam = -0.8 + I * 0.156;
-	f->kernel = kernel_init(0, &f->view, &f->kernel_settings);
+	f->kernel = kernel_init(f->kernel_id, &f->view, &f->kernel_settings);
 	f->next_view = f->view;
 	f->has_next_view = false;
 	f->post_pass = false;
@@ -67,13 +67,13 @@ static inline void	init_ui(t_fractol *f, t_pos size)
 	f->filter_buffer = malloc(sizeof(float) * size.x * size.y * 4);
 }
 
-void	fractol_start(t_pos win_size, int downsampling)
+void	fractol_start(t_pos win_size, int downsampling, int kernel)
 {
 	t_fractol	f;
 
 	f.downsampling = downsampling;
 	init_mlx(&f, win_size);
-	init_kernel(&f, win_size);
+	init_kernel(&f, win_size, kernel);
 	init_ui(&f, win_size);
 	// Start
 	ui_update(&f);

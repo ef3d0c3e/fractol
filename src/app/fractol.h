@@ -69,7 +69,7 @@ typedef struct s_fractol
  * @brief Start the program
  */
 void
-fractol_start(t_pos win_size, int downsampling);
+fractol_start(t_pos win_size, int downsampling, int kernel);
 
 // Render the selector widget
 void

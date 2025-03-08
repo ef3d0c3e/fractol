@@ -31,14 +31,22 @@ void
 print_version(void);
 void
 /**
- * @brief Parses the program's positional arguments
+ * @brief Parses the program's positional arguments or exit
  */
 parse_positional(
 	const char *program,
 	const char *s,
 	int *positional,
 	t_pos *win_size);
+/**
+ * @brief Parses the downsampling amount, or exit
+ */
 int
-parse_uint(const char *s);
+parse_downsampling(const char *s);
+/**
+ * @brief Parses the kernel id, or exit
+ */
+int
+parse_kernel(const char *s);
 
 #endif // ARGS_H

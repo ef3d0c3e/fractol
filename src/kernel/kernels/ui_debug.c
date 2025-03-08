@@ -19,10 +19,8 @@ static inline t_color	iter(double _Complex c, const t_closure *data)
 {
 	const double	ratio = (4.0 / data->view->size.x)
 		* (data->view->view.data[1] - data->view->view.data[0]);
-	int				i;
 	const t_vec2d	d = {creal(c) - floor(creal(c)),
 		cimag(c) - floor(cimag(c))};
-	const t_pos		pos = {floor(creal(c)), floor(cimag(c))};
 
 	if (fabs(d.x) < ratio / 2 || fabs(d.y) < ratio / 2)
 		return ((t_color){0x000000});

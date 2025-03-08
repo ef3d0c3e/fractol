@@ -51,7 +51,7 @@ static void
 #pragma omp for schedule(dynamic)
 		for (i = 0; i < size; ++i)
 		{
-			const int	oversample = (0.1 + data->oversampling_data[i]) * 2;
+			const int	oversample = (0.1 + data->oversampling_data[i]);
 			if (oversample == 0)
 				continue ;
 			const	float factor = 1.f / (2.f * oversample + 1.f);

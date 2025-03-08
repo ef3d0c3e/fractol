@@ -56,7 +56,6 @@ const t_kernel
 			t_kernel_settings *settings)
 {
 	const t_kernel					*kernel = kernel_list(id, settings);
-	struct s_viewport_linear_data	*view_data;
 
 	if (viewport->data)
 		free(viewport->data);
