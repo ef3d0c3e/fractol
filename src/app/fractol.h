@@ -43,6 +43,10 @@ typedef struct s_fractol
 	 */
 	int					downsampling;
 	/**
+	 * @brief Oversampling factor for upsampling
+	 */
+	int					oversampling;
+	/**
 	 * @brief Current viewport
 	 */
 	t_viewport			view;
@@ -125,9 +129,10 @@ typedef struct s_fractol
  * @param win_size Window size
  * @param downsampling downsampling factor
  * @param kernel Initial kernel id
+ * @param oversampling Oversampling factor for upsampling
  */
 void
-fractol_start(t_pos win_size, int downsampling, int kernel);
+fractol_start(t_pos win_size, int downsampling, int kernel, int oversampling);
 
 /**
  * @brief Displays the selector widget

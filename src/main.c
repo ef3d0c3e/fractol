@@ -25,6 +25,8 @@ static inline bool	parse_opts(int *i, char **argv, int *args)
 		args[0] = parse_downsampling(argv[++(*i)]);
 	else if (!ft_strcmp(argv[*i], "--kernel"))
 		args[1] = parse_kernel(argv[++(*i)]);
+	else if (!ft_strcmp(argv[*i], "-o") || !ft_strcmp(argv[*i], "--oversampling"))
+		args[2] = parse_oversampling(argv[++(*i)]);
 	else if (argv[*i][0] == '-')
 		exit((ft_dprintf(2, "Error: Unrecognized parameter `%s`\n"
 					"Try `--help` for help.\n", argv[*i]), 1));
@@ -38,12 +40,13 @@ int	main(int argc, char **argv)
 	t_pos	win_size;
 	int		i;
 	int		positional;
-	int		args[2];
+	int		args[3];
 
 	i = 0;
 	positional = 0;
 	args[0] = 1;
 	args[1] = 0;
+	args[2] = 1;
 	while (++i < argc)
 	{
 		if (!parse_opts(&i, argv, args))
@@ -52,6 +55,6 @@ int	main(int argc, char **argv)
 	if (positional != 2)
 		exit((ft_dprintf(2, "Error: Wrong number of positional parameters, "
 					"expected: `WIDTH HEIGHT`\n"), print_usage(argv[0]), 1));
-	fractol_start(win_size, args[0], args[1]);
+	fractol_start(win_size, args[0], args[1], args[2]);
 	return (0);
 }

@@ -90,6 +90,10 @@ struct s_fragment_data
 	 */
 	t_img				*img;
 	/**
+	 * @brief Factor for oversampling
+	 */
+	int					oversampling_factor;
+	/**
 	 * @brief Array containing resampling weights for each pixels.
 	 * NULL for none
 	 */

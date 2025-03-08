@@ -95,3 +95,29 @@ int
 					"got `%d` \n", val), 1));
 	return (val);
 }
+
+int
+	parse_oversampling(const char *s)
+{
+	size_t	i;
+	int		val;
+
+	if (!s)
+		exit((ft_dprintf(2, "Error: Oversampling expects an integer\n", s), 1));
+	val = 0;
+	i = 0;
+	if (s[i] == '+')
+		++i;
+	while (s[i] >= '0' && s[i] <= '9')
+		val = val * 10 + (s[i++] - '0');
+	if (s[i])
+		exit((ft_dprintf(2, "Error: Unexpected character in oversampling: "
+					"`%s` \n", s), 1));
+	if (val <= 0)
+		exit((ft_dprintf(2, "Error: Oversampling expects a strictly positive "
+					"integer, got `%d` \n", val), 1));
+	else if (val >= 8)
+		exit((ft_dprintf(2, "Error: Oversampling exceeds the maximum value of "
+					"8, got `%d` \n", val), 1));
+	return (val);
+}

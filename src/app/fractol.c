@@ -71,11 +71,12 @@ static inline void	init_ui(t_fractol *f, t_pos size)
 	f->filter_buffer = malloc(sizeof(float) * size.x * size.y * 4);
 }
 
-void	fractol_start(t_pos win_size, int downsampling, int kernel)
+void	fractol_start(t_pos win_size, int downsampling, int kernel, int oversampling)
 {
 	t_fractol	f;
 
 	f.downsampling = downsampling;
+	f.oversampling = oversampling;
 	init_mlx(&f, win_size);
 	init_kernel(&f, win_size, kernel);
 	init_ui(&f, win_size);

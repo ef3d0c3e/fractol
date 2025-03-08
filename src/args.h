@@ -48,5 +48,10 @@ parse_downsampling(const char *s);
  */
 int
 parse_kernel(const char *s);
+/**
+ * @brief Parses the oversampling amount
+ */
+int
+parse_oversampling(const char *s);
 
 #endif // ARGS_H

@@ -2,6 +2,14 @@
 
 ![Fractol in action](./docs/mandel_arg.png)
 
+# Building
+
+Fractol requires the following to be installed:
+ - `libx11`
+ - `libxext`
+
+Then you can run `make` to build the `fractol` executable. Or `make bonus` for the multithreaded (faster) version.
+
 # Navigation
 
 You can navigate using the mouse:
@@ -13,9 +21,19 @@ Or you can use the keyboard:
  * Arrow keys for moving
 *Note: You have to disable the [S]elector in order to use arrow key navigation.*
 
+
+## <a name="selector" style="text-decoration:none">Selector ui</a>
+
+![Selector hovering the 'Reset viewport' option](./docs/selector.png)
+
+The selector lets you navigate through rendering kernels and program options.
+ * The selector can be toggled by pressing the **S** key.
+ * Use the arrow keys to navigate entries in the selector.
+ * Press `Enter` to select an option.
+
 # Rendering
 
-The program uses two different rendering pipelines according to the value chosen for `downsampling`.
+The program uses two different rendering pipelines according to the value chosen for [`downsampling`](#opts-downsampling).
 
  * **When `downsampling == 1`: [Key = R]**
    - The image is rendered using 1 sample per screen pixel. The image is then displayed without no further processing.\
@@ -33,7 +51,7 @@ The program uses two different rendering pipelines according to the value chosen
         *A possible optimization to this method is to re-use the previously computed pixel data from the smaller image*
 
 
- * **When using <a name="render-upsampling">upsampling</a> (antialiasing): [Key = U]**
+ * **When using <a name="render-upsampling" style="text-decoration:none">upsampling</a> (antialiasing): [Key = U]**
     - Sobel edge-detection is used to detect noisy regions that might need re-computing.
     - A 5x5 gaussian blur is used to 'propagate' noisy pixels to their neighbors.
     - From then, each pixel gets an oversampling weight assigned.\
@@ -44,14 +62,6 @@ The program uses two different rendering pipelines according to the value chosen
         *This upsampling method can save a lot of resources, as most smooth pixel regions would have\
         stayed the same if they had been oversampled. Oversampling only the noisy regions uses.\
         However, expect very noisy images to result in global oversampling of the entire image (long).*
-
-# Building
-
-Fractol requires the following to be installed:
- - `libx11`
- - `libxext`
-
-Then you can run `make` to build the fractol executable. Or `make bonus` for the multithreaded (faster) version.
 
 # Parameters
 
@@ -66,9 +76,18 @@ They must be positive integers between 256 and 4096. These will be the window's 
 ## Additional parameters
 
 The program support the following additional options:
- * [downsampling](#opt-downsampling) *Integer value between 1 and 16*
-    This value controls the downscaling factor for when rendering the image.
-    Defaults to 1, 
+ *  <a name="opts-downsampling" style="text-decoration:none">**Downsampling**</a> `-d N | --downsample N`\
+    *N=Integer value between 1 and 16, default: 1*\
+    This value controls the downscaling factor for when rendering the image.\
+ * **Choosing a kernel** `--kernel ID`\
+    *ID=Positive integer, default: 0*\
+    This selects the default kernel used for rendering.
+    This option can be changed inside the program via the [selector](#selector) ui.
+ * **High quality antialiasing** `-o N | --oversampling N`\
+    *N=Integer value between 1 and 8, default: 1*\
+    Sets the oversampling factor to use when upsampling images.\
+    The number of total samples per pixel will be multiplied by `N*N`\
+    See [upsampling](#render-upsampling) for more information.
 
 # Defining new fractals
 
