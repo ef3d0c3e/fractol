@@ -14,7 +14,6 @@
 #include "viewport.h"
 #include <complex.h>
 #include <math.h>
-#include <stdio.h>
 
 /**
  * @brief Gets the weight of a sample

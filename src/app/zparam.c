@@ -19,8 +19,7 @@ static void move_zparam(t_fractol *f)
 {
 	const t_vec2d	z = f->view.screen_to_space(&f->view,
 		(t_vec2d){f->ui.mouse_pos.x / (double)f->ui.size.x,
-		f->ui.mouse_pos.x / (double)f->ui.size.y  });
-	printf("HERE: %f %f\n", z.x, z.y);
+		f->ui.mouse_pos.y / (double)f->ui.size.y});
 	f->kernel_settings.zparam = z.x + I * z.y;
 }
 

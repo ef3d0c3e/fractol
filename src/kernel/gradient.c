@@ -12,7 +12,6 @@
 #include "gradient.h"
 #include "kernel/color.h"
 #include <math.h>
-#include <stdio.h>
 
 /* Generates the color */
 static t_color	get_color(

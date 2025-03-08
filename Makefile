@@ -15,6 +15,7 @@ src/args_parse.c \
 src/app/fractol.c \
 src/app/zparam.c \
 src/app/render.c \
+src/app/screenshot.c \
 src/app/viewport/viewport.c \
 src/app/viewport/viewport_fragment.c \
 src/app/viewport/viewport_linear.c \

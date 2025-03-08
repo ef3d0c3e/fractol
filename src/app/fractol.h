@@ -75,6 +75,10 @@ fractol_start(t_pos win_size, int downsampling, int kernel);
 void
 fractol_selector(t_fractol *f);
 
+// Screenshots
+void
+fractol_screenshot(t_fractol *f);
+
 // Rendering ui
 void
 fractol_render(t_fractol *f);

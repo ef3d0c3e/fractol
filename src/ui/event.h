@@ -54,6 +54,10 @@ enum	e_keycode
 	KEY_Y,
 	KEY_Z,
 	KEY_RETURN = 0xff0d,
+	KEY_SHIFT_LEFT = 0xffe1,
+	KEY_SHIFT_RIGHT = 0xffe2,
+	KEY_CTRL_LEFT = 0xffe3,
+	KEY_CTRL_RIGHT = 0xffe4,
 	// Arrow
 	KEY_ARROW_LEFT = 65361,
 	KEY_ARROW_UP,

@@ -14,6 +14,9 @@
 
 # include "vector.h"
 
+/**
+ * @brief 2x2 floating point matrix
+ */
 typedef union u_mat2d
 {
 	struct s_mat2d_values
