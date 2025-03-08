@@ -32,6 +32,7 @@ typedef struct s_fractol
 	t_ui				ui;
 
 	// Rendering data
+	int					downsampling;
 	t_viewport			view;
 	t_viewport			next_view;
 	bool				has_next_view;
@@ -64,8 +65,11 @@ typedef struct s_fractol
 	void				*filter_buffer;
 }	t_fractol;
 
+/**
+ * @brief Start the program
+ */
 void
-fractol_start(t_pos win_size);
+fractol_start(t_pos win_size, int downsampling);
 
 // Render the selector widget
 void

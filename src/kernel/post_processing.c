@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "post_processing.h"
+#include "kernel/color.h"
 #include "util/util.h"
 
 /* Runs function over each pixel in a sub-view */
@@ -57,10 +58,55 @@ float	*postprocess_edge_filter(
 	return (in);
 }
 
-void	postprocess_upscale(t_img *img, t_pos size, t_color *in)
+/* Propagate dense areas */
+static inline float	propagate(
+	float *in,
+	size_t line_length,
+	t_pos pos)
 {
-	const t_color			*data = (const t_color *)img->data;
+	static const float	weights[] = {
+		0.1, 0.2, 0.2, 0.2, 0.1,
+		0.2, 0.4, 0.5, 0.4, 0.2,
+		0.2, 0.5, 1.0, 0.5, 0.2,
+		0.2, 0.4, 0.5, 0.4, 0.2,
+		0.1, 0.2, 0.2, 0.2, 0.1,
+	};
+	float				r;
+	t_pos				offset;
 
-	postprocess_bicubic(data, size, in, (t_pos){img->width, img->height});
+	r = 0;
+	offset.y = -2;
+	while (offset.y <= 2)
+	{
+		offset.x = -2;
+		while (offset.x <= 2)
+		{
+			r += weights[2 + offset.x + (2 + offset.y) * 5]
+				* in[(pos.x + offset.x) + (pos.y + offset.y) * line_length];
+			++offset.x;
+		}
+		++offset.y;
+	}
+	return (r);
+}
+
+float	*postprocess_upscale(t_img *img, t_pos size, t_color *in)
+{
+	const size_t	pixel_size = img->width * img->height;
+	const t_color	*data = (const t_color *)img->data;
+	t_color			color;
+	size_t			i;
+
+	postprocess_bilinear(data, size, in, (t_pos){img->width, img->height});
 	ft_memcpy(img->data, in, (img->width * img->height) * sizeof(t_color));
+	i = 0;
+	while (i < pixel_size)
+	{
+		color = ((t_color *)img->data)[i];
+		((float*)in)[i++] = (0.30f * color.channels.r + 0.59f * color.channels.g
+				+ 0.11f * color.channels.b) / 255.0f;
+	}
+	filter(img, (float *[2]){(float *)in, (float *)in + pixel_size}, 3, postprocess_sobel);
+	filter(img, (float *[2]){(float *)in + pixel_size, (float *)in}, 5, propagate);
+	return ((float *)in);
 }

@@ -10,6 +10,7 @@ LIB_PRINTF := ./libs/ft_printf/libftprintf.a
 
 SOURCES := \
 src/main.c \
+src/args.c \
 src/app/fractol.c \
 src/app/zparam.c \
 src/app/render.c \
@@ -44,7 +45,7 @@ src/kernel/color.c \
 src/kernel/post_processing.c \
 src/kernel/post_processing_sobel.c \
 src/kernel/post_processing_gauss.c \
-src/kernel/post_processing_bicubic.c \
+src/kernel/post_processing_interpolation.c \
 src/kernel/kernel.c \
 src/ui/event_util.c \
 src/ui/draw_queue.c \

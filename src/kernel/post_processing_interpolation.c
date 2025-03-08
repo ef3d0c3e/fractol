@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   post_processing_bicubic.c                          :+:      :+:    :+:   */
+/*   post_processing_interpolation.c                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgamba <lgamba@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -9,6 +9,7 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include "kernel/color.h"
 #include "post_processing.h"
 #include "util/vector.h"
 #include <math.h>
@@ -105,6 +106,40 @@ void	postprocess_bicubic(
 					((i % out_size.x) + 0.5) / (float)out_size.x * in_size.x - 0.5,
 					((i / (float)out_size.x) + 0.5)
 					/ (float)out_size.y * in_size.y - 0.5});
+		}
+	}
+}
+
+void	postprocess_bilinear(
+	const t_color *in,
+	t_pos in_size,
+	t_color *out,
+	t_pos out_size)
+{
+	int		i;
+	t_vec2d	pos;
+
+	i = 0;
+#pragma omp parallel shared(out)
+	{
+#pragma omp for private(i, pos)
+		for (i = 0; i < out_size.x * out_size.y; ++i)
+		{
+			pos = (t_vec2d){((i % out_size.x) + 0.5)
+				/ (float)out_size.x * in_size.x - 0.5,
+				((i / (float)out_size.x) + 0.5)
+				/ (float)out_size.y * in_size.y - 0.5};
+			out[i] = color_lerp(
+					color_lerp(
+						get_pixel_clamped(in, in_size, pos.x, pos.y),
+						get_pixel_clamped(in, in_size, pos.x + 1, pos.y),
+						fmod(pos.x, 1.0)),
+					color_lerp(
+						get_pixel_clamped(in, in_size, pos.x, pos.y + 1),
+						get_pixel_clamped(in, in_size, pos.x + 1, pos.y + 1),
+						fmod(pos.x, 1.0)),
+					fmod(pos.y, 1.0)
+					);
 		}
 	}
 }
