@@ -66,6 +66,9 @@ int
 	if (val <= 0)
 		exit((ft_dprintf(2, "Error: Downsampling expects a strictly positive "
 					"integer, got `%d` \n", val), 1));
+	else if (val >= 16)
+		exit((ft_dprintf(2, "Error: Downsampling exceeds the maximum value of "
+					"16, got `%d` \n", val), 1));
 	return (val);
 }
 

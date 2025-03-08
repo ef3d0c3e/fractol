@@ -12,32 +12,45 @@
 #include "fractol.h"
 #include "ui/event.h"
 #include "util/util.h"
+#include <stddef.h>
+
+/* Writes int to buffer */
+static inline void	write_int(char **buf, int x)
+{
+	const int	length = log10(abs(x)) + (!x);
+	size_t		i;
+
+	if (x < 0)
+		*(*buf)++ = '-';
+	x *= -(x < 0) + (x >= 0);
+	i = 0;
+	while (x)
+	{
+		(*buf)[length - i - 1] = (x % 10) + '0';
+		x /= 10;
+		++i;
+	}
+	*buf += length;
+}
 
 /* Display iteration count */
 static inline void	iter_count(t_fractol *f)
 {
-	const int	length = log10(f->max_iter) + (!f->max_iter);
-	static char	buf[64];
-	int			x;
-	size_t		i;
+	static char	str[255];
+	char		*ptr;
 
-	ft_memcpy(buf, "iter: ", 6);
-	x = f->max_iter;
-	i = 0;
-	while (x)
-	{
-		buf[6 + length - i] = (x % 10) + '0';
-		x /= 10;
-		++i;
-	}
-	buf[6 + length + 1] = '\0';
+	ptr = (char *)memcpy(str, "iter: ", 6) + 7;
+	write_int(&ptr, f->max_iter);
+	ptr = (char *)memcpy(ptr, " | downsampling: ", 17) + 18;
+	write_int(&ptr, f->downsampling);
+	*ptr = '\0';
 	drawqueue_push(&f->ui.ui_queue, (t_draw_item){
 		.item = DRAW_TEXT_SHADOW,
 		.draw.text_shadow = {
 		.pos = {2, f->ui.size.y - 8},
 		.color = 0xFFFFFF,
 		.shadow = 0x000000,
-		.str = buf,
+		.str = str,
 	}});
 }
 

@@ -55,7 +55,7 @@ void		fractol_selector(t_fractol *f)
 	if (f->selector_pos.x == 0)
 		f->selector_pos.y = min(max(f->selector_pos.y, 0), f->kernel_count - 1);
 	if (f->selector_pos.x == 1)
-		f->selector_pos.y = min(max(f->selector_pos.y, 0), 8);
+		f->selector_pos.y = min(max(f->selector_pos.y, 0), 10);
 	id = 0;
 	while ((name = kernel_name(id)))
 	{
@@ -96,9 +96,13 @@ void		fractol_selector(t_fractol *f)
 		f->max_iter = min(f->max_iter + 100, 20000);
 	if (draw_item(f, (t_pos){1, 6}, "Iter -100"))
 		f->max_iter = max(f->max_iter - 100, 1);
-	if (draw_item(f, (t_pos){1, 7}, "Oversampling Debug"))
+	if (draw_item(f, (t_pos){1, 7}, "Downsample -1"))
+		f->downsampling = max(f->downsampling - 1, 1);
+	if (draw_item(f, (t_pos){1, 8}, "Downsample +1"))
+		f->downsampling = min(f->downsampling + 1, 16);
+	if (draw_item(f, (t_pos){1, 9}, "Oversampling Debug"))
 		f->needs_resample_debug = true;
-	if (draw_item(f, (t_pos){1, 8}, "Gradient Debug") && f->kernel->flags & USE_GRADIENT)
+	if (draw_item(f, (t_pos){1, 10}, "Gradient Debug") && f->kernel->flags & USE_GRADIENT)
 		f->needs_gradient_debug = true;
 	
 	drawqueue_push(&f->ui.ui_queue, (t_draw_item){
