@@ -1,0 +1,11 @@
+#pragma once
+
+#define FRACTOL__EXPAND(...) __VA_ARGS__
+#define FRACTOL_EXPAND(...) FRACTOL__EXPAND(__VA_ARGS__)
+#define FRACTOL_OMP(__omp, __i, __size, __s) \
+{ \
+	const size_t __fractol_omp_size = (__size); \
+	_Pragma(__omp) \
+	for (__i = 0; __i < __fractol_omp_size; ++__i) \
+	{ __s } \
+}

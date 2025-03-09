@@ -63,7 +63,7 @@ void	fractol_ui(t_fractol *f)
 	else if (ev_key_held(&f->ui, KEY_A))
 		f->max_iter = max(1, f->max_iter - 3);
 	else if (ev_key_pressed(&f->ui, KEY_F) && f->kernel->flags & USE_GRADIENT)
-		gradient_randomize(&f->kernel_settings.gradient, 8);
+		gradient_randomize(&f->kernel_settings.gradient, 4);
 	if (ev_key_pressed(&f->ui, KEY_Z))
 		fractol_screenshot(f);
 	iter_count(f);

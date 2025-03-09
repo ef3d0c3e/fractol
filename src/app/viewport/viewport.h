@@ -12,7 +12,7 @@
 #ifndef VIEWPORT_H
 # define VIEWPORT_H
 
-#include "util/pos.h"
+# include <util/pos.h>
 # include <util/math.h>
 # include <kernel/color.h>
 # include <mlx_int.h>

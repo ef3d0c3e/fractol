@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "post_processing.h"
-#include "kernel/color.h"
-#include "util/util.h"
+#include <kernel/color.h>
+#include <util/util.h>
 #include <math.h>
 
 /* Runs function over each pixel in a sub-view */
@@ -56,7 +56,8 @@ float	*postprocess_edge_filter(
 	}
 	filter(img, (float *[2]){in, in + pixel_size}, 3, postprocess_sobel);
 	filter(img, (float *[2]){in + pixel_size, in}, 5, postprocess_gauss_blur_5);
-	return (in);
+	filter(img, (float *[2]){in, in + pixel_size}, 5, postprocess_gauss_blur_5);
+	return (in + pixel_size);
 }
 
 /* Propagate dense areas */
@@ -114,7 +115,7 @@ float	*postprocess_upscale(t_img *img, t_pos size, float *in)
 	while (i < pixel_size)
 	{
 		((float *)in)[i] = fmax(fminf(log(((float *)in)[i]) - size.x
-				/ (double)img->width, 0.f), -10.f);
+					/ (double)img->width, 0.f), -10.f);
 		++i;
 	}
 	return ((float *)in);

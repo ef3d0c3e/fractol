@@ -36,53 +36,81 @@ static inline float	gauss_sample_weight(size_t size, int x, int y)
 	return (expf(-(x * x + y * y) / 2.f) / kernel_sums[15]);
 }
 
+static inline t_color
+	adaptive_sample(
+		struct s_fragment_data *data,
+		size_t ids[2],
+		t_color (*shader)(double _Complex z, void *data),
+		void *closure)
+{
+	const int		oversample = data->oversampling_data[ids[0]]
+		* data->oversampling_factor;
+	const double	factor = 1.0 / (2.0 * oversample + 1.0);
+	const t_pos		delta = (t_pos){ids[1] % (2 * oversample + 1) - oversample,
+		ids[1] / (2 * oversample + 1) - oversample};
+	const t_vec2d	z = data->viewport->screen_to_space(data->viewport,
+			(t_vec2d){
+			((ids[0] % data->viewport->size.x) + 0.5 + delta.x * factor)
+			/ (float)data->render_size.x,
+			((ids[0] / data->viewport->size.x) + 0.5 + delta.y * factor)
+			/ (float)data->render_size.y});
+
+	return (shader(z.x + I * z.y, closure));
+}
+
+/* Gaussian average over the samples */
+static inline t_color
+	oversample_average(
+		struct s_fragment_data *data,
+		size_t idx,
+		t_color (*shader)(double _Complex z, void *data),
+		void *closure)
+{
+	const int	oversample = data->oversampling_data[idx]
+		* data->oversampling_factor;
+	size_t		i;
+	t_color		pix;
+	float		colors[5];
+
+	colors[0] = 0.f;
+	colors[1] = 0.f;
+	colors[2] = 0.f;
+	colors[3] = 0.f;
+	i = 0;
+	while (i++ < (2 * oversample + 1) * (2 * oversample + 1))
+	{
+		pix = adaptive_sample(data, (size_t [2]){idx, i - 1}, shader, closure);
+		colors[4] = gauss_sample_weight(oversample * 2 + 1,
+				i % (2 * oversample + 1), i / (2 * oversample + 1));
+		colors[0] += pix.channels.r / 255.f * colors[4];
+		colors[1] += pix.channels.g / 255.f * colors[4];
+		colors[2] += pix.channels.b / 255.f * colors[4];
+		colors[3] += colors[4];
+	}
+	pix.channels.r = colors[0] * 255.f / colors[3];
+	pix.channels.g = colors[1] * 255.f / colors[3];
+	pix.channels.b = colors[2] * 255.f / colors[3];
+	return (pix);
+}
+
 static void	
 	fragment_oversample(
 		struct s_fragment_data *data,
 		t_color (*shader)(double _Complex z, void *data),
 		void *closure)
 {
-	const size_t	size = data->render_size.x * data->render_size .y;
+	const size_t	size = data->render_size.x * data->render_size.y;
 	t_color			*shared;
 	size_t			i;
-	t_color			color;
-	float			weight;
 
 	shared = (t_color *)data->img->data;
-#pragma omp parallel for schedule(dynamic) shared(shared, size)\
-	private(i, color, weight)
-	for (size_t i = 0; i < size; ++i)
-	{
-		const int oversample = data->oversampling_data[i] * data->oversampling_factor;
-		const double factor = 1.f / (2.f * oversample + 1.f);
-		const t_pos pos = (t_pos){i % data->viewport->size.x, i / data->viewport->size.x};
-		float cols[3] = {0.f, 0.f, 0.f};
-
-		if (oversample < 0)
+	FRACTOL_OMP("omp parallel for schedule(dynamic) shared(shared) private(i)",
+		i, size, FRACTOL_EXPAND({
+			if (data->oversampling_data[i] * data->oversampling_factor < 0)
 			continue;
-		float weight_sum = 0.f;
-		const int total_samples = (2 * oversample + 1) * (2 * oversample + 1);
-		for (int sample = 0; sample < total_samples; ++sample)
-		{
-			int x = (sample % (2 * oversample + 1) - oversample);
-			int y = (sample / (2 * oversample + 1) - oversample);
-			t_vec2d z = data->viewport->screen_to_space(data->viewport, (t_vec2d){
-					(pos.x + 0.5 + x * factor) / (float)data->render_size.x,
-					(pos.y + 0.5 + y * factor) / (float)data->render_size.y});
-			t_color color = shader(z.x + I * z.y, closure);
-
-			float f = gauss_sample_weight(oversample * 2 + 1, x, y);
-			cols[0] += color.channels.r / 255.f * f;
-			cols[1] += color.channels.g / 255.f * f;
-			cols[2] += color.channels.b / 255.f * f;
-			weight_sum += f;
-		}
-		((t_color *)shared)[i].channels.r = cols[0] * 255.f / weight_sum;
-		((t_color *)shared)[i].channels.g = cols[1] * 255.f / weight_sum;
-		((t_color *)shared)[i].channels.b = cols[2] * 255.f / weight_sum;
-	}
+		shared[i] = oversample_average(data, i, shader, closure);
+	}));
 }
-
 
 void
 	viewport_fragment(
@@ -101,16 +129,14 @@ void
 		return ;
 	}
 	shared = (t_color *)data->img->data;
-#pragma omp parallel shared(shared, size) private(i, z)
-	{
-#pragma omp for schedule(dynamic)
-		for (i = 0; i < size; ++i)
-		{
+	FRACTOL_OMP("omp parallel for schedule(dynamic) shared(shared)\
+		private(i, z)", i,
+		size, FRACTOL_EXPAND({
 			if (data->post_pass && shared[i].color != data->dafault_color.color)
-				continue;
-			z = data->viewport->screen_to_space(data->viewport, (t_vec2d){((double)(i % data->render_size.x) + 0.5) / data->render_size.x, ((double)i + 0.5) / data->render_size.x / data->render_size.y });
+			continue;
+			z = data->viewport->screen_to_space(data->viewport, (t_vec2d){
+				((double)(i % data->render_size.x) + 0.5) / data->render_size.x,
+				((double)i + 0.5) / data->render_size.x / data->render_size.y});
 			shared[i] = shader(z.x + I * z.y, closure);
-		}
-#pragma omp barrier
-	}
+	}));
 }

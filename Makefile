@@ -8,6 +8,7 @@ LIB_MLX := ./libs/minilibx-linux/libmlx_Linux.a
 LIB_PRINTF := ./libs/ft_printf/libftprintf.a
 
 
+
 SOURCES := \
 src/main.c \
 src/args.c \
@@ -46,7 +47,8 @@ src/kernel/color.c \
 src/kernel/post_processing.c \
 src/kernel/post_processing_sobel.c \
 src/kernel/post_processing_gauss.c \
-src/kernel/post_processing_interpolation.c \
+src/kernel/post_processing_bicubic.c \
+src/kernel/post_processing_bilinear.c \
 src/kernel/kernel.c \
 src/ui/event_util.c \
 src/ui/draw_queue.c \
@@ -59,12 +61,18 @@ src/ui/ui.c \
 src/ui/event_mouse.c
 
 OBJECTS := $(addprefix objs/,$(SOURCES:.c=.o))
+FRACTOL_DEFS := -include "defs/default.def"
 
 objs/%.o : %.c
 	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(IFLAGS) $(FRACTOL_DEFS) -c $< -o $@
 
 $(NAME): $(OBJECTS) $(LIB_MLX) $(LIB_PRINTF)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJECTS) $(LIB_MLX) $(LIB_PRINTF) $(LFLAGS)
+
+.PHONY: bonus
+bonus: FRACTOL_DEFS := -include "defs/bonus.def" 
+bonus: $(OBJECTS) $(LIB_MLX) $(LIB_PRINTF)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJECTS) $(LIB_MLX) $(LIB_PRINTF) $(LFLAGS)
 
 # minilibx-linux
