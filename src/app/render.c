@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   render.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lgamba <lgamba@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/18 11:54:01 by lgamba            #+#    #+#             */
+/*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+#include "app/viewport/viewport.h"
 #include "fractol.h"
 #include "kernel/color.h"
 #include "kernel/gradient.h"
@@ -5,7 +17,9 @@
 #include "mlx_int.h"
 #include <X11/Xlib.h>
 #include <kernel/post_processing.h>
+#include <string.h>
 #include <ui/event.h>
+#include <sys/time.h>
 
 /* Renders text by bypassing the draqueue */
 static void	status(t_fractol *f, char *s)
@@ -28,6 +42,19 @@ static void	render_keys(t_fractol *f)
 		f->needs_resample = true;
 }
 
+static struct s_fragment_data init_data(t_fractol *f, float *oversampling_data, int downsampling)
+{
+	return ((struct s_fragment_data){
+		.viewport = &f->view,
+		.render_size = {f->ui.size.x / downsampling, f->ui.size.y / downsampling},
+		.dafault_color = f->kernel->default_color,
+		.img = f->ui.render,
+		.oversampling_factor = f->oversampling,
+		.oversampling_data = oversampling_data,
+		.post_pass = f->post_pass,
+	});
+}
+
 
 void	fractol_render(t_fractol *f)
 {
@@ -35,24 +62,18 @@ void	fractol_render(t_fractol *f)
 
 	data.dafault_color = f->kernel->default_color;
 	render_keys(f);
+	struct timeval stop, start;
+	gettimeofday(&start, NULL);
 	if (f->needs_render)
 	{
 		status(f, "Rendering...");
-		f->needs_render = false;
-		f->post_pass = false;
-		f->ui.img_pos = (t_vec2d){0, 0};
 		if (f->has_next_view)
 			f->view = f->next_view;
 		f->has_next_view = false;
-		data = (struct s_fragment_data){
-			.viewport = &f->view,
-			.render_size = {f->ui.size.x / f->downsampling, f->ui.size.y / f->downsampling},
-			.dafault_color = f->kernel->default_color,
-			.oversampling_factor = f->oversampling,
-			.oversampling_data = NULL,
-			.img = f->ui.render,
-			.post_pass = f->post_pass,
-		};
+		f->needs_render = false;
+		f->post_pass = false;
+		f->ui.img_pos = (t_vec2d){0, 0};
+		data = init_data(f, NULL, f->downsampling);
 		f->kernel->render(&data, &f->kernel_settings, f->max_iter);
 		if (f->downsampling != 1)
 		{
@@ -60,25 +81,24 @@ void	fractol_render(t_fractol *f)
 			data.render_size = f->ui.size;
 			f->kernel->render(&data, &f->kernel_settings, f->max_iter);
 		}
+		gettimeofday(&stop, NULL);
+		printf("[R]ender: %lu us\n", (stop.tv_sec - start.tv_sec) * 1000000 + stop.tv_usec - start.tv_usec);
 	}
 	else if (f->needs_resample)
 	{
 		status(f, "Upsampling...");
 		f->needs_resample = false;
-		data = (struct s_fragment_data){&f->view, f->ui.size,  f->kernel->default_color,
-			f->ui.render,
-			f->oversampling,
-			postprocess_edge_filter(f->ui.render, f->filter_buffer), false};
+	f->ui.img_pos = (t_vec2d){0, 0};
+		data = init_data(f, postprocess_edge_filter(f->ui.render, f->filter_buffer), 1);
 		f->kernel->render(&data, &f->kernel_settings, f->max_iter);
+		gettimeofday(&stop, NULL);
+		printf("[U]psample: %lu us\n", (stop.tv_sec - start.tv_sec) * 1000000 + stop.tv_usec - start.tv_usec);
 	}
 	else if (f->needs_resample_debug)
 	{
 		status(f, "Resmampling debug...");
 		f->needs_resample_debug = false;
-		data = (struct s_fragment_data){&f->view, f->ui.size, f->kernel->default_color,
-			f->ui.render,
-			f->oversampling,
-			postprocess_edge_filter(f->ui.render, f->filter_buffer), false};
+		data = init_data(f, postprocess_edge_filter(f->ui.render, f->filter_buffer), 1);
 		for (int i = 0; i < f->ui.render->width * f->ui.render->height; ++i)
 			((t_color *)f->ui.render->data)[i] = color_lerp((t_color){0x000000}, (t_color){0xFFFFFF}, exp(-data.oversampling_data[i] / 4));
 	}

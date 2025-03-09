@@ -25,7 +25,7 @@
  * */
 static inline float	gauss_sample_weight(size_t size, int x, int y)
 {
-	static const float	kernel_sums[] = {[3] = 4.897640403536304,
+	static const float	kernel_sums[] = {[1] = 1.0, [3] = 4.897640403536304,
 	[5] = 6.168924081028881, [7] = 6.2797847959347015, [9] = 6.283147856202572,
 	[11] = 6.283185221483608, [13] = 6.2831853741872, [15] = 6.283185374416782};
 
@@ -36,6 +36,7 @@ static inline float	gauss_sample_weight(size_t size, int x, int y)
 	return (expf(-(x * x + y * y) / 2.f) / kernel_sums[15]);
 }
 
+/* Samples the selected pixel from adaptive sampling */
 static inline t_color
 	adaptive_sample(
 		struct s_fragment_data *data,
@@ -52,7 +53,7 @@ static inline t_color
 			(t_vec2d){
 			((ids[0] % data->viewport->size.x) + 0.5 + delta.x * factor)
 			/ (float)data->render_size.x,
-			((ids[0] / data->viewport->size.x) + 0.5 + delta.y * factor)
+			((int)(ids[0] / data->viewport->size.x) + 0.5 + delta.y * factor)
 			/ (float)data->render_size.y});
 
 	return (shader(z.x + I * z.y, closure));
@@ -71,17 +72,20 @@ static inline t_color
 	size_t		i;
 	t_color		pix;
 	float		colors[5];
+	size_t		ids[2];
 
 	colors[0] = 0.f;
 	colors[1] = 0.f;
 	colors[2] = 0.f;
 	colors[3] = 0.f;
 	i = 0;
-	while (i++ < (2 * oversample + 1) * (2 * oversample + 1))
+	ids[0] = idx;
+	while (i++ < (2 * oversample + 1) * (size_t)(2 * oversample + 1))
 	{
-		pix = adaptive_sample(data, (size_t [2]){idx, i - 1}, shader, closure);
+		ids[1] = i - 1;
+		pix = adaptive_sample(data, ids, shader, closure);
 		colors[4] = gauss_sample_weight(oversample * 2 + 1,
-				i % (2 * oversample + 1), i / (2 * oversample + 1));
+				(i - 1) % (2 * oversample + 1), (i - 1) / (2 * oversample + 1));
 		colors[0] += pix.channels.r / 255.f * colors[4];
 		colors[1] += pix.channels.g / 255.f * colors[4];
 		colors[2] += pix.channels.b / 255.f * colors[4];
@@ -106,9 +110,14 @@ static void
 	shared = (t_color *)data->img->data;
 	FRACTOL_OMP("omp parallel for schedule(dynamic) shared(shared) private(i)",
 		i, size, FRACTOL_EXPAND({
-			if (data->oversampling_data[i] * data->oversampling_factor < 0)
+	//i = 0;
+	//while (i < size)
+	//{
+		if (data->oversampling_data[i] * data->oversampling_factor < 0)
 			continue;
 		shared[i] = oversample_average(data, i, shader, closure);
+		++i;
+	//}
 	}));
 }
 

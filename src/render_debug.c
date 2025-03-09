@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   event_misc.c                                      :+:      :+:    :+:   */
+/*   render_debug.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgamba <lgamba@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -9,13 +9,5 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "ui/event.h"
-#include <ui/ui.h>
-#include <app/fractol.h>
 
-int ev_resize(int width, int height, t_fractol *f)
-{
-	printf("RESIZE: %d %d\n", width, height);
-	(void)f;
-	return (0);
-}
+inline t_color gradient_debug_fragment(doucle _Complex z, void *data)

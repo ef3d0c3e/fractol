@@ -6,6 +6,9 @@
 { \
 	const size_t __fractol_omp_size = (__size); \
 	__i = 0; \
-	while (__i < __fractol_omp_size) \
-	{ __s; ++__i; } \
+	while ((size_t)__i < __fractol_omp_size) \
+	{ \
+		{ __s }; \
+		++__i; \
+	} \
 }

@@ -1,13 +1,10 @@
-NAME   := fractol
-CC     := gcc
-#CFLAGS := -Wall -Werror -Wextra -ggdb -fopenmp -pedantic
-CFLAGS := -Wall -Wextra -fopenmp -O3 -Ofast -ffast-math -pedantic
+NAME := fractol
+CC := gcc
+CFLAGS := -Wall -Wextra -pedantic -Werror -ggdb
 IFLAGS := -I./libs/minilibx-linux -I./libs/ft_printf/includes/ -I./src
 LFLAGS := -L/usr/lib -lX11 -lXext -lm
 LIB_MLX := ./libs/minilibx-linux/libmlx_Linux.a
 LIB_PRINTF := ./libs/ft_printf/libftprintf.a
-
-
 
 SOURCES := \
 src/main.c \
@@ -35,6 +32,7 @@ src/kernel/kernels/burning_ship_exp.c \
 src/kernel/kernels/mandel_arg.c \
 src/kernel/kernels/mandel_exp.c \
 src/kernel/kernels/mandel_de.c \
+src/kernel/kernels/mandel_vel.c \
 src/kernel/kernels/julia_arg.c \
 src/kernel/kernels/ui_debug.c \
 src/kernel/kernels/mandel_landing_arg.c \
@@ -62,6 +60,21 @@ src/ui/event_mouse.c
 
 OBJECTS := $(addprefix objs/,$(SOURCES:.c=.o))
 FRACTOL_DEFS := -include "defs/default.def"
+# Flags for optimizations
+FLAGS_OPT := -fopenmp \
+	-mtune=native \
+	-march=native \
+	-fvect-cost-model=dynamic \
+	-fsimd-cost-model=dynamic \
+	-fstrict-aliasing \
+	-fmin-function-alignment=32 \
+	-funroll-loops \
+	-fno-math-errno \
+	-funsafe-math-optimizations \
+	-fassociative-math \
+	-ffinite-math-only \
+	-fno-signed-zeros \
+	-fno-trapping-math
 
 objs/%.o : %.c
 	@mkdir -p $(@D)
@@ -71,16 +84,35 @@ $(NAME): $(OBJECTS) $(LIB_MLX) $(LIB_PRINTF)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJECTS) $(LIB_MLX) $(LIB_PRINTF) $(LFLAGS)
 
 .PHONY: bonus
-bonus: FRACTOL_DEFS := -include "defs/bonus.def" 
+bonus: FRACTOL_DEFS := -include "defs/bonus.def"
+bonus: CFLAGS += $(FLAGS_OPT)
 bonus: $(OBJECTS) $(LIB_MLX) $(LIB_PRINTF)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJECTS) $(LIB_MLX) $(LIB_PRINTF) $(LFLAGS)
+	$(CC) $(CFLAGS) -flto -o $(NAME) $(OBJECTS) $(LIB_MLX) $(LIB_PRINTF) $(LFLAGS)
+
+$(NAME)-profile: FRACTOL_DEFS := -include "defs/bonus.def"
+$(NAME)-profile: CFLAGS += $(FLAGS_OPT) \
+	-pg \
+	--coverage \
+	-fprofile-arcs \
+	-fcondition-coverage \
+	-fprofile-generate
+$(NAME)-profile: clean $(OBJECTS) $(LIB_MLX) $(LIB_PRINTF)
+	$(CC) $(CFLAGS) -o $(NAME)-profile $(OBJECTS) $(LIB_MLX) $(LIB_PRINTF) $(LFLAGS)
+
+$(NAME)-instrumented: FRACTOL_DEFS := -include "defs/bonus.def"
+$(NAME)-instrumented: CFLAGS += $(FLAGS_OPT) \
+	-fprofile-use
+$(NAME)-instrumented: clean $(OBJECTS) $(LIB_MLX) $(LIB_PRINTF)
+	$(CC) $(CFLAGS) -flto -o $(NAME)-instrumented $(OBJECTS) $(LIB_MLX) $(LIB_PRINTF) $(LFLAGS)
 
 # minilibx-linux
 $(LIB_MLX):
+	echo "Building libmlx..."
 	cd $(dir $(LIB_MLX)) && ./configure
 
 # ft_printf
 $(LIB_PRINTF):
+	echo "Building libprintf..."
 	$(MAKE) -C $(dir $(LIB_PRINTF))
 
 .PHONY: all
@@ -93,12 +125,16 @@ clean:
 
 .PHONY: lclean
 lclean:
+	echo "Cleaning mlx..."
 	cd $(dir $(LIB_MLX)) && make clean
+	echo "Cleaning printf..."
 	cd $(dir $(LIB_PRINTF)) && make fclean
 
 .PHONY: fclean
 fclean: clean
 	$(RM) $(NAME)
+	$(RM) $(NAME)-profile
+	$(RM) $(NAME)-instrumented
 
 .PHONY: re
 re: fclean all
