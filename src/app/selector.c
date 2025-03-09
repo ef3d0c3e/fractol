@@ -67,48 +67,50 @@ static void	selector_kernel(t_fractol *f)
 
 static void	selector_options_1(t_fractol *f)
 {
+	const bool	has_gradient = (f->kernel->flags & USE_GRADIENT) != 0;
+
 	if (f->selector_pos.x == 1)
-		f->selector_pos.y = min(max(f->selector_pos.y, 0), 12);
+		f->selector_pos.y = min(max(f->selector_pos.y, 0), 14);
 	if (draw_item(f, (t_pos){1, 0}, "Render"))
 		f->needs_render = true;
 	if (draw_item(f, (t_pos){1, 1}, "Upsample"))
 		f->needs_resample = true;
-	if (draw_item(f, (t_pos){1, 2}, "Randomize Gradient")
-			&& f->kernel->flags & USE_GRADIENT)
-		gradient_randomize(&f->kernel_settings.gradient, 8);
-	if (draw_item(f, (t_pos){1, 3}, "Reset viewport"))
+	if (draw_item(f, (t_pos){1, 2}, "Randomize Gradient (3)") && has_gradient)
+		gradient_randomize(&f->kernel_settings.gradient, 3);
+	if (draw_item(f, (t_pos){1, 3}, "Randomize Gradient (6)") && has_gradient)
+		gradient_randomize(&f->kernel_settings.gradient, 6);
+	if (draw_item(f, (t_pos){1, 4}, "Randomize Gradient (16)") && has_gradient)
+		gradient_randomize(&f->kernel_settings.gradient, 16);
+	if (draw_item(f, (t_pos){1, 5}, "Reset viewport"))
 	{
-		f->view.view = (t_mat2d){{
-			-(double)f->ui.size.x / f->ui.size.y,
-			(double)f->ui.size.x / f->ui.size.y,
-			f->kernel->default_viewport.data[2],
-			f->kernel->default_viewport.data[3],
-		}};
+		f->view.view = (t_mat2d){{-f->ui.size.x / (double)f->ui.size.y,
+			f->ui.size.x / (double)f->ui.size.y, f->kernel->default_viewport
+			.data[2], f->kernel->default_viewport.data[3]}};
 		f->next_view = f->view;
 		f->has_next_view = false;
 		f->needs_render = true;
 	}
-	if (draw_item(f, (t_pos){1, 4}, "Sceenshot to 'screenshot.ppm'"))
+	if (draw_item(f, (t_pos){1, 6}, "Sceenshot to 'screenshot.ppm'"))
 		fractol_screenshot(f);
-	if (draw_item(f, (t_pos){1, 5}, "Iter +100"))
-		f->max_iter = min(f->max_iter + 100, 20000);
 }
 
 static void	selector_options_2(t_fractol *f)
 {
-	if (draw_item(f, (t_pos){1, 6}, "Iter -100"))
+	if (draw_item(f, (t_pos){1, 7}, "Iter +100"))
+		f->max_iter = min(f->max_iter + 100, 20000);
+	if (draw_item(f, (t_pos){1, 8}, "Iter -100"))
 		f->max_iter = max(f->max_iter - 100, 1);
-	if (draw_item(f, (t_pos){1, 7}, "Downsample +1"))
+	if (draw_item(f, (t_pos){1, 9}, "Downsample +1"))
 		f->downsampling = min(f->downsampling + 1, 16);
-	if (draw_item(f, (t_pos){1, 8}, "Downsample -1"))
+	if (draw_item(f, (t_pos){1, 10}, "Downsample -1"))
 		f->downsampling = max(f->downsampling - 1, 1);
-	if (draw_item(f, (t_pos){1, 9}, "Oversample +1"))
+	if (draw_item(f, (t_pos){1, 11}, "Oversample +1"))
 		f->oversampling = min(f->oversampling + 1, 8);
-	if (draw_item(f, (t_pos){1, 10}, "Oversample -1"))
+	if (draw_item(f, (t_pos){1, 12}, "Oversample -1"))
 		f->oversampling = max(f->oversampling - 1, 1);
-	if (draw_item(f, (t_pos){1, 11}, "Oversampling Debug"))
+	if (draw_item(f, (t_pos){1, 13}, "Oversampling Debug"))
 		f->needs_resample_debug = true;
-	if (draw_item(f, (t_pos){1, 12}, "Gradient Debug")
+	if (draw_item(f, (t_pos){1, 14}, "Gradient Debug")
 			&& f->kernel->flags & USE_GRADIENT)
 		f->needs_gradient_debug = true;
 }

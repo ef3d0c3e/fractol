@@ -48,7 +48,7 @@ static inline t_color	iter(double _Complex c, const t_closure *data)
 			uv = (t_vec2d){creal(z), cimag(z)};
 			uv = vec_mul_mat(&uv, &j);
 			return (gradient_get(&data->settings->gradient,
-					0.2 * log10(m * 0.5 * log(m) / vec_norm(&uv))));
+					0.3 * log10(m * log(m) / vec_norm(&uv))));
 		}
 		++i;
 	}

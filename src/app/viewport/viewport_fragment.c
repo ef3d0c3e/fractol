@@ -78,14 +78,16 @@ static inline t_color
 	total_weight = 0.f;
 	i = 0;
 	ids[0] = idx;
-	while (i++ < (2 * oversample + 1) * (size_t)(2 * oversample + 1))
+	while (i < (2 * oversample + 1) * (size_t)(2 * oversample + 1))
 	{
-		ids[1] = i - 1;
+		ids[1] = i;
 		colors.v[3] = gauss_sample_weight(oversample * 2 + 1,
-				ids[1] % (2 * oversample + 1), ids[1] / (2 * oversample + 1));
+				i % (2 * oversample + 1) - oversample,
+				i / (2 * oversample + 1) - oversample);
 		colvec_sample(&colors, adaptive_sample(data, ids, shader, closure),
 			colors.v[3]);
 		total_weight += colors.v[3];
+		++i;
 	}
 	return (colvec_to_color(&colors, total_weight));
 }

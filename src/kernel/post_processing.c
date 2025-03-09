@@ -39,27 +39,6 @@ static inline void	filter(
 	}
 }
 
-float	*postprocess_edge_filter(
-	t_img *img,
-	float *in)
-{
-	const size_t	pixel_size = img->width * img->height;
-	size_t			i;
-	t_color			color;
-
-	i = 0;
-	while (i < pixel_size)
-	{
-		color = ((t_color *)img->data)[i];
-		in[i++] = (0.30f * color.channels.r + 0.59f * color.channels.g
-				+ 0.11f * color.channels.b) / 255.0f;
-	}
-	filter(img, (float *[2]){in, in + pixel_size}, 3, postprocess_sobel);
-	filter(img, (float *[2]){in + pixel_size, in}, 5, postprocess_gauss_blur_5);
-	filter(img, (float *[2]){in, in + pixel_size}, 5, postprocess_gauss_blur_5);
-	return (in + pixel_size);
-}
-
 /* Propagate dense areas */
 static inline float	propagate(
 	float *in,
@@ -90,6 +69,27 @@ static inline float	propagate(
 		++offset.y;
 	}
 	return (r);
+}
+
+float	*postprocess_edge_filter(
+	t_img *img,
+	float *in)
+{
+	const size_t	pixel_size = img->width * img->height;
+	size_t			i;
+	t_color			color;
+
+	i = 0;
+	while (i < pixel_size)
+	{
+		color = ((t_color *)img->data)[i];
+		in[i++] = (0.30f * color.channels.r + 0.59f * color.channels.g
+				+ 0.11f * color.channels.b) / 255.0f;
+	}
+	filter(img, (float *[2]){in, in + pixel_size}, 3, postprocess_sobel);
+	filter(img, (float *[2]){in + pixel_size, in}, 5, postprocess_gauss_blur_5);
+	filter(img, (float *[2]){in, in + pixel_size}, 5, postprocess_gauss_blur_5);
+	return (in + pixel_size);
 }
 
 float	*postprocess_upscale(t_img *img, t_pos size, float *in)

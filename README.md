@@ -7,14 +7,19 @@
 Fractol requires the following to be installed:
  - `libx11`
  - `libxext`
+Optional requirements:
+ - `openmp` (`libgomp` for gcc, `libomp` for clang)\
+    *Required for multithreading, might have to turn off `-Werror` when building without it.*
 
 Then you can run `make` to build the `fractol` executable. Or `make bonus` for the multithreaded (faster) version.
+
+You can now run fractol: `./fractol 1024 1024`.
 
 # Navigation
 
 You can navigate using the mouse:
- * `Mouse wheel` is responsible for zooming
- * `Mouse left` 'pans' the view
+ * `Mouse wheel` for zooming
+ * `Mouse left` to 'pan' the view
 
 Or you can use the keyboard:
  * Numpad `+` or `-` for zooming
@@ -24,12 +29,21 @@ Or you can use the keyboard:
 
 ## <a name="selector" style="text-decoration:none;">Selector ui</a>
 
+The selector can be toggled by pressing key `S`, it is enabled by default.
+
 ![Selector hovering the 'Reset viewport' option](./docs/selector.png)
 
 The selector lets you navigate through rendering kernels and program options.
  * The selector can be toggled by pressing the **S** key.
  * Use the arrow keys to navigate entries in the selector.
  * Press `Enter` to select an option.
+
+### Screenshot
+
+To save the current render as a screenshot, choose the `Screenshot to 'screenshot.ppm'` option, or press key `Z`.
+The image will be saved in [ppm](https://netpbm.sourceforge.net/doc/ppm.html) format.
+
+You can convert a screenshot using imagemagick: `convert screenshot.ppm screenshot.png`.
 
 # Rendering
 
@@ -48,8 +62,8 @@ The program uses two different rendering pipelines according to the value chosen
     - Edges are detected using [Sobel edge detection](https://en.wikipedia.org/wiki/Sobel_operator)
     - Detected edges are propagated to their neighbor pixels in order to create a 'mask' of blurry regions.
     - Each pixel present in the mask is re-sampled from the fractal in order to get a newer accurate reading of their values.\
-        *A possible optimization to this method is to re-use the previously computed pixel data from the smaller image*
-
+        *A possible optimization to this method is to re-use the previously computed pixel data from the smaller image*\
+        See [gallery](#gallery-downsampling) for how downsampling works.
 
  * **When using <a name="render-upsampling" style="text-decoration:none;">upsampling</a> (antialiasing): [Key = U]**
     - Sobel edge-detection is used to detect noisy regions that might need re-computing.
@@ -60,8 +74,10 @@ The program uses two different rendering pipelines according to the value chosen
         *(The original pixel is subdivided into a grid with 1 cell for each sample)*
     - They are then blended into the final pixel value using gaussian sampling.\
         *This upsampling method can save a lot of resources, as most smooth pixel regions would have\
-        stayed the same if they had been oversampled. Oversampling only the noisy regions uses.\
-        However, expect very noisy images to result in global oversampling of the entire image (long).*
+        stayed the same if they had been oversampled. Oversampling only the noisy regions uses\
+        less resources than supersampling. While still providing good quality images.\
+        However, expect very noisy images to result in global oversampling of the entire image (long).* \
+        See [gallery](#gallery-upsampling) for examples of upsampling.
 
 # Parameters
 
@@ -88,6 +104,26 @@ The program support the following additional options:
     Sets the oversampling factor to use when upsampling images.\
     The number of total samples per pixel will be multiplied by `N*N`\
     See [upsampling](#render-upsampling) for more information.
+
+# Gallery
+
+![The julia exp galaxy kernel](./docs/julia_galaxy.png) [The julia exp galaxy kernel](./src/kernel/kernels/julia_exp_galaxy.c)
+
+![The mandel arg kernel over a minibrot](./docs/mandel_arg_minibrot.png) [The mandel arg kernel over a minibrot](./src/kernel/kernels/mandel_arg.c)
+
+## <a name="gallery-upsampling" style="text-decoration:none;">Upsampling</a>
+
+![Pre upsampling](./docs/upsampling_pre.png) Image rendered at 1 sample per pixel
+![Upsampling mask](./docs/upsampling_mask.png) Post processing mask generated for the image
+![Post upsampling](./docs/upsampling_post.png) Image after upsampling using processing mask
+
+## <a name="gallery-downsampling" style="text-decoration:none;">Downsampling</a>
+
+With `downsampling == 4`:
+
+![Interpolated image](./docs/downsampling_pre.png) Upscaled (bilinear) downsampled 4x image
+![Resampling mask](./docs/downsampling_mask.png) Mask for pixles needing resampling
+![Resampled image](./docs/downsampling_post.png) Result once resampling has been applied
 
 # Defining new fractals
 
