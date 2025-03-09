@@ -11,7 +11,9 @@
 /* ************************************************************************** */
 #include "kernel/color.h"
 #include "kernel/gradient.h"
+#include <math.h>
 #include <stdint.h>
+#include <sys/types.h>
 
 static inline uint32_t	xorshift(void)
 {
@@ -27,15 +29,22 @@ static inline uint32_t	xorshift(void)
 
 void	gradient_randomize(t_gradient *g, size_t num)
 {
-	size_t				i;
-	struct s_gr_color	*colors;
+	static const uint32_t	max = ~(uint32_t)0;
+	struct s_gr_color		*colors;
+	size_t					i;
+	float					h;
 
+	gradient_free(g);
 	colors = malloc(sizeof(struct s_gr_color) * (num + 1));
 	i = 0;
-	gradient_free(g);
 	while (i < num)
 	{
-		colors[i].color.color = xorshift() % 0xFFFFFF;
+		h = fmod(xorshift() / (float)max, 1.0);
+		if (h > 100 / 360.f && h < 160 / 360.f)
+			h += 10 / 360.f;
+		colors[i].color = color_from_hsv(h,
+				0.6 + (xorshift() / (float)max) * 0.4,
+				0.5 + (xorshift() / (float)max) * 0.5);
 		colors[i].weight = 1.f;
 		++i;
 	}

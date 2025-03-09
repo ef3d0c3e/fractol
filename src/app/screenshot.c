@@ -47,14 +47,13 @@ void
 	i = 0;
 	data = (t_color *)f->ui.render->data;
 	size = 0;
-	while (i < ((size_t)f->ui.size.x) * f->ui.size.y)
+	while (i++ < ((size_t)f->ui.size.x) * f->ui.size.y)
 	{
-		buf[size++] = (uint8_t)data[i].channels.r;
-		buf[size++] = (uint8_t)data[i].channels.g;
-		buf[size++] = (uint8_t)data[i].channels.b;
+		buf[size++] = (uint8_t)data[i - 1].channels.r;
+		buf[size++] = (uint8_t)data[i - 1].channels.g;
+		buf[size++] = (uint8_t)data[i - 1].channels.b;
 		while (size + 3 >= sizeof(buf))
 			size -= write(fd, buf, size);
-		++i;
 	}
 	write(fd, buf, size);
 	close(fd);

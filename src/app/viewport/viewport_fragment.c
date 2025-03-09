@@ -70,31 +70,24 @@ static inline t_color
 	const int	oversample = data->oversampling_data[idx]
 		* data->oversampling_factor;
 	size_t		i;
-	t_color		pix;
-	float		colors[5];
+	t_colvec	colors;
+	float		total_weight;
 	size_t		ids[2];
 
-	colors[0] = 0.f;
-	colors[1] = 0.f;
-	colors[2] = 0.f;
-	colors[3] = 0.f;
+	colors = colvec_new(0.f, 0.f, 0.f, 0.f);
+	total_weight = 0.f;
 	i = 0;
 	ids[0] = idx;
 	while (i++ < (2 * oversample + 1) * (size_t)(2 * oversample + 1))
 	{
 		ids[1] = i - 1;
-		pix = adaptive_sample(data, ids, shader, closure);
-		colors[4] = gauss_sample_weight(oversample * 2 + 1,
-				(i - 1) % (2 * oversample + 1), (i - 1) / (2 * oversample + 1));
-		colors[0] += pix.channels.r / 255.f * colors[4];
-		colors[1] += pix.channels.g / 255.f * colors[4];
-		colors[2] += pix.channels.b / 255.f * colors[4];
-		colors[3] += colors[4];
+		colors.v[3] = gauss_sample_weight(oversample * 2 + 1,
+				ids[1] % (2 * oversample + 1), ids[1] / (2 * oversample + 1));
+		colvec_sample(&colors, adaptive_sample(data, ids, shader, closure),
+			colors.v[3]);
+		total_weight += colors.v[3];
 	}
-	pix.channels.r = colors[0] * 255.f / colors[3];
-	pix.channels.g = colors[1] * 255.f / colors[3];
-	pix.channels.b = colors[2] * 255.f / colors[3];
-	return (pix);
+	return (colvec_to_color(&colors, total_weight));
 }
 
 static void	
@@ -110,14 +103,10 @@ static void
 	shared = (t_color *)data->img->data;
 	FRACTOL_OMP("omp parallel for schedule(dynamic) shared(shared) private(i)",
 		i, size, FRACTOL_EXPAND({
-	//i = 0;
-	//while (i < size)
-	//{
-		if (data->oversampling_data[i] * data->oversampling_factor < 0)
+			if (data->oversampling_data[i] * data->oversampling_factor < 0)
 			continue;
 		shared[i] = oversample_average(data, i, shader, closure);
 		++i;
-	//}
 	}));
 }
 

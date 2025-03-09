@@ -13,6 +13,7 @@ src/args_parse.c \
 src/app/fractol.c \
 src/app/zparam.c \
 src/app/render.c \
+src/app/render_utils.c \
 src/app/screenshot.c \
 src/app/viewport/viewport.c \
 src/app/viewport/viewport_fragment.c \
@@ -32,8 +33,8 @@ src/kernel/kernels/burning_ship_exp.c \
 src/kernel/kernels/mandel_arg.c \
 src/kernel/kernels/mandel_exp.c \
 src/kernel/kernels/mandel_de.c \
-src/kernel/kernels/mandel_vel.c \
 src/kernel/kernels/julia_arg.c \
+src/kernel/kernels/julia_exp_galaxy.c \
 src/kernel/kernels/ui_debug.c \
 src/kernel/kernels/mandel_landing_arg.c \
 src/kernel/kernels/fatou.c \
@@ -42,6 +43,7 @@ src/kernel/kernels/mandel_smooth_it.c \
 src/kernel/gradient.c \
 src/kernel/gradient_randomize.c \
 src/kernel/color.c \
+src/kernel/color_vec.c \
 src/kernel/post_processing.c \
 src/kernel/post_processing_sobel.c \
 src/kernel/post_processing_gauss.c \
@@ -61,7 +63,8 @@ src/ui/event_mouse.c
 OBJECTS := $(addprefix objs/,$(SOURCES:.c=.o))
 FRACTOL_DEFS := -include "defs/default.def"
 # Flags for optimizations
-FLAGS_OPT := -fopenmp \
+FLAGS_OPT := -O3 \
+	-fopenmp \
 	-mtune=native \
 	-march=native \
 	-fvect-cost-model=dynamic \

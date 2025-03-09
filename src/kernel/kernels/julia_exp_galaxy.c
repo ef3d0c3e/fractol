@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mandel_vel.c                                       :+:      :+:    :+:   */
+/*   julia_exp_galaxy.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgamba <lgamba@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "kernel/color.h"
-#include "mlx_int.h"
 #include <kernel/kernel.h>
 #include <complex.h>
 
@@ -19,21 +18,22 @@ static inline t_color	iter(double _Complex c, const t_closure *data)
 	int				i;
 	double			m;
 	double _Complex	z;
+	double _Complex	dz;
 
 	z = c;
+	dz = 1;
 	i = 0;
 	m = 0;
 	while (i < data->max_it)
 	{
-		z = z * z + c;
-		m += exp(-cabs( cpow(csin(z), 0.5) * cpow(z, -2)  ));
-		if (cabs(z) >= 1e20)
-		{
-			return (gradient_get(&data->settings->gradient, log(m)));
-		}
+		dz = 2 * z * dz + 1;
+		z = z * z + data->settings->zparam;
+		m += exp(-cabs(clog(z * dz)));
+		if (cabs(z) >= 1e16)
+			break ;
 		++i;
 	}
-	return ((t_color){0x000000});
+	return (gradient_get(&data->settings->gradient, log(m)));
 }
 
 static inline void
@@ -48,12 +48,11 @@ static inline void
 	closure.view = data->viewport;
 	closure.settings = settings;
 	closure.max_it = max_it;
-	closure.data = malloc(data->render_size.x * data->render_size.x * sizeof(int));
 	viewport_fragment(data, (t_color (*)(double _Complex, void *))iter,
 		&closure);
 }
 
-const t_kernel	*mandel_vel(t_kernel_settings *settings)
+const t_kernel	*julia_exp_galaxy(t_kernel_settings *settings)
 {
 	static const struct s_gr_color	colors[] = {
 	{{66 << 16 | 30 << 8 | 15}, 1.0},
@@ -66,11 +65,11 @@ const t_kernel	*mandel_vel(t_kernel_settings *settings)
 	{{204 << 16 | 128 << 8 | 0}, 1.0}, {{153 << 16 | 87 << 8 | 0}, 1.0},
 	{{106 << 16 | 52 << 8 | 3}, 1.0}, {{66 << 16 | 30 << 8 | 15}, 1.0}};
 	static const t_kernel			kernel = {
-		.name = "Mandelbrot Velocity",
+		.name = "Julia Exp [galaxy]",
 		.render = render,
 		.default_viewport = {{-1.5, 1.5, -1.0, 1.0}},
 		.default_mat = {{1, 0, 0, 1}},
-		.flags = USE_GRADIENT,
+		.flags = USE_GRADIENT | USE_ZPARAM,
 	};
 
 	if (settings)

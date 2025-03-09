@@ -21,7 +21,7 @@ int	ev_mousedown(enum e_mousecode code, int x, int y, t_fractol *f);
 int	ev_mouseup(enum e_mousecode code, int x, int y, t_fractol *f);
 int	ev_mousemove(int x, int y, t_fractol *f);
 
-int ev_resize(int width, int height, t_fractol *f);
+int	ev_resize(int width, int height, t_fractol *f);
 
 void	event_setup(t_fractol *f)
 {
