@@ -1,14 +1,19 @@
 #pragma once
 
+#include <stdio.h>
+
 #define FRACTOL__EXPAND(...) __VA_ARGS__
 #define FRACTOL_EXPAND(...) FRACTOL__EXPAND(__VA_ARGS__)
-#define FRACTOL_OMP(__omp, __i, __size, __s) \
+#define FRACTOL_OMP(__omp, __idx, __size, __s) \
 { \
-	const size_t __fractol_omp_size = (__size); \
-	__i = 0; \
-	while ((size_t)__i < __fractol_omp_size) \
+	const size_t	__fractol_omp_size = (__size); \
+	size_t			__fractol_idx; \
+	\
+	__fractol_idx = 0; \
+	__idx = 0; \
+	while (++__fractol_idx < __fractol_omp_size) \
 	{ \
+		__idx = __fractol_idx - 1; \
 		{ __s }; \
-		++__i; \
 	} \
 }

@@ -109,8 +109,7 @@ static void
 		i, size, FRACTOL_EXPAND({
 			if (data->oversampling_data[i] * data->oversampling_factor < 0)
 			continue;
-		shared[i] = oversample_average(data, i, shader, closure);
-		++i;
+		shared[i] = oversample_average(data, (size_t)i, shader, closure);
 	}));
 }
 

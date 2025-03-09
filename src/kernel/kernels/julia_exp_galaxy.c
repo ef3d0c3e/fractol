@@ -32,7 +32,7 @@ static inline t_color	iter(double _Complex c, const t_closure *data)
 	while (i < data->max_it)
 	{
 		dz = 2 * z * dz + 1;
-		z = z * z + data->settings->zparam;
+		z = z * z + c;
 		m += exp(-cabs(clog(z * dz)));
 		if (cabs(z) >= 1e16)
 			break ;

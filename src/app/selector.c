@@ -31,7 +31,8 @@ static bool	draw_item(t_fractol *f, t_pos id, const char *name)
 		.color = color_lerp(color, (t_color){0},
 			0.33 * (id.x != f->selector_pos.x)).color,
 		.shadow = 0,
-		.pos = {12 + 256 * id.x, 12 * (id.y - f->selector_pos.y + 3)},
+		.pos = {12 + 256 * (id.x - f->selector_pos.x * (f->ui.size.x < 512)),
+		12 * (id.y - f->selector_pos.y + 3)},
 		.str = name}});
 	return (ev_key_pressed(&f->ui, KEY_RETURN) && f->selector_pos.x == id.x
 		&& f->selector_pos.y == id.y);
@@ -135,6 +136,6 @@ void	fractol_selector(t_fractol *f)
 		.draw.text_shadow = {
 		.color = colors[1].color,
 		.shadow = 0,
-		.pos = {256 * f->selector_pos.x, 12 * 3},
+		.pos = {256 * (f->selector_pos.x * (f->ui.size.x >= 512)), 12 * 3},
 		.str = "->"}});
 }
