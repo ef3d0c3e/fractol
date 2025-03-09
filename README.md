@@ -50,7 +50,7 @@ You can convert a screenshot using imagemagick: `convert screenshot.ppm screensh
 The program uses two different rendering pipelines according to the value chosen for [`downsampling`](#opts-downsampling).
 
  * **When `downsampling == 1`: [Key = R]**
-   - The image is rendered using 1 sample per screen pixel. The image is then displayed without no further processing.\
+   - The image is rendered using 1 sample per screen pixel. The image is then displayed with no further processing.\
         *This is the default rendering method, note that some regions may require [upsampling](#render-upsampling) in order to display 'precisely'.*
 
  * **When `downsampling > 1`: [Key = R]**
@@ -113,17 +113,27 @@ The program support the following additional options:
 
 ## <a name="gallery-upsampling" style="text-decoration:none;">Upsampling</a>
 
-![Pre upsampling](./docs/upsampling_pre.png) Image rendered at 1 sample per pixel
-![Upsampling mask](./docs/upsampling_mask.png) Post processing mask generated for the image
-![Post upsampling](./docs/upsampling_post.png) Image after upsampling using processing mask
+![Pre upsampling](./docs/upsampling_pre.png)\
+Image rendered at 1 sample per pixel
+
+![Upsampling mask](./docs/upsampling_mask.png)\
+Post processing mask generated for the image
+
+![Post upsampling](./docs/upsampling_post.png)\
+Image after upsampling using processing mask
 
 ## <a name="gallery-downsampling" style="text-decoration:none;">Downsampling</a>
 
 With `downsampling == 4`:
 
-![Interpolated image](./docs/downsampling_pre.png) Upscaled (bilinear) downsampled 4x image
-![Resampling mask](./docs/downsampling_mask.png) Mask for pixles needing resampling
-![Resampled image](./docs/downsampling_post.png) Result once resampling has been applied
+![Interpolated image](./docs/downsampling_pre.png)\
+Upscaled (bilinear) downsampled 4x image
+
+![Resampling mask](./docs/downsampling_mask.png)\
+Mask for pixles needing resampling
+
+![Resampled image](./docs/downsampling_post.png)\
+Result once resampling has been applied
 
 # Defining new fractals
 
@@ -132,72 +142,72 @@ You can add a new fractal by creating the following file: `src/kernel/kernels/my
 **Template**
 ```c
 // Iteration code
-static inline t_color	iter(double complex c, const t_closure *data)
+static inline t_color    iter(double complex c, const t_closure *data)
 {
-	int				i;
-	double			m;
-	double complex	dz;
-	double complex	z;
+    int i;
+    double m;
+    double complex dz;
+    double complex z;
 
-	dz = 0;
-	z = 0;
-	i = 0;
-	while (i < data->max_it)
-	{
-		// Derivative
-		dz = 3 * z * z * dz + c;
-		// Main function Z(n+1) = Z(n)^3 + c
-		z = z * z * z + c;
-		m = cabs(z);
-		if (m > 1e8) // c is outside the set, color it...
-		{
-			m = 2 * log2(m) * m / cabs(dz);
-			// Plot from gradient
-			return (gradient_get(&data->settings->gradient, log10(m)));
-		}
-		++i;
-	}
-	return ((t_color){0x000000});
+    dz = 0;
+    z = 0;
+    i = 0;
+    while (i < data->max_it)
+    {
+        // Derivative
+        dz = 3 * z * z * dz + c;
+        // Main function Z(n+1) = Z(n)^3 + c
+        z = z * z * z + c;
+        m = cabs(z);
+        if (m > 1e8) // c is outside the set, color it...
+        {
+            m = 2 * log2(m) * m / cabs(dz);
+            // Plot from gradient
+            return (gradient_get(&data->settings->gradient, log10(m)));
+        }
+        ++i;
+    }
+    return ((t_color){0x000000});
 }
 
 // Render callback, called when the user asks for rendering
 static inline void
-	render(
-			struct s_fragment_data *data,
-			const t_kernel_settings *settings,
-			const int max_it
-			)
+    render(
+            struct s_fragment_data *data,
+            const t_kernel_settings *settings,
+            const int max_it
+            )
 {
-	struct s_kernel_closure	closure;
+    struct s_kernel_closure closure;
 
-	closure.view = data->viewport;
-	closure.settings = settings;
-	closure.max_it = max_it;
-	// Call iteration code for each pixel
-	viewport_fragment(data, (t_color (*)(double _Complex, void *))iter,
-		&closure);
+    closure.view = data->viewport;
+    closure.settings = settings;
+    closure.max_it = max_it;
+    // Call iteration code for each pixel
+    viewport_fragment(data, (t_color (*)(double _Complex, void *))iter,
+        &closure);
 }
 
 // Initialization function of your fractal.
 // if `settings` is NULL, do not initialize anything!
-const t_kernel	*my_fractal(t_kernel_settings *settings)
+const t_kernel    *my_fractal(t_kernel_settings *settings)
 {
-	// Red/Green/Blue gradient
-	static const struct s_gr_color	colors[] = {
-	{{0xFF0000}, 1.0}, {{0x00FF00}, 1.0}, {{0x0000FF}, 1.0}};
-	static const t_kernel			kernel = {
-		.name = "My custom fractal",
-		.render = render,
-		.default_viewport = {{-1.5, 1.5, -1.0, 1.0}}, // Viewable area, can be changed according to window's sizes
-		.default_mat = {{1, 0, 0, 1}}, // Transformation
-		.flags = USE_GRADIENT, // Flag because we use the gradient
-		.default_color = {0x000000}, // Background color
-	};
+    // Red/Green/Blue gradient
+    static const struct s_gr_color colors[] = {
+    {{0xFF0000}, 1.0}, {{0x00FF00}, 1.0}, {{0x0000FF}, 1.0}};
+    static const t_kernel kernel = {
+        .name = "My custom fractal",
+        .render = render,
+        .default_viewport = {{-1.5, 1.5, -1.0, 1.0}}, // Viewable area, can be changed according to window's sizes
+        .default_mat = {{1, 0, 0, 1}}, // Transformation
+        .flags = USE_GRADIENT, // Flag because we use the gradient
+        .default_color = {0x000000}, // Background color
+    };
 
-	if (settings)
-		settings->gradient
-			= gradient_new(colors, sizeof(colors) / sizeof(colors[0]));
-	return (&kernel);
+    if (settings)
+        settings->gradient
+            = gradient_new(colors, sizeof(colors) / sizeof(colors[0]));
+    return (&kernel);
 }
 ```
 

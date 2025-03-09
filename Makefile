@@ -1,6 +1,6 @@
 NAME := fractol
 CC := gcc
-CFLAGS := -Wall -Wextra -pedantic -Werror -ggdb
+CFLAGS := -Wall -Wextra -pedantic -Werror
 IFLAGS := -I./libs/minilibx-linux -I./libs/ft_printf/includes/ -I./src
 LFLAGS := -L/usr/lib -lX11 -lXext -lm
 LIB_MLX := ./libs/minilibx-linux/libmlx_Linux.a
