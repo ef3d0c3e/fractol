@@ -9,9 +9,13 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "kernel/color.h"
-#include "kernel/gradient.h"
+
+/**
+ * @file Render the Julia set using using exponential magnitude sum
+ */
+
 #include <kernel/kernel.h>
+
 #include <complex.h>
 
 static inline t_color	iter(double _Complex c, const t_closure *data)

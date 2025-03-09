@@ -12,7 +12,11 @@
 #ifndef VIEWPORT_LINEAR_H
 # define VIEWPORT_LINEAR_H
 
-# include "viewport.h"
+/**
+ * @file Linear viewport definition
+ */
+
+# include <app/viewport/viewport.h>
 
 /**
  * @brief Data for the linear viewport

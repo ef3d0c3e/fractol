@@ -11,12 +11,13 @@
 /* ************************************************************************** */
 
 /**
- * @file BMP export capability!
+ * @file BMP export capability
  */
 
-#include "ft_printf.h"
-#include "mlx.h"
 #include <app/fractol.h>
+
+#include <ft_printf.h>
+#include <mlx.h>
 #include <fcntl.h>
 
 /* Renders text by bypassing the draqueue */

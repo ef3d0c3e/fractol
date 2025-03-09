@@ -9,12 +9,14 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "kernel/gradient.h"
-#include "util/matrix.h"
-#include "util/vector.h"
-#include <app/viewport/viewport.h>
-#include <complex.h>
+
+/**
+ * @file Render the Burning Ship using exterior distance estimate
+ */
+
 #include <kernel/kernel.h>
+
+#include <complex.h>
 
 static inline void	update_jn(t_mat2d *j, double _Complex z)
 {

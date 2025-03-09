@@ -10,7 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "util.h"
+/**
+ * @file strcmp implementation
+ */
+
+#include <util/util.h>
 
 inline int
 	ft_strcmp(const char *l, const char *r)

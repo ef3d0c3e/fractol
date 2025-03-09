@@ -9,8 +9,14 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "gradient.h"
-#include "kernel/color.h"
+
+/**
+ * @file Gradient utilities
+ */
+
+#include <kernel/gradient.h>
+#include <kernel/color.h>
+
 #include <math.h>
 
 /* Generates the color */

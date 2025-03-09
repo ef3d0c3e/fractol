@@ -12,7 +12,11 @@
 #ifndef MATRIX_H
 # define MATRIX_H
 
-# include "vector.h"
+/**
+ * @file Matrix type definition
+ */
+
+# include <util/vector.h>
 
 /**
  * @brief 2x2 floating point matrix

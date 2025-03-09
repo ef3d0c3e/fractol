@@ -9,10 +9,12 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba		   ###   ########.fr	   */
 /*																			*/
 /* ************************************************************************** */
-#include "viewport_linear.h"
-#include "util/matrix.h"
-#include "util/vector.h"
-#include <util/math.h>
+
+/**
+ * @brief Linear viewport implementation
+ */
+
+#include <app/viewport/viewport_linear.h>
 
 struct s_viewport_linear_data
 	view_linear_data(t_mat2d mat)

@@ -10,8 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-// memcpy based on https://github.com/nadavrot/memset_benchmark
-#include "util.h"
+/**
+ * @file memcpy implementation,
+ * based on https://github.com/nadavrot/memset_benchmark
+ */
+
+#include <util/util.h>
 #include <stdint.h>
 
 static inline void	*memcpy_4(char *dest, const char *src, size_t n)

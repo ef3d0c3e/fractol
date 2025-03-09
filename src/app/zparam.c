@@ -9,9 +9,13 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "app/fractol.h"
-#include "util/pos.h"
-#include "util/vector.h"
+
+/**
+ * @file Handles julia parameter selection
+ */
+
+#include <app/fractol.h>
+
 #include <complex.h>
 
 /* Moves the Z parameter to the right-clicked location */

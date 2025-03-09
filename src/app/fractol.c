@@ -9,21 +9,25 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "fractol.h"
-#include "app/viewport/viewport.h"
-#include "ft_printf.h"
-#include "kernel/kernel.h"
-#include "util/matrix.h"
+
+/**
+ * @brief Fractol initialization
+ */
+
+#include <app/fractol.h>
+
+#include <ft_printf.h>
 #include <complex.h>
 #include <mlx.h>
-#include <omp.h>
 
+/* Initialize mlx */
 static inline void	init_mlx(t_fractol *f, t_pos size)
 {
 	f->mlx = mlx_init();
 	f->window = mlx_new_window(f->mlx, size.x, size.y, "Fractol");
 }
 
+/* Initialize rendering kernel */
 static inline void	init_kernel(t_fractol *f, t_pos size, int kernel_id)
 {
 	f->view.size = size;
@@ -49,6 +53,7 @@ static inline void	init_kernel(t_fractol *f, t_pos size, int kernel_id)
 	f->max_iter = 500;
 }
 
+/* Start program loop */
 static void	fractol_loop(t_fractol *f)
 {
 	fractol_selector(f);
@@ -58,6 +63,7 @@ static void	fractol_loop(t_fractol *f)
 	fractol_render(f);
 }
 
+/* Initializes fractol's ui */
 static inline void	init_ui(t_fractol *f, t_pos size)
 {
 	f->ui = ui_init(f, size);
@@ -81,8 +87,8 @@ void	fractol_start(
 
 	f.downsampling = downsampling;
 	f.oversampling = oversampling;
-	init_mlx(&f, win_size);
 	init_kernel(&f, win_size, kernel);
+	init_mlx(&f, win_size);
 	init_ui(&f, win_size);
 	ui_update(&f);
 	mlx_loop(f.mlx);

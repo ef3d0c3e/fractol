@@ -14,12 +14,9 @@
  * @file Handles mouse movements
  */
 
-#include "app/viewport/viewport.h"
-#include "fractol.h"
-#include "ui/event.h"
-#include "util/vector.h"
-#include <complex.h>
+#include <app/fractol.h>
 
+/* Moves or zoom the viewport */
 static t_pos
 	move_viewport(
 	t_fractol *f,
@@ -80,6 +77,7 @@ static void	move_reticle(t_fractol *f)
 		.color = 0x00FFFF, .fill = false}});
 }
 
+/* Moves the viewport from keyboard input */
 static t_pos	move_keyboard(t_fractol *f)
 {
 	t_pos	d;

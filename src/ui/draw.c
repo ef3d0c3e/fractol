@@ -14,11 +14,13 @@
  * @file Drawing primitives using XLib
  */
 
-#include "draw.h"
-#include "mlx_int.h"
+#include <ui/draw.h>
+
+#include <mlx_int.h>
 #include <X11/X.h>
 #include <X11/Xlib.h>
 
+/* Draws a rectangle */
 static inline void
 	draw_rect(
 		t_xvar *mlx,
@@ -48,6 +50,7 @@ static inline void
 			);
 }
 
+/* Draws a line */
 static inline void
 	draw_line(
 		t_xvar *mlx,
@@ -69,6 +72,7 @@ static inline void
 		);
 }
 
+/* Draws text */
 static inline void
 	draw_text(
 		t_xvar *mlx,
@@ -88,6 +92,7 @@ static inline void
 		);
 }
 
+/* Draws text with shadow */
 static inline void
 	draw_text_shadow(
 		t_xvar *mlx,
@@ -115,7 +120,7 @@ static inline void
 		);
 }
 
-inline void	draw(t_xvar *mlx, t_win_list *win, const t_draw_item *item)
+void	draw(t_xvar *mlx, t_win_list *win, const t_draw_item *item)
 {
 	static	void (*const drawer_table[])
 		(t_xvar *mlx, t_win_list *win, const t_draw_item *item) = {

@@ -9,10 +9,13 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "kernel.h"
-#include "app/viewport/viewport.h"
-#include "app/viewport/viewport_linear.h"
-#include "kernel/gradient.h"
+
+/**
+ * @file Kernel initialization
+ */
+
+#include <kernel/kernel.h>
+#include <app/viewport/viewport_linear.h>
 
 const t_kernel	*mandel_de(t_kernel_settings *settings);
 const t_kernel	*mandel_exp(t_kernel_settings *settings);

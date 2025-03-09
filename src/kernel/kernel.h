@@ -12,9 +12,11 @@
 #ifndef KERNEL_H
 # define KERNEL_H
 
-# include <util/math.h>
+/**
+ * @brief Rendering kernel definition
+ */
+
 # include <kernel/gradient.h>
-# include <ui/image.h>
 # include <app/viewport/viewport.h>
 
 typedef struct s_kernel_settings

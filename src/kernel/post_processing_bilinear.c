@@ -9,11 +9,15 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "post_processing.h"
-#include <kernel/color.h>
-#include <util/vector.h>
-#include <math.h>
 
+/**
+ * @brief Bulinear image filtering
+ */
+
+#include <kernel/post_processing.h>
+#include <util/math.h>
+
+/* Gets a clamped pixel value */
 static inline t_color
 	get_pixel_clamped(const t_color *buffer, t_pos size, int x, int y)
 {

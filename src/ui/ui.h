@@ -16,7 +16,7 @@
  * @file Fractol's ui manager
  */
 
-# include "util/vector.h"
+# include <util/vector.h>
 # include <ui/event.h>
 # include <ui/draw.h>
 
@@ -53,17 +53,25 @@ typedef struct s_ui
 /**
  * @brief Initializes ui
  *
+ * @param f Fractol instance
  * @param size Screen size in pixels
+ *
+ * @returns The newly created ui
  */
 t_ui
 ui_init(struct s_fractol *f, const t_pos size);
 /**
  * @brief Deinitializes ui
+ *
+ * @param f Fractol instance
+ * @param ui Ui to deinitialize
  */
 void
 ui_deinit(struct s_fractol *f, t_ui *ui);
 /**
  * @brief Updates the ui
+ *
+ * @param f Fractol instance
  */
 void
 ui_update(struct s_fractol *f);

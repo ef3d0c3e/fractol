@@ -12,6 +12,10 @@
 #ifndef UTIL_H
 # define UTIL_H
 
+/**
+ * @file Misc utilities
+ */
+
 # include <stdlib.h>
 
 # ifdef __clang__

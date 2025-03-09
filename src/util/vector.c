@@ -9,7 +9,12 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "vector.h"
+
+/**
+ * @file double floating point vector implementation
+ */
+
+#include <util/vector.h>
 #include <math.h>
 
 inline void

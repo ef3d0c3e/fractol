@@ -9,6 +9,11 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/**
+ * @file Realloc implementation
+ */
+
 #include "util.h"
 #include <string.h>
 

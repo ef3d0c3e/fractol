@@ -9,10 +9,12 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "viewport.h"
-#include "util/vector.h"
-#include <util/math.h>
-#include <stdlib.h>
+
+/**
+ * @file Base implementation of viewport functionalities
+ */
+
+#include <app/viewport/viewport.h>
 
 t_viewport
 	viewport_create(

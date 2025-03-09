@@ -16,8 +16,9 @@
  * @file Ui drawing
  */
 
-# include "mlx_int.h"
-# include "util/pos.h"
+# include <util/pos.h>
+
+# include <mlx_int.h>
 # include <stdint.h>
 # include <stdbool.h>
 
@@ -94,30 +95,43 @@ typedef struct s_drawqueue
 
 /**
  * @brief Creates a new draw queue
+ *
+ * @returns A new empty draw queue
  */
 t_drawqueue
 drawqueue_new(void);
 
 /**
  * @brief Frees the draw queue
+ *
+ * @param d Drawqueue to free
  */
 void
 drawqueue_free(t_drawqueue *d);
 
 /**
  * @brief Add an element to the draw queue
+ *
+ * @param d Drawqueue to append to
+ * @param item Item to add to queue
  */
 void
 drawqueue_push(t_drawqueue *d, const t_draw_item item);
 
 /**
  * @brief Clears the draw queue
+ *
+ * @param d Drawqueue to clear
  */
 void
 drawqueue_clear(t_drawqueue *d);
 
 /**
  * @brief Renders to screen
+ *
+ * @param d Drawqueue to render
+ * @param mlx Mlx instance
+ * @param win Window to draw to
  */
 void
 drawqueue_render(const t_drawqueue *d, t_xvar *mlx, t_win_list *win);

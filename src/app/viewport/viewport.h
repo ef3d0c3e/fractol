@@ -12,9 +12,13 @@
 #ifndef VIEWPORT_H
 # define VIEWPORT_H
 
-# include <util/pos.h>
+/**
+ * @file Base viewport specification
+ */
+
 # include <util/math.h>
 # include <kernel/color.h>
+
 # include <mlx_int.h>
 # include <stdbool.h>
 
@@ -55,6 +59,11 @@ viewport_free(t_viewport *this);
 
 /**
  * @brief Moves the view
+ *
+ * @param this The viewprot to apply zoom on
+ * @param start Translation start coordinates
+ * @param end Translation end coordinates
+ * @param factor Translation factor (1.0 for complete translation)
  */
 void
 view_move(
@@ -62,6 +71,13 @@ view_move(
 	const t_vec2d start,
 	const t_vec2d end,
 	const double factor);
+/**
+ * @brief Zooms the view
+ *
+ * @param this The viewprot to apply zoom on
+ * @param center Zoom center
+ * @param zoom Zoom factor (+1 or -1)
+ */
 void
 view_zoom(
 	t_viewport *this,

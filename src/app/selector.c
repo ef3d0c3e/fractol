@@ -9,13 +9,12 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "fractol.h"
-#include "kernel/color.h"
-#include "kernel/gradient.h"
-#include "kernel/kernel.h"
-#include "ui/draw.h"
-#include "ui/event.h"
-#include <stddef.h>
+
+/**
+ * @file Selector UI
+ */
+
+#include <app/fractol.h>
 
 static bool	draw_item(t_fractol *f, t_pos id, const char *name)
 {

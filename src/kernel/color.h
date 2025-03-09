@@ -12,6 +12,10 @@
 #ifndef COLOR_H
 # define COLOR_H
 
+/**
+ * @file Color datatypes definitions
+ */
+
 # include <stdint.h>
 
 /**

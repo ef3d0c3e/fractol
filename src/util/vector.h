@@ -13,6 +13,10 @@
 # define VECTOR_H
 
 /**
+ * @brief Floating point vector types definition
+ */
+
+/**
  * @brief Vector struct
  */
 typedef struct s_vec2d
@@ -20,15 +24,6 @@ typedef struct s_vec2d
 	double	x;
 	double	y;
 }	t_vec2d;
-
-/**
- * @brief Single Vector struct
- */
-typedef struct s_vec2f
-{
-	float	x;
-	float	y;
-}	t_vec2f;
 
 /**
  * @brief Sums two vectors
@@ -60,5 +55,14 @@ vec_norm(const t_vec2d *a);
  */
 double
 vec_norm_sqr(const t_vec2d *a);
+
+/**
+ * @brief Single-precision Vector struct
+ */
+typedef struct s_vec2f
+{
+	float	x;
+	float	y;
+}	t_vec2f;
 
 #endif // VECTOR_H

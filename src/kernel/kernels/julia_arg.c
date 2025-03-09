@@ -9,8 +9,13 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "kernel/color.h"
+
+/**
+ * @file Render the Julia set using complex argument coloring
+ */
+
 #include <kernel/kernel.h>
+
 #include <complex.h>
 
 static inline t_color	iter(

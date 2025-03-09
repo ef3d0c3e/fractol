@@ -9,8 +9,11 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "ui/event.h"
-#include <ui/ui.h>
+
+/**
+ * @brief Mouse event handlers
+ */
+
 #include <app/fractol.h>
 
 int	ev_mousedown(enum e_mousecode code, int x, int y, t_fractol *f)

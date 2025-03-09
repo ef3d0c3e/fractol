@@ -9,6 +9,11 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/**
+ * @brief Utilities for events
+ */
+
 #include <ui/event.h>
 #include <ui/ui.h>
 

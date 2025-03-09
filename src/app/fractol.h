@@ -12,11 +12,11 @@
 #ifndef FRACTOL_H
 # define FRACTOL_H
 
-# include <kernel/kernel.h>
-# include "viewport/viewport.h"
 # include <ui/ui.h>
+# include <kernel/kernel.h>
+# include <app/viewport/viewport.h>
 
-# include "../minilibx-linux/mlx_int.h"
+# include <mlx_int.h>
 # include <stdbool.h>
 
 /**

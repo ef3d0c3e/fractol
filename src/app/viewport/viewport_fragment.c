@@ -9,12 +9,14 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "kernel/color.h"
-#include "util/vector.h"
-#include "viewport.h"
+
+/**
+ * @file Viewport fragment capabilities
+ */
+
+#include <app/viewport/viewport.h>
+
 #include <complex.h>
-#include <math.h>
-#include <stdio.h>
 
 /**
  * @brief Gets the weight of a sample

@@ -9,9 +9,15 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "fractol.h"
-#include "ui/event.h"
-#include "util/util.h"
+
+/**
+ * @file Main UI
+ */
+
+#include <app/fractol.h>
+#include <ui/event.h>
+
+#include <mlx.h>
 #include <stddef.h>
 
 /* Writes int to buffer */
@@ -66,5 +72,10 @@ void	fractol_ui(t_fractol *f)
 		gradient_randomize(&f->kernel_settings.gradient, 4);
 	if (ev_key_pressed(&f->ui, KEY_Z))
 		fractol_screenshot(f);
+	if (ev_key_pressed(&f->ui, KEY_ESC))
+	{
+		mlx_loop_end(f->mlx);
+		return ;
+	}
 	iter_count(f);
 }

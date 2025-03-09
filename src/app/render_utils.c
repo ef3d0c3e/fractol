@@ -10,12 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+/**
+ * @file Rendering utilities
+ */
+
 #include <app/fractol.h>
-#include <kernel/color.h>
-#include <util/pos.h>
-#include <kernel/gradient.h>
-#include <mlx_int.h>
-#include <math.h>
 
 /* Render upsampling data as grayscale image */
 void	upsampling_debug_fragment(t_img *buf, float *weights)

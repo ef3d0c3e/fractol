@@ -9,10 +9,14 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "kernel/gradient.h"
-#include <app/viewport/viewport.h>
-#include <complex.h>
+
+/**
+ * @file Render the Mandelbrot set using potential
+ */
+
 #include <kernel/kernel.h>
+
+#include <complex.h>
 
 static inline t_color	iter(double _Complex c, const t_closure *data)
 {

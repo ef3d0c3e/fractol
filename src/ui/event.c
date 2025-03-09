@@ -9,9 +9,14 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "ui/ui.h"
+
+/**
+ * @file Setup event handlers
+ */
+
 #include <ui/event.h>
 #include <app/fractol.h>
+
 #include <mlx.h>
 
 int	ev_keyup(enum e_keycode code, t_fractol *f);

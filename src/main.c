@@ -9,10 +9,15 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "args.h"
-#include "util/pos.h"
-#include "util/util.h"
+
+/**
+ * @file Fractol entry point
+ */
+
+#include <args.h>
+#include <util/util.h>
 #include <app/fractol.h>
+
 #include <ft_printf.h>
 
 static inline bool	parse_opts(int *i, char **argv, int *args)

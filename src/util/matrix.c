@@ -9,8 +9,7 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "matrix.h"
-#include "vector.h"
+#include <util/matrix.h>
 
 inline void	mat_mul(t_mat2d *a, const t_mat2d *const b)
 {

@@ -9,9 +9,15 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "args.h"
-#include <stdlib.h>
+
+/**
+ * @file Parsers for command line options
+ */
+
+#include <args.h>
+
 #include <ft_printf.h>
+#include <stdlib.h>
 
 void	parse_positional(
 	const char *program,

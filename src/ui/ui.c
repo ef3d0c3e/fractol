@@ -9,10 +9,14 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "kernel/kernel.h"
+
+/**
+ * @brief UI methods
+ */
+
 #include <ui/ui.h>
-#include <ui/event.h>
 #include <app/fractol.h>
+
 #include <mlx.h>
 
 t_ui	ui_init(t_fractol *f, const t_pos size)

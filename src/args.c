@@ -9,7 +9,13 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "args.h"
+
+/**
+ * @file Basic argument handlers
+ */
+
+#include <args.h>
+
 #include <ft_printf.h>
 
 void	print_usage(const char *program)

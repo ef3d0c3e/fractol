@@ -9,9 +9,13 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "color.h"
-#include "util/math.h"
-#include <math.h>
+
+/**
+ * @file Color utilities
+ */
+
+#include <kernel/color.h>
+#include <util/math.h>
 
 inline t_color
 	color_lerp(

@@ -9,10 +9,15 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "post_processing.h"
+
+/**
+ * @brief Post processing for downsampling/upsampling
+ */
+
+#include <kernel/post_processing.h>
 #include <kernel/color.h>
 #include <util/util.h>
-#include <math.h>
+#include <util/math.h>
 
 /* Runs function over each pixel in a sub-view */
 static inline void	filter(

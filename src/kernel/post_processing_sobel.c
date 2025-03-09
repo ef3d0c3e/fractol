@@ -9,9 +9,13 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "post_processing.h"
-#include "util/vector.h"
-#include <math.h>
+
+/**
+ * @file Sobel kernel
+ */
+
+#include <kernel/post_processing.h>
+#include <util/math.h>
 
 inline float	postprocess_sobel(
 	float *in,

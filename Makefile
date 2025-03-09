@@ -1,6 +1,6 @@
 NAME := fractol
 CC := gcc
-CFLAGS := -Wall -Wextra -pedantic -Werror
+CFLAGS := -Wall -Wextra -pedantic -Werror -ggdb
 IFLAGS := -I./libs/minilibx-linux -I./libs/ft_printf/includes/ -I./src
 LFLAGS := -L/usr/lib -lX11 -lXext -lm
 LIB_MLX := ./libs/minilibx-linux/libmlx_Linux.a
@@ -52,7 +52,6 @@ src/kernel/post_processing_bilinear.c \
 src/kernel/kernel.c \
 src/ui/event_util.c \
 src/ui/draw_queue.c \
-src/ui/image.c \
 src/ui/draw.c \
 src/ui/event_keyboard.c \
 src/ui/event_misc.c \

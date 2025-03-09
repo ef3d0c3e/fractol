@@ -13,6 +13,10 @@
 # define POS_H
 
 /**
+ * @file Screen coordinate definition
+ */
+
+/**
  * @brief Screen position structure
  */
 typedef struct s_pos

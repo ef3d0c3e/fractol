@@ -9,7 +9,12 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "color.h"
+
+/**
+ * @file Floating point colors utilities
+ */
+
+#include <kernel/color.h>
 
 inline t_colvec
 	colvec_new(float r, float g, float b, float a)

@@ -9,7 +9,11 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include <ui/ui.h>
+
+/**
+ * @brief Keyboard event handlers
+ */
+
 #include <app/fractol.h>
 
 int	ev_keyup(enum e_keycode code, t_fractol *f)

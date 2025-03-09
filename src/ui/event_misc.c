@@ -9,8 +9,11 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include <ui/event.h>
-#include <ui/ui.h>
+
+/**
+ * @brief Misc event handlers
+ */
+
 #include <app/fractol.h>
 
 int	ev_resize(int width, int height, t_fractol *f)

@@ -12,9 +12,15 @@
 #ifndef POST_PROCESSING_H
 # define POST_PROCESSING_H
 
+/**
+ * @brief Image filtering utilities
+ */
+
 # include <kernel/color.h>
 # include <util/pos.h>
+
 # include <mlx_int.h>
+# include <stdlib.h>
 
 /**
  * @brief Sobel edge detection filter

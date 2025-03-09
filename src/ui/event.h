@@ -13,10 +13,11 @@
 # define EVENT_H
 
 /**
- * @file Event handlers
+ * @file Event definitions
  */
 
 # include <util/pos.h>
+
 # include <stdbool.h>
 
 struct	s_fractol;
@@ -54,6 +55,7 @@ enum	e_keycode
 	KEY_Y,
 	KEY_Z,
 	KEY_RETURN = 0xff0d,
+	KEY_ESC = 0xff1b,
 	KEY_KP_PLUS = 0xffab,
 	KEY_KP_MINUS = 0xffad,
 	KEY_SHIFT_LEFT = 0xffe1,
@@ -67,6 +69,9 @@ enum	e_keycode
 	KEY_ARROW_DOWN,
 };
 
+/**
+ * @brief Code for mouse button
+ */
 enum e_mousecode
 {
 	MOUSE_NONE,
@@ -77,6 +82,9 @@ enum e_mousecode
 	MOUSE_WHEEL_UP = 5,
 };
 
+/**
+ * @brief Xlib event code
+ */
 enum e_eventcode
 {
 	EVENT_KEYDOWN = 2,
@@ -89,6 +97,9 @@ enum e_eventcode
 	EVENT_RESIZE = 18,
 };
 
+/**
+ * @brief XLib event mask
+ */
 enum e_evmask
 {
 	MASK_NONE = (0L),

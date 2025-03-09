@@ -9,8 +9,14 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "draw.h"
-#include "mlx_int.h"
+
+/**
+ * @file Drawqueue buffer management
+ */
+
+#include <ui/draw.h>
+
+#include <mlx_int.h>
 #include <util/util.h>
 
 t_drawqueue

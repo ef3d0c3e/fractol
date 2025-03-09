@@ -9,15 +9,17 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/**
+ * @brief Render controls
+ */
+
 #include <app/fractol.h>
-#include <app/viewport/viewport.h>
 #include <kernel/post_processing.h>
-#include <ui/event.h>
 
 #include <ft_printf.h>
 #include <mlx.h>
 #include <mlx_int.h>
-
 #include <sys/time.h>
 
 void					upsampling_debug_fragment(t_img *buf, float *weights);
@@ -64,6 +66,7 @@ static void	fractol_render_debug(t_fractol *f)
 	}
 }
 
+/* Render at 1 sample per pixel, or use downsampling */
 static void	fractol_render_default(t_fractol *f)
 {
 	struct s_fragment_data	data;
@@ -86,6 +89,7 @@ static void	fractol_render_default(t_fractol *f)
 	}
 }
 
+/* Render from edge filtering */
 static void	fractol_render_upsampling(t_fractol *f)
 {
 	struct s_fragment_data	data;

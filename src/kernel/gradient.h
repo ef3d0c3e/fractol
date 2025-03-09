@@ -12,8 +12,11 @@
 #ifndef GRADIENT_H
 # define GRADIENT_H
 
+/**
+ * @file Gradient definition
+ */
+
 # include <kernel/color.h>
-# include <stdint.h>
 # include <stdlib.h>
 
 /**

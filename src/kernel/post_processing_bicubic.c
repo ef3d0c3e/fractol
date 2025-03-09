@@ -9,11 +9,15 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "post_processing.h"
-#include <kernel/color.h>
-#include <util/vector.h>
-#include <math.h>
 
+/**
+ * @brief Bucubic image filtering
+ */
+
+#include <kernel/post_processing.h>
+#include <util/math.h>
+
+/* Gets a clamped pixel value */
 static inline t_color
 	get_pixel_clamped(const t_color *buffer, t_pos size, int x, int y)
 {
@@ -28,6 +32,7 @@ static inline t_color
 	return (buffer[y * size.x + x]);
 }
 
+/* Bicubic upscaling kernel */
 static inline float
 	cubic_hermite(float cols[4], float t)
 {
@@ -41,6 +46,7 @@ static inline float
 	return (w[0] * t * t * t + w[1] * t * t + w[2] * t + w[3]);
 }
 
+/* Sample pixels to a 4x4 array */
 static inline void
 	sample_pixels(const t_color *in, t_pos size, t_color *pixels, t_pos center)
 {
@@ -60,6 +66,7 @@ static inline void
 	}
 }
 
+/* Interpolate for given coordinate */
 static inline t_color
 	bicubic_interpolate(const t_color *buffer, t_pos size, t_vec2d z)
 {

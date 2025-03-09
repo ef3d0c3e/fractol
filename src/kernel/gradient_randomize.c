@@ -9,12 +9,17 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "kernel/color.h"
-#include "kernel/gradient.h"
-#include <math.h>
-#include <stdint.h>
-#include <sys/types.h>
 
+/**
+ * @file Gradient randomizer
+ */
+
+#include <kernel/color.h>
+#include <kernel/gradient.h>
+
+#include <math.h>
+
+/* Implementation of xorshift, for random colors */
 static inline uint32_t	xorshift(void)
 {
 	static uint32_t	state = 1;

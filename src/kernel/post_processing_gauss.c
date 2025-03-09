@@ -9,7 +9,12 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "post_processing.h"
+
+/**
+ * @file 5x5 gauss kernel
+ */
+
+#include <kernel/post_processing.h>
 
 inline float	postprocess_gauss_blur_5(
 	float *in,

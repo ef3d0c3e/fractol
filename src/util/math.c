@@ -9,6 +9,11 @@
 /*   Updated: 2025/02/18 17:50:12 by lgamba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/**
+ * @brief Math helper functions
+ */
+
 #include <util/math.h>
 
 inline float	lerpf(const float a, const float b, const float f)

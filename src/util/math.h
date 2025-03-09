@@ -13,14 +13,14 @@
 # define MATH_H
 
 /**
- * @file Math helpers
+ * @file Math helper functions
  */
 
 # define TWO_PI 6.2831853071795864769253
 
-# include "vector.h"
-# include "matrix.h"
-# include "pos.h"
+# include <util/vector.h>
+# include <util/matrix.h>
+# include <util/pos.h>
 # include <math.h>
 
 /**
