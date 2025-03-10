@@ -54,7 +54,6 @@ static void	fractol_render_debug(t_fractol *f)
 		data = init_data(f, postprocess_edge_filter(f->ui.render,
 					f->filter_buffer), 1);
 		upsampling_debug_fragment(f->ui.render, data.oversampling_data);
-		f->ui.force_redraw = true;
 	}
 	else if (f->needs_gradient_debug)
 	{
@@ -64,7 +63,6 @@ static void	fractol_render_debug(t_fractol *f)
 			f->kernel->default_color, f->ui.render, f->oversampling,
 			postprocess_edge_filter(f->ui.render, f->filter_buffer), false};
 		gradient_debug_fragment(f->ui.render, &f->kernel_settings.gradient);
-		f->ui.force_redraw = true;
 	}
 }
 
@@ -89,7 +87,6 @@ static void	fractol_render_default(t_fractol *f)
 		data.render_size = f->ui.size;
 		f->kernel->render(&data, &f->kernel_settings, f->max_iter);
 	}
-	f->ui.force_redraw = true;
 }
 
 /* Render from edge filtering */
@@ -103,7 +100,6 @@ static void	fractol_render_upsampling(t_fractol *f)
 	data = init_data(f,
 			postprocess_edge_filter(f->ui.render, f->filter_buffer), 1);
 	f->kernel->render(&data, &f->kernel_settings, f->max_iter);
-	f->ui.force_redraw = true;
 }
 
 void	fractol_render(t_fractol *f)

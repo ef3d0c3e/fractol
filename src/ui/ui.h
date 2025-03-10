@@ -31,23 +31,35 @@ typedef struct s_ui
 	 * @brief UI sizes in pixels
 	 */
 	t_pos				size;
-	// Events
+	/**
+	 * @brief Held moust button
+	 */
 	enum e_mousecode	mouse_down;
 	/**
 	 * @brief Mouse position during last event
 	 */
 	t_pos				mouse_pos;
+	/**
+	 * @brief Curent event
+	 */
 	t_event				event;
 	void				(*ui_loop)(struct s_fractol *f);
 	/*
 	 * @brief Render framebuffer
 	 */
 	t_img				*render;
+	/**
+	 * @brief Screen coordinates of the image
+	 */
 	t_vec2d				img_pos;
 	/**
 	 * @brief UI Draw list
 	 */
 	t_drawqueue			ui_queue;
+	/**
+	 * @brief Force redrawing of  the drawqueue
+	 */
+	bool				force_redraw;
 }	t_ui;
 
 /**

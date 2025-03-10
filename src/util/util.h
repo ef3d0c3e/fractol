@@ -16,6 +16,7 @@
  * @file Misc utilities
  */
 
+# include <stdint.h>
 # include <stdlib.h>
 
 # ifdef __clang__
@@ -27,7 +28,7 @@ typedef char	t_char32 __attribute__((vector_size(32), aligned(1)));
 # endif // __clang__
 
 /**
- * @brief Memcpy functin
+ * @brief Memcpy function
  *
  * @note The bahaviour of this functyion is undefined if `[src, src+n]` overlaps
  * with `[dest, dest+n]`.
@@ -40,6 +41,20 @@ typedef char	t_char32 __attribute__((vector_size(32), aligned(1)));
  */
 void
 *ft_memcpy(void *dest, const void *src, size_t n);
+/**
+ * @brief Memcpy function for unaligned pointers
+ *
+ * @note The bahaviour of this functyion is undefined if `[src, src+n]` overlaps
+ * with `[dest, dest+n]`.
+ *
+ * @param dest Destination buffer
+ * @param src Source buffer
+ * @param n Number of bytes to copy from `src` into `dest`
+ *
+ * @returns `dest`
+ */
+void
+*ft_memcpy_unaligned(void *dest, const void *src, size_t n);
 /**
  * @brief Strcmp function
  *
@@ -62,5 +77,19 @@ ft_strcmp(const char *l, const char *r);
  */
 void
 *ft_realloc(void *ptr, const size_t old, const size_t size);
+/**
+ * @brief Murmur3 hash function
+ *
+ * Follows this implementation:
+ * https://en.wikipedia.org/wiki/MurmurHash#Algorithm
+ *
+ * @param data To get a hash for
+ * @param len Data length in bytes
+ * @param seed Murmur seed
+ *
+ * @returns [data:data+len] hashed
+ */
+uint32_t
+murmumr3_32(const unsigned char *data, size_t len, uint32_t seed);
 
 #endif // UTIL_H

@@ -94,7 +94,7 @@ enum e_eventcode
 	EVENT_MOUSEMOVE = 6,
 	EVENT_EXPOSE = 12,
 	EVENT_DESTROY = 17,
-	EVENT_RESIZE = 18,
+	EVENT_RESIZE = 25,
 };
 
 /**

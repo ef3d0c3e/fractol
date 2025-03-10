@@ -19,13 +19,18 @@
 #include <mlx_int.h>
 #include <util/util.h>
 
+uint32_t	draw_hash(const t_draw_item *item, uint32_t seed);
+
 t_drawqueue
 	drawqueue_new(void)
 {
 	return ((t_drawqueue){
 		.capacity = 0,
 		.size = 0,
-		.queue = 0,
+		.queue = NULL,
+		.seed = 14547710,
+		.hash = 0,
+		.last_hash = 0,
 	});
 }
 
@@ -38,6 +43,8 @@ void
 void
 	drawqueue_push(t_drawqueue *d, const t_draw_item item)
 {
+	const uint32_t	hash = draw_hash(&item, d->seed);
+
 	if (d->size == d->capacity)
 	{
 		d->capacity = (d->capacity + !d->capacity) << 1;
@@ -45,23 +52,29 @@ void
 				sizeof(t_draw_item) * d->size,
 				sizeof(t_draw_item) * d->capacity);
 	}
+    d->hash ^= hash;
+    d->hash *= 0xcc9e2d51;
+    d->hash ^= (d->hash >> 15);
 	d->queue[d->size++] = item;
 }
 
 void
 	drawqueue_clear(t_drawqueue *d)
 {
+	d->last_hash = d->hash;
+	d->hash = 0;
 	d->size = 0;
 }
 
 void
 	drawqueue_render(const t_drawqueue *d, t_xvar *mlx, t_win_list *win)
 {
-	size_t	i;
+	size_t		i;
 
 	i = 0;
 	while (i < d->size)
 	{
+		mlx->do_flush = 1;
 		draw(mlx, win, &d->queue[i]);
 		++i;
 	}

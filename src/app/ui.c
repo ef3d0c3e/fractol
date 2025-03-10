@@ -16,6 +16,7 @@
 
 #include <app/fractol.h>
 #include <ui/event.h>
+#include <util/util.h>
 
 #include <mlx.h>
 #include <stddef.h>
@@ -42,14 +43,14 @@ static inline void	write_int(char **buf, int x)
 /* Display iteration count */
 static inline void	iter_count(t_fractol *f)
 {
-	static char	str[255];
+	static char	str[2550];
 	char		*ptr;
 
-	ptr = (char *)memcpy(str, "iter: ", 6) + 7;
+	ptr = (char *)ft_memcpy_unaligned(str, "iter: ", 6) + 7;
 	write_int(&ptr, f->max_iter);
-	ptr = (char *)memcpy(ptr, " | downsampling: ", 17) + 18;
+	ptr = (char *)ft_memcpy_unaligned(ptr, " | downsampling: ", 17) + 18;
 	write_int(&ptr, f->downsampling);
-	ptr = (char *)memcpy(ptr, " | oversampling: ", 17) + 18;
+	ptr = (char *)ft_memcpy_unaligned(ptr, " | oversampling: ", 17) + 18;
 	write_int(&ptr, f->oversampling);
 	*ptr = '\0';
 	drawqueue_push(&f->ui.ui_queue, (t_draw_item){

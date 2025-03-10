@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   julia_exp_galaxy.c                                 :+:      :+:    :+:   */
+/*   mandel_orbit.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgamba <lgamba@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,34 +11,76 @@
 /* ************************************************************************** */
 
 /**
- * @file Render the Julia set using using a custom formula
+ * @file Render the Mandelbrot set using exterior distance estimate
  */
 
+#include "kernel/color.h"
 #include <kernel/kernel.h>
 
 #include <complex.h>
 
+double calctrap(double _Complex c, double _Complex z, double _Complex zm, double _Complex dz)
+{
+	double	m;
+
+	(void)dz;
+	(void)c;
+	(void)zm;
+	(void)z;
+	m = 1e20;
+	m = fmin(fabs( creal(z) ), m);
+	m = fmin(fabs( cimag(z) ), m);
+	return (m);
+}
+
+static const double StripeDensity = 1.5384;
+
 static inline t_color	iter(double _Complex c, const t_closure *data)
 {
-	int				i;
-	double			m;
+	//double _Complex	dz;
 	double _Complex	z;
-	double _Complex	dz;
+	//double _Complex	zm;
+	//double			m;
+	int				i;
 
-	z = c;
-	dz = 1;
+	//dz = 0;
+	z = 0;
+	//m = 1e20;
 	i = 0;
-	m = 0;
+
+	const int skip = 6;
+	double last = 0;
+	double avg = 0;
+	int count = 0;
 	while (i < data->max_it)
 	{
-		dz = 2 * z * dz + 1;
-		z = z * z + data->settings->zparam;
-		m += exp(-cabs(clog(z * dz)));
-		if (cabs(z) >= 1e16)
-			break ;
+		//zm = z;
+		//dz = 2 * z * dz + 1;
+		z = z * z + c;
+		//m = fmin(calctrap(c, z, zm, dz), m);
 		++i;
+
+		if (i >= skip)
+		{
+			last = 0.5 + 0.5 * sin(StripeDensity * atan2(cimag(z),creal(z)));
+			avg += last;
+			++count;
+		}
+		if (cabs(z)*cabs(z) >= 74468 && i>skip)
+			break;
 	}
-	return (gradient_get(&data->settings->gradient, log(m)));
+	double prevAvg = (avg - last)/(count-1.0);
+	avg = avg/count;
+	double frac = 1 + log2(log(74468)/log(cabs(z)));
+	double mix = frac * avg + (1.0 - frac) * prevAvg;
+	if (i < data->max_it)
+	{
+		double co = mix * pow(10.0, -0.1098);
+		//t_colvec cv = colvec_new(.5+.5*cos(6.2831*co),.5+.5*cos(6.2831*co + 0.4),.5+.5*cos(6.2831*co +0.7), 0.f);
+		//return (colvec_to_color(&cv, 1.f));
+		return (gradient_get(&data->settings->gradient, log(co)));
+	}
+	return ((t_color){0});
 }
 
 static inline void
@@ -57,7 +99,7 @@ static inline void
 		&closure);
 }
 
-const t_kernel	*julia_exp_galaxy(t_kernel_settings *settings)
+const t_kernel	*mandel_orbit(t_kernel_settings *settings)
 {
 	static const struct s_gr_color	colors[] = {
 	{{66 << 16 | 30 << 8 | 15}, 1.0},
@@ -70,15 +112,16 @@ const t_kernel	*julia_exp_galaxy(t_kernel_settings *settings)
 	{{204 << 16 | 128 << 8 | 0}, 1.0}, {{153 << 16 | 87 << 8 | 0}, 1.0},
 	{{106 << 16 | 52 << 8 | 3}, 1.0}, {{66 << 16 | 30 << 8 | 15}, 1.0}};
 	static const t_kernel			kernel = {
-		.name = "Julia Exp [galaxy]",
+		.name = "Mandelbrot Orbit Trap",
 		.render = render,
 		.default_viewport = {{-1.5, 1.5, -1.0, 1.0}},
 		.default_mat = {{1, 0, 0, 1}},
-		.flags = USE_GRADIENT | USE_ZPARAM,
+		.flags = USE_GRADIENT,
+		.default_color = {0x000000},
 	};
 
 	if (settings)
-		settings->gradient
-			= gradient_new(colors, sizeof(colors) / sizeof(colors[0]));
+		settings->gradient = gradient_new(colors,
+				sizeof(colors) / sizeof(colors[0]));
 	return (&kernel);
 }

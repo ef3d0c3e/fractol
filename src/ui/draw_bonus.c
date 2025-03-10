@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   draw.c                                             :+:      :+:    :+:   */
+/*   draw_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgamba <lgamba@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,11 +11,14 @@
 /* ************************************************************************** */
 
 /**
- * @file Drawing primitives using pure MLX
+ * @file Drawing primitives using XLib
  */
 
-#include "mlx.h"
 #include <ui/draw.h>
+
+#include <mlx_int.h>
+#include <X11/X.h>
+#include <X11/Xlib.h>
 
 /* Draws a rectangle */
 static inline void
@@ -25,41 +28,26 @@ static inline void
 		const struct s_draw_rect *rect
 		)
 {
-	int	i;
-	int	j;
+	XGCValues	xgcv;
 
+	xgcv.foreground = rect->color;
+	XChangeGC(mlx->display, win->gc, GCForeground, &xgcv);
 	if (rect->fill)
-	{
-		i = rect->top_left.x;
-		while (i <= rect->bottom_right.x)
-		{
-			j = rect->top_left.y;
-			while (j <= rect->bottom_right.y)
-			{
-				mlx_pixel_put(mlx, win, i, j, rect->color);
-				++j;
-			}
-			++i;
-		}
-	}
+		XFillRectangle(
+			mlx->display, win->window, win->gc,
+			rect->top_left.x,
+			rect->top_left.y,
+			rect->bottom_right.x - rect->top_left.x,
+			rect->bottom_right.y - rect->top_left.y
+			);
 	else
-	{
-		i = rect->top_left.x;
-		while (i <= rect->bottom_right.x)
-		{
-			mlx_pixel_put(mlx, win, i, rect->top_left.y, rect->color);
-			mlx_pixel_put(mlx, win, i, rect->bottom_right.y, rect->color);
-			++i;
-		}
-
-		i = rect->top_left.y;
-		while (i <= rect->bottom_right.y)
-		{
-			mlx_pixel_put(mlx, win, rect->top_left.x, i, rect->color);
-			mlx_pixel_put(mlx, win, rect->bottom_right.x, i, rect->color);
-			++i;
-		}
-	}
+		XDrawRectangle(
+			mlx->display, win->window, win->gc,
+			rect->top_left.x,
+			rect->top_left.y,
+			rect->bottom_right.x - rect->top_left.x,
+			rect->bottom_right.y - rect->top_left.y
+			);
 }
 
 /* Draws text */
@@ -70,8 +58,16 @@ static inline void
 		const struct s_draw_text *text
 		)
 {
-	mlx_string_put(mlx, win, text->pos.x, text->pos.y, text->color,
-		(char *)text->str);
+	XGCValues	xgcv;
+
+	xgcv.foreground = text->color;
+	XChangeGC(mlx->display, win->gc, GCForeground, &xgcv);
+	XDrawString(
+		mlx->display, win->window, win->gc,
+		text->pos.x,
+		text->pos.y,
+		text->str, strlen(text->str)
+		);
 }
 
 /* Draws text with shadow */
@@ -82,10 +78,24 @@ static inline void
 		const struct s_draw_text_shadow *text
 		)
 {
-	mlx_string_put(mlx, win, text->pos.x + 1, text->pos.y + 1, text->shadow,
-		(char *)text->str);
-	mlx_string_put(mlx, win, text->pos.x, text->pos.y, text->color,
-		(char *)text->str);
+	XGCValues	xgcv;
+
+	xgcv.foreground = text->shadow;
+	XChangeGC(mlx->display, win->gc, GCForeground, &xgcv);
+	XDrawString(
+		mlx->display, win->window, win->gc,
+		text->pos.x + 1,
+		text->pos.y + 1,
+		text->str, strlen(text->str)
+		);
+	xgcv.foreground = text->color;
+	XChangeGC(mlx->display, win->gc, GCForeground, &xgcv);
+	XDrawString(
+		mlx->display, win->window, win->gc,
+		text->pos.x,
+		text->pos.y,
+		text->str, strlen(text->str)
+		);
 }
 
 void	draw(t_xvar *mlx, t_win_list *win, const t_draw_item *item)

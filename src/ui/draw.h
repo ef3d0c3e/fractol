@@ -28,7 +28,6 @@
 enum	e_draw_item
 {
 	DRAW_RECT,
-	DRAW_LINE,
 	DRAW_TEXT,
 	DRAW_TEXT_SHADOW,
 };
@@ -48,13 +47,6 @@ typedef struct s_draw_item
 			t_pos				bottom_right;
 			bool				fill;
 		} rect;
-		struct s_draw_line
-		{
-			uint32_t			color;
-			t_pos				start;
-			t_pos				end;
-			int					width;
-		} line;
 		struct s_draw_text
 		{
 			uint32_t			color;
@@ -88,9 +80,30 @@ draw(t_xvar *mlx, t_win_list *win, const t_draw_item *item);
  */
 typedef struct s_drawqueue
 {
+	/**
+	 * @brief Drawqueue capacity
+	 */
 	size_t		capacity;
+	/**
+	 * @brief Drawqueue size
+	 */
 	size_t		size;
+	/**
+	 * @brief Drawqueue data
+	 */
 	t_draw_item	*queue;
+	/**
+	 * @brief Random seed for hashing
+	 */
+	uint32_t	seed;
+	/**
+	 * @brief Hash of last drawn draw queue
+	 */
+	uint32_t	last_hash;
+	/**
+	 * @brief Hash of current draw queue
+	 */
+	uint32_t	hash;
 }	t_drawqueue;
 
 /**

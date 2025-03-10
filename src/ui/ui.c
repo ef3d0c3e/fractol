@@ -14,6 +14,8 @@
  * @brief UI methods
  */
 
+#include "ui/event.h"
+#include <X11/Xlib.h>
 #include <ui/ui.h>
 #include <app/fractol.h>
 
@@ -31,6 +33,7 @@ t_ui	ui_init(t_fractol *f, const t_pos size)
 	ui.size = size;
 	ui.render = mlx_new_image(f->mlx, size.x, size.y);
 	ui.ui_queue = drawqueue_new();
+	ui.force_redraw = false;
 	return (ui);
 }
 
@@ -42,10 +45,18 @@ void	ui_deinit(t_fractol *f, t_ui *ui)
 
 void	ui_update(t_fractol *f)
 {
+	drawqueue_clear(&f->ui.ui_queue);
 	f->ui.ui_loop(f);
+
+	if (f->ui.ui_queue.hash == f->ui.ui_queue.last_hash
+		&& !ev_key_pressed(&f->ui, KEY_RETURN)
+		&& !ev_mouse_held(&f->ui, MOUSE_LEFT)
+		&& !ev_mouse_held(&f->ui, MOUSE_RIGHT)
+		&& !f->ui.force_redraw)
+		return ;
 	mlx_clear_window(f->mlx, f->window);
 	mlx_put_image_to_window(f->mlx, f->window, f->ui.render,
 		f->ui.img_pos.x, f->ui.img_pos.y);
 	drawqueue_render(&f->ui.ui_queue, f->mlx, f->window);
-	drawqueue_clear(&f->ui.ui_queue);
+	f->ui.force_redraw = false;
 }

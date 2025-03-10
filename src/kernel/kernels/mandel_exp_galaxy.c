@@ -25,15 +25,15 @@ static inline t_color	iter(double _Complex c, const t_closure *data)
 	double _Complex	z;
 	double _Complex	dz;
 
-	z = c;
-	dz = 1;
+	z = 0;
+	dz = 0;
 	i = 0;
 	m = 0;
 	while (i < data->max_it)
 	{
 		dz = 2 * z * dz + 1;
-		z = z * z + data->settings->zparam;
-		m += exp(-cabs(clog(z * dz)));
+		z = z * z + c;
+		m += exp(-cabs(clog(z * dz) * (dz - c)));
 		if (cabs(z) >= 1e16)
 			break ;
 		++i;
@@ -57,7 +57,7 @@ static inline void
 		&closure);
 }
 
-const t_kernel	*julia_exp_galaxy(t_kernel_settings *settings)
+const t_kernel	*mandel_exp_galaxy(t_kernel_settings *settings)
 {
 	static const struct s_gr_color	colors[] = {
 	{{66 << 16 | 30 << 8 | 15}, 1.0},
@@ -70,7 +70,7 @@ const t_kernel	*julia_exp_galaxy(t_kernel_settings *settings)
 	{{204 << 16 | 128 << 8 | 0}, 1.0}, {{153 << 16 | 87 << 8 | 0}, 1.0},
 	{{106 << 16 | 52 << 8 | 3}, 1.0}, {{66 << 16 | 30 << 8 | 15}, 1.0}};
 	static const t_kernel			kernel = {
-		.name = "Julia Exp [galaxy]",
+		.name = "Mandel Exp [galaxy]",
 		.render = render,
 		.default_viewport = {{-1.5, 1.5, -1.0, 1.0}},
 		.default_mat = {{1, 0, 0, 1}},
