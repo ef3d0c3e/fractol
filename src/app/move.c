@@ -15,6 +15,7 @@
  */
 
 #include <app/fractol.h>
+#include <stdbool.h>
 
 /* Moves or zoom the viewport */
 static t_pos
@@ -81,6 +82,7 @@ static void	move_reticle(t_fractol *f)
 static t_pos	move_keyboard(t_fractol *f)
 {
 	t_pos	d;
+	bool	old;
 
 	d = (t_pos){0, 0};
 	if (ev_key_pressed(&f->ui, KEY_KP_PLUS))
@@ -91,6 +93,9 @@ static t_pos	move_keyboard(t_fractol *f)
 				(t_pos){f->ui.size.x / 2, f->ui.size.y / 2}, 1);
 	if (f->selector_shown)
 		return (d);
+
+	old = f->ui.force_redraw;
+	f->ui.force_redraw = true;
 	if (ev_key_pressed(&f->ui, KEY_ARROW_UP))
 		d = move_viewport(f, (t_pos){0, 0}, (t_pos){0, 4}, 0);
 	else if (ev_key_pressed(&f->ui, KEY_ARROW_DOWN))
@@ -99,6 +104,8 @@ static t_pos	move_keyboard(t_fractol *f)
 		d = move_viewport(f, (t_pos){0, 0}, (t_pos){4, 0}, 0);
 	else if (ev_key_pressed(&f->ui, KEY_ARROW_RIGHT))
 		d = move_viewport(f, (t_pos){0, 0}, (t_pos){-4, 0}, 0);
+	else
+		f->ui.force_redraw = old;
 	return (d);
 }
 

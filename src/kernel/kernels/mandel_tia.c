@@ -42,7 +42,7 @@ static inline t_color	iter(double _Complex c, const t_closure *data)
 	frac = 1 + log2(log(1e8) / log(cabs(z)));
 	frac = frac * (avg / i) + (1.0 - frac) * (avg - last) / (i - 1.0);
 	if (i < data->max_it)
-		return (gradient_get(&data->settings->gradient, log(fmin(
+		return (gradient_get(&data->settings->gradient, sqrt(fmin(
 						fmax(frac * 8.117, 0.0), 10000.0))));
 	return ((t_color){0});
 }
