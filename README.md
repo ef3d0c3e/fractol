@@ -15,6 +15,14 @@ Then you can run `make` to build the `fractol` executable. Or `make bonus` for t
 
 You can now run fractol: `./fractol 1024 1024`.
 
+## Builder the faster Fractol
+
+In order to build the multithreaded version on fractal, you will need to install the matching OpenMP library for your compiler.
+
+Then use the `bonus` target: `make bonus`
+(Be sure to run `make fclean` if you have already built Fractol)
+
+
 # Navigation
 
 You can navigate using the mouse:
@@ -110,6 +118,8 @@ The program support the following additional options:
 ![The julia exp galaxy kernel](./docs/julia_galaxy.png) [The julia exp galaxy kernel](./src/kernel/kernels/julia_exp_galaxy.c)
 
 ![The mandel arg kernel over a minibrot](./docs/mandel_arg_minibrot.png) [The mandel arg kernel over a minibrot](./src/kernel/kernels/mandel_arg.c)
+
+![The julia distance estimate kernel](./docs/julia_de.png) [The julia distance estimate kernel](./src/kernel/kernels/julia_de.c)
 
 ## <a name="gallery-upsampling" style="text-decoration:none;">Upsampling</a>
 

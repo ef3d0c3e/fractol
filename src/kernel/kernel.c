@@ -31,14 +31,13 @@ const t_kernel	*burning_ship_de(t_kernel_settings *settings);
 const t_kernel	*julia_exp(t_kernel_settings *settings);
 const t_kernel	*julia_arg(t_kernel_settings *settings);
 const t_kernel	*julia_exp_galaxy(t_kernel_settings *settings);
+const t_kernel	*julia_de(t_kernel_settings *settings);
 const t_kernel	*fatou(t_kernel_settings *settings);
 const t_kernel	*ui_debug(t_kernel_settings *settings);
 
 static const t_kernel	*kernel_list(size_t id, t_kernel_settings *settings)
 {
 	static const t_kernel *(*const	list[])(t_kernel_settings *settings) = {
-		mandel_tia,
-		mandel_orbit,
 		mandel_exp_galaxy,
 		mandel_arg,
 		mandel_exp,
@@ -46,8 +45,11 @@ static const t_kernel	*kernel_list(size_t id, t_kernel_settings *settings)
 		mandel_smooth_it,
 		mandel_landing_arg,
 		mandel_electric,
+		mandel_tia,
+		mandel_orbit,
 		burning_ship_de,
 		burning_ship_exp,
+		julia_de,
 		julia_arg,
 		julia_exp,
 		julia_exp_galaxy,

@@ -38,6 +38,7 @@ src/kernel/kernels/mandel_arg.c \
 src/kernel/kernels/mandel_exp.c \
 src/kernel/kernels/mandel_de.c \
 src/kernel/kernels/julia_arg.c \
+src/kernel/kernels/julia_de.c \
 src/kernel/kernels/julia_exp_galaxy.c \
 src/kernel/kernels/mandel_exp_galaxy.c \
 src/kernel/kernels/ui_debug.c \

@@ -93,7 +93,6 @@ static t_pos	move_keyboard(t_fractol *f)
 				(t_pos){f->ui.size.x / 2, f->ui.size.y / 2}, 1);
 	if (f->selector_shown)
 		return (d);
-
 	old = f->ui.force_redraw;
 	f->ui.force_redraw = true;
 	if (ev_key_pressed(&f->ui, KEY_ARROW_UP))
