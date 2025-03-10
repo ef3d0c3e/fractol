@@ -97,7 +97,7 @@ static void	selector_options_1(t_fractol *f)
 static void	selector_options_2(t_fractol *f)
 {
 	if (draw_item(f, (t_pos){1, 7}, "Iter +100"))
-		f->max_iter = min(f->max_iter + 100, 20000);
+		f->max_iter = min(f->max_iter + 100, 50000);
 	if (draw_item(f, (t_pos){1, 8}, "Iter -100"))
 		f->max_iter = max(f->max_iter - 100, 1);
 	if (draw_item(f, (t_pos){1, 9}, "Downsample +1"))

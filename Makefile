@@ -108,16 +108,16 @@ bonus: LFLAGS += -L/usr/lib -lX11 -lXext
 bonus: FRACTOL_DEFS := -include "defs/bonus.def"
 bonus: CFLAGS += $(FLAGS_OPT) \
 	-flto
-bonus: $(OBJECTS) $(LIB_MLX) $(LIB_PRINTF)
-	$(CC) $(CFLAGS) -o $@ $(LIB_MLX) $(LIB_PRINTF) $(LFLAGS)
+bonus: $(LIB_MLX) $(LIB_PRINTF) $(OBJECTS_BONUS)
+	$(CC) $(CFLAGS) -o $@ $(OBJECTS_BONUS) $(LIB_MLX) $(LIB_PRINTF) $(LFLAGS)
 
 # Openmp optimized target
 bonus-omp: LFLAGS += -L/usr/lib -lX11 -lXext
 bonus-omp: FRACTOL_DEFS := -include "defs/bonus.def"
 bonus-omp: CFLAGS += $(FLAGS_OMP) \
 	-flto
-bonus-omp: $(OBJECTS) $(LIB_MLX) $(LIB_PRINTF)
-	$(CC) $(CFLAGS) -o $@ $(LIB_MLX) $(LIB_PRINTF) $(LFLAGS)
+bonus-omp: $(LIB_MLX) $(LIB_PRINTF) $(OBJECTS_BONUS)
+	$(CC) $(CFLAGS) -o $@ $(OBJECTS_BONUS) $(LIB_MLX) $(LIB_PRINTF) $(LFLAGS)
 
 # Target for GCC's profiler
 $(NAME)-profile: FRACTOL_DEFS := -include "defs/bonus.def"
@@ -127,16 +127,16 @@ $(NAME)-profile: CFLAGS += $(FLAGS_OMP) \
 	-fprofile-arcs \
 	-fcondition-coverage \
 	-fprofile-generate
-$(NAME)-profile: clean $(OBJECTS) $(LIB_MLX) $(LIB_PRINTF)
-	$(CC) $(CFLAGS) -o $@ $(OBJECTS) $(LIB_MLX) $(LIB_PRINTF) $(LFLAGS)
+$(NAME)-profile: clean $(OBJECTS_BONUS) $(LIB_MLX) $(LIB_PRINTF)
+	$(CC) $(CFLAGS) -o $@ $(OBJECTS_BONUS) $(LIB_MLX) $(LIB_PRINTF) $(LFLAGS)
 
 # GCC instrumented target (requires profile)
 $(NAME)-instrumented: FRACTOL_DEFS := -include "defs/bonus.def"
 $(NAME)-instrumented: CFLAGS += $(FLAGS_OMP) \
 	-fprofile-use \
 	-flto
-$(NAME)-instrumented: clean $(OBJECTS) $(LIB_MLX) $(LIB_PRINTF)
-	$(CC) $(CFLAGS) -o $@ $(OBJECTS) $(LIB_MLX) $(LIB_PRINTF) $(LFLAGS)
+$(NAME)-instrumented: clean $(OBJECTS_BONUS) $(LIB_MLX) $(LIB_PRINTF)
+	$(CC) $(CFLAGS) -o $@ $(OBJECTS_BONUS) $(LIB_MLX) $(LIB_PRINTF) $(LFLAGS)
 
 # Libraries
 # minilibx-linux

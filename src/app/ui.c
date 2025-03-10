@@ -66,9 +66,15 @@ static inline void	iter_count(t_fractol *f)
 void	fractol_ui(t_fractol *f)
 {
 	if (ev_key_held(&f->ui, KEY_Q))
-		f->max_iter = min(20000, f->max_iter + 3);
+	{
+		f->max_iter = min(50000, f->max_iter + 3);
+		f->ui.force_redraw = true;
+	}
 	else if (ev_key_held(&f->ui, KEY_A))
+	{
 		f->max_iter = max(1, f->max_iter - 3);
+		f->ui.force_redraw = true;
+	}
 	else if (ev_key_pressed(&f->ui, KEY_F) && f->kernel->flags & USE_GRADIENT)
 		gradient_randomize(&f->kernel_settings.gradient, 4);
 	if (ev_key_pressed(&f->ui, KEY_Z))
