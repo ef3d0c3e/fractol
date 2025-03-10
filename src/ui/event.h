@@ -94,6 +94,7 @@ enum e_eventcode
 	EVENT_MOUSEMOVE = 6,
 	EVENT_EXPOSE = 12,
 	EVENT_DESTROY = 17,
+	EVENT_CONFIGURE_REQUEST = 23,
 	EVENT_RESIZE = 25,
 };
 
@@ -159,7 +160,6 @@ enum e_ev_type
 typedef struct s_event
 {
 	enum e_ev_type	type;
-
 	union u_event
 	{
 		/**

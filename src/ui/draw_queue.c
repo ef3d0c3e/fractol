@@ -52,9 +52,9 @@ void
 				sizeof(t_draw_item) * d->size,
 				sizeof(t_draw_item) * d->capacity);
 	}
-    d->hash ^= hash;
-    d->hash *= 0xcc9e2d51;
-    d->hash ^= (d->hash >> 15);
+	d->hash ^= hash;
+	d->hash *= 0xcc9e2d51;
+	d->hash ^= (d->hash >> 15);
 	d->queue[d->size++] = item;
 }
 
@@ -74,7 +74,6 @@ void
 	i = 0;
 	while (i < d->size)
 	{
-		mlx->do_flush = 1;
 		draw(mlx, win, &d->queue[i]);
 		++i;
 	}

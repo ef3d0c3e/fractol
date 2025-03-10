@@ -14,8 +14,6 @@
  * @brief UI methods
  */
 
-#include "ui/event.h"
-#include <X11/Xlib.h>
 #include <ui/ui.h>
 #include <app/fractol.h>
 
@@ -47,11 +45,9 @@ void	ui_update(t_fractol *f)
 {
 	drawqueue_clear(&f->ui.ui_queue);
 	f->ui.ui_loop(f);
-
 	if (f->ui.ui_queue.hash == f->ui.ui_queue.last_hash
 		&& !ev_key_pressed(&f->ui, KEY_RETURN)
-		&& !ev_mouse_held(&f->ui, MOUSE_LEFT)
-		&& !ev_mouse_held(&f->ui, MOUSE_RIGHT)
+		&& f->ui.mouse_down == MOUSE_NONE
 		&& !f->ui.force_redraw)
 		return ;
 	mlx_clear_window(f->mlx, f->window);

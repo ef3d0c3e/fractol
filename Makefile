@@ -32,6 +32,7 @@ src/util/matrix.c \
 src/kernel/kernels/mandel_electric.c \
 src/kernel/kernels/burning_ship_de.c \
 src/kernel/kernels/mandel_orbit.c \
+src/kernel/kernels/mandel_tia.c \
 src/kernel/kernels/burning_ship_exp.c \
 src/kernel/kernels/mandel_arg.c \
 src/kernel/kernels/mandel_exp.c \
@@ -57,7 +58,7 @@ src/kernel/kernel.c \
 src/ui/event_util.c \
 src/ui/draw_queue.c \
 src/ui/draw_hash.c \
-src/ui/draw_bonus.c \
+src/ui/draw.c \
 src/ui/event_keyboard.c \
 src/ui/event_misc.c \
 src/ui/event.c \
@@ -86,10 +87,12 @@ objs/%.o : %.c
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) $(IFLAGS) $(FRACTOL_DEFS) -c $< -o $@
 
+$(NAME): $(OBJECTS) += objs/ui/draw.o
 $(NAME): $(OBJECTS) $(LIB_MLX) $(LIB_PRINTF)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJECTS) $(LIB_MLX) $(LIB_PRINTF) $(LFLAGS)
 
 .PHONY: bonus
+bonus: $(OBJECTS) += objs/ui/draw_bonus.o
 bonus: FRACTOL_DEFS := -include "defs/bonus.def"
 bonus: CFLAGS += $(FLAGS_OPT) \
 	-flto

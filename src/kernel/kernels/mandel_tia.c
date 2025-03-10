@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mandel_orbit.c                                     :+:      :+:    :+:   */
+/*   mandel_tia.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgamba <lgamba@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 /**
- * @file Render the Mandelbrot set using exterior distance estimate
+ * @file Render the Mandelbrot set using triangle inequality
  */
 
 #include <kernel/kernel.h>
@@ -21,22 +21,30 @@
 static inline t_color	iter(double _Complex c, const t_closure *data)
 {
 	double _Complex	z;
-	double			m;
 	int				i;
+	double			avg;
+	double			last;
+	double			frac;
 
 	z = 0;
-	m = 1e20;
 	i = 0;
+	avg = 0;
+	last = 0;
 	while (i < data->max_it)
 	{
 		z = z * z + c;
-		m = fmin(fabs(creal(z - data->settings->zparam)), m);
-		m = fmin(fabs(cimag(z - data->settings->zparam)), m);
 		++i;
+		last = 0.5 + 0.5 * sin(1.699587 * atan2(cimag(z), creal(z)));
+		avg += last;
 		if (cabs(z) >= 1e8)
 			break ;
 	}
-	return (gradient_get(&data->settings->gradient, log(0.05 + m)));
+	frac = 1 + log2(log(1e8) / log(cabs(z)));
+	frac = frac * (avg / i) + (1.0 - frac) * (avg - last) / (i - 1.0);
+	if (i < data->max_it)
+		return (gradient_get(&data->settings->gradient, log(fmin(
+						fmax(frac * 8.117, 0.0), 10000.0))));
+	return ((t_color){0});
 }
 
 static inline void
@@ -55,7 +63,7 @@ static inline void
 		&closure);
 }
 
-const t_kernel	*mandel_orbit(t_kernel_settings *settings)
+const t_kernel	*mandel_tia(t_kernel_settings *settings)
 {
 	static const struct s_gr_color	colors[] = {
 	{{66 << 16 | 30 << 8 | 15}, 1.0},
@@ -68,11 +76,11 @@ const t_kernel	*mandel_orbit(t_kernel_settings *settings)
 	{{204 << 16 | 128 << 8 | 0}, 1.0}, {{153 << 16 | 87 << 8 | 0}, 1.0},
 	{{106 << 16 | 52 << 8 | 3}, 1.0}, {{66 << 16 | 30 << 8 | 15}, 1.0}};
 	static const t_kernel			kernel = {
-		.name = "Mandelbrot Orbit Trap",
+		.name = "Mandelbrot Triangle Inequality",
 		.render = render,
 		.default_viewport = {{-1.5, 1.5, -1.0, 1.0}},
 		.default_mat = {{1, 0, 0, 1}},
-		.flags = USE_GRADIENT | USE_ZPARAM,
+		.flags = USE_GRADIENT,
 		.default_color = {0x000000},
 	};
 

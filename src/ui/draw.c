@@ -15,7 +15,28 @@
  */
 
 #include "mlx.h"
+#include "mlx_int.h"
 #include <ui/draw.h>
+
+/* Draws a filled rectangle */
+static inline void
+	rect_fill(t_xvar *mlx, t_win_list *win, const struct s_draw_rect *rect)
+{
+	int	i;
+	int	j;
+
+	i = rect->top_left.x;
+	while (i <= rect->bottom_right.x)
+	{
+		j = rect->top_left.y;
+		while (j <= rect->bottom_right.y)
+		{
+			mlx_pixel_put(mlx, win, i, j, rect->color);
+			++j;
+		}
+		++i;
+	}
+}
 
 /* Draws a rectangle */
 static inline void
@@ -26,39 +47,25 @@ static inline void
 		)
 {
 	int	i;
-	int	j;
 
 	if (rect->fill)
 	{
-		i = rect->top_left.x;
-		while (i <= rect->bottom_right.x)
-		{
-			j = rect->top_left.y;
-			while (j <= rect->bottom_right.y)
-			{
-				mlx_pixel_put(mlx, win, i, j, rect->color);
-				++j;
-			}
-			++i;
-		}
+		rect_fill(mlx, win, rect);
+		return ;
 	}
-	else
+	i = rect->top_left.x;
+	while (i <= rect->bottom_right.x)
 	{
-		i = rect->top_left.x;
-		while (i <= rect->bottom_right.x)
-		{
-			mlx_pixel_put(mlx, win, i, rect->top_left.y, rect->color);
-			mlx_pixel_put(mlx, win, i, rect->bottom_right.y, rect->color);
-			++i;
-		}
-
-		i = rect->top_left.y;
-		while (i <= rect->bottom_right.y)
-		{
-			mlx_pixel_put(mlx, win, rect->top_left.x, i, rect->color);
-			mlx_pixel_put(mlx, win, rect->bottom_right.x, i, rect->color);
-			++i;
-		}
+		mlx_pixel_put(mlx, win, i, rect->top_left.y, rect->color);
+		mlx_pixel_put(mlx, win, i, rect->bottom_right.y, rect->color);
+		++i;
+	}
+	i = rect->top_left.y;
+	while (i <= rect->bottom_right.y)
+	{
+		mlx_pixel_put(mlx, win, rect->top_left.x, i, rect->color);
+		mlx_pixel_put(mlx, win, rect->bottom_right.x, i, rect->color);
+		++i;
 	}
 }
 

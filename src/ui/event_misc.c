@@ -16,9 +16,18 @@
 
 #include <app/fractol.h>
 
-int	ev_resize(int width, int height, t_fractol *f)
+/*
+// TODO: MLX seems to be forcing a constant size
+int	ev_configure(int width, int height, t_fractol *f)
 {
 	printf("RESIZE: %d %d\n", width, height);
 	(void)f;
 	return (0);
+}
+*/
+
+int	ev_expose(t_fractol *f)
+{
+	f->ui.force_redraw = true;
+	return (ui_update(f), 0);
 }

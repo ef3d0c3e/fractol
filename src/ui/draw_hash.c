@@ -20,10 +20,10 @@
 /* Computes the hash of a draw item */
 uint32_t	draw_hash(const t_draw_item *item, uint32_t seed)
 {
-	static const size_t lengths[] = {
-		[DRAW_RECT] = sizeof(struct s_draw_rect),
-		[DRAW_TEXT] = sizeof(struct s_draw_text),
-		[DRAW_TEXT_SHADOW] = sizeof(struct s_draw_text_shadow),
+	static const size_t	lengths[] = {
+	[DRAW_RECT] = sizeof(struct s_draw_rect),
+	[DRAW_TEXT] = sizeof(struct s_draw_text),
+	[DRAW_TEXT_SHADOW] = sizeof(struct s_draw_text_shadow),
 	};
 
 	return (murmumr3_32((const void *)&item->draw, lengths[item->item], seed));
