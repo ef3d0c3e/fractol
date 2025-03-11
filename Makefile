@@ -92,6 +92,10 @@ OBJECTS += $(addprefix objs/,$(BONUS_SOURCES:_bonus.c=.o))
 OBJECTS_BONUS := $(addprefix objs/,$(SOURCES:.c=.o))
 OBJECTS_BONUS += $(addprefix objs/,$(BONUS_SOURCES:.c=.o))
 
+# Libraries
+LIB_MLX := ./libs/minilibx-linux/libmlx_Linux.a
+LIB_PRINTF := ./libs/ft_printf/libftprintf.a
+
 FRACTOL_DEFS := -include "defs/default.def"
 objs/%.o: IFLAGS += -I./libs/ft_printf/includes/ -I./libs/minilibx-linux
 objs/%.o: %.c
@@ -99,25 +103,25 @@ objs/%.o: %.c
 	$(CC) $(CFLAGS) $(IFLAGS) $(FRACTOL_DEFS) -c $< -o $@
 
 # Default target
-$(NAME): LFLAGS += -L/usr/lib -lX11 -lXext
+$(NAME): LFLAGS += -L/usr/lib -lX11 -lXext $(LIB_MLX) $(LIB_PRINTF)
 $(NAME): $(LIB_MLX) $(LIB_PRINTF) $(OBJECTS)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJECTS) $(LIB_MLX) $(LIB_PRINTF) $(LFLAGS)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJECTS) $(LFLAGS)
 
 # Bonus target
-bonus: LFLAGS += -L/usr/lib -lX11 -lXext
+bonus: LFLAGS += -L/usr/lib -lX11 -lXext $(LIB_MLX) $(LIB_PRINTF)
 bonus: FRACTOL_DEFS := -include "defs/bonus.def"
 bonus: CFLAGS += $(FLAGS_OPT) \
 	-flto
 bonus: $(LIB_MLX) $(LIB_PRINTF) $(OBJECTS_BONUS)
-	$(CC) $(CFLAGS) -o $@ $(OBJECTS_BONUS) $(LIB_MLX) $(LIB_PRINTF) $(LFLAGS)
+	$(CC) $(CFLAGS) -o $@ $(OBJECTS_BONUS) $(LFLAGS)
 
 # Openmp optimized target
-bonus-omp: LFLAGS += -L/usr/lib -lX11 -lXext
+bonus-omp: LFLAGS += -L/usr/lib -lX11 -lXext $(LIB_MLX) $(LIB_PRINTF)
 bonus-omp: FRACTOL_DEFS := -include "defs/bonus.def"
 bonus-omp: CFLAGS += $(FLAGS_OMP) \
 	-flto
 bonus-omp: $(LIB_MLX) $(LIB_PRINTF) $(OBJECTS_BONUS)
-	$(CC) $(CFLAGS) -o $@ $(OBJECTS_BONUS) $(LIB_MLX) $(LIB_PRINTF) $(LFLAGS)
+	$(CC) $(CFLAGS) -o $@ $(OBJECTS_BONUS) $(LFLAGS)
 
 # Target for GCC's profiler
 $(NAME)-profile: FRACTOL_DEFS := -include "defs/bonus.def"
@@ -138,15 +142,13 @@ $(NAME)-instrumented: CFLAGS += $(FLAGS_OMP) \
 $(NAME)-instrumented: clean $(OBJECTS_BONUS) $(LIB_MLX) $(LIB_PRINTF)
 	$(CC) $(CFLAGS) -o $@ $(OBJECTS_BONUS) $(LIB_MLX) $(LIB_PRINTF) $(LFLAGS)
 
-# Libraries
+# Libraries build
 # minilibx-linux
-LIB_MLX := ./libs/minilibx-linux/libmlx_Linux.a
 $(LIB_MLX):
 	echo "Building libmlx..."
 	cd $(dir $(LIB_MLX)) && ./configure
 
 # ft_printf
-LIB_PRINTF := ./libs/ft_printf/libftprintf.a
 $(LIB_PRINTF):
 	echo "Building libprintf..."
 	$(MAKE) -C $(dir $(LIB_PRINTF))
@@ -157,6 +159,7 @@ all: $(NAME)
 .PHONY: clean
 clean:
 	$(RM) $(OBJECTS)
+	$(RM) $(OBJECTS_BONUS)
 
 .PHONY: lclean
 lclean:
@@ -168,6 +171,8 @@ lclean:
 .PHONY: fclean
 fclean: clean
 	$(RM) $(NAME)
+	$(RM) bonus
+	$(RM) bonus-omp
 	$(RM) $(NAME)-profile
 	$(RM) $(NAME)-instrumented
 

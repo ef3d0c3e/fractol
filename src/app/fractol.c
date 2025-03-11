@@ -86,7 +86,6 @@ void	fractol_start(
 	t_fractol	f;
 
 	f.downsampling = downsampling;
-	printf("DS=%d\n", f.downsampling);
 	f.oversampling = oversampling;
 	init_kernel(&f, win_size, kernel);
 	init_mlx(&f, win_size);
