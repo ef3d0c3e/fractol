@@ -1,6 +1,6 @@
 NAME := fractol
 CC := gcc
-CFLAGS := -Wall -Wextra -pedantic -ggdb -fsanitize=address
+CFLAGS := -Wall -Wextra -pedantic
 IFLAGS := -I./src
 LFLAGS :=  -lm
 
@@ -12,7 +12,7 @@ FLAGS_OPT := \
 
 # Flags for openmp
 FLAGS_OMP := $(FLAGS_OPT) \
-	-fopenmp
+	-fopenmp \
 	-fvect-cost-model=dynamic \
 	-fsimd-cost-model=dynamic \
 	-fstrict-aliasing \
@@ -108,7 +108,7 @@ $(NAME): $(LIB_MLX) $(LIB_PRINTF) $(OBJECTS)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJECTS) $(LFLAGS)
 
 # Bonus target
-bonus: LFLAGS += -L/usr/lib -lX11 -lXext $(LIB_MLX) $(LIB_PRINTF)
+bonus: LFLAGS += $(LIB_MLX) $(LIB_PRINTF) -L/usr/lib -lX11 -lXext
 bonus: FRACTOL_DEFS := -include "defs/bonus.def"
 bonus: CFLAGS += $(FLAGS_OPT) \
 	-flto
@@ -116,11 +116,11 @@ bonus: $(LIB_MLX) $(LIB_PRINTF) $(OBJECTS_BONUS)
 	$(CC) $(CFLAGS) -o $@ $(OBJECTS_BONUS) $(LFLAGS)
 
 # Openmp optimized target
-bonus-omp: LFLAGS += -L/usr/lib -lX11 -lXext $(LIB_MLX) $(LIB_PRINTF)
+bonus-omp: LFLAGS += $(LIB_MLX) $(LIB_PRINTF) -L/usr/lib -lX11 -lXext
 bonus-omp: FRACTOL_DEFS := -include "defs/bonus.def"
-bonus-omp: CFLAGS += $(FLAGS_OMP) \
-	-flto
+bonus-omp: CFLAGS += $(FLAGS_OMP)
 bonus-omp: $(LIB_MLX) $(LIB_PRINTF) $(OBJECTS_BONUS)
+	echo $(LFLAGS)
 	$(CC) $(CFLAGS) -o $@ $(OBJECTS_BONUS) $(LFLAGS)
 
 # Target for GCC's profiler
@@ -132,7 +132,7 @@ $(NAME)-profile: CFLAGS += $(FLAGS_OMP) \
 	-fcondition-coverage \
 	-fprofile-generate
 $(NAME)-profile: clean $(OBJECTS_BONUS) $(LIB_MLX) $(LIB_PRINTF)
-	$(CC) $(CFLAGS) -o $@ $(OBJECTS_BONUS) $(LIB_MLX) $(LIB_PRINTF) $(LFLAGS)
+	$(CC) $(CFLAGS) -o $@ $(OBJECTS_BONUS) $(LFLAGS)
 
 # GCC instrumented target (requires profile)
 $(NAME)-instrumented: FRACTOL_DEFS := -include "defs/bonus.def"
@@ -144,6 +144,7 @@ $(NAME)-instrumented: clean $(OBJECTS_BONUS) $(LIB_MLX) $(LIB_PRINTF)
 
 # Libraries build
 # minilibx-linux
+$(LIB_MLX): LFLAGS += -L/usr/lib -lX11 -lXext
 $(LIB_MLX):
 	echo "Building libmlx..."
 	cd $(dir $(LIB_MLX)) && ./configure

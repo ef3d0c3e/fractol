@@ -41,7 +41,7 @@ void	postprocess_bilinear(
 	int		i;
 	t_vec2d	pos;
 
-	FRACTOL_OMP("omp parallel for shared(out) private(i, pos)",
+	FRACTOL_OMP("omp parallel for shared(in, out) private(i, pos)",
 		i, out_size.x * out_size.y, FRACTOL_EXPAND({
 			pos = (t_vec2d){((i % out_size.x) + 0.5)
 			/ (float)out_size.x * in_size.x - 0.5,

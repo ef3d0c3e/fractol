@@ -84,7 +84,9 @@ inline t_color
 {
 	float	v;
 
-	if (f > 1.0)
+	if (!isnormal(f))
+		f = 0;
+	else if (f > 1.0)
 		f = modff(f, &v);
 	else if (f < 0.0)
 		f = modff(-f, &v);
