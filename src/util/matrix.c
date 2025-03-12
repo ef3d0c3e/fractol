@@ -45,7 +45,7 @@ inline void	mat_invert(t_mat2d *mat)
 	*mat = (t_mat2d){{
 		+ scale * mat->data[3],
 		- scale * mat->data[1],
-		+ scale * mat->data[2],
-		- scale * mat->data[0],
+		- scale * mat->data[2],
+		+ scale * mat->data[0],
 	}};
 }
