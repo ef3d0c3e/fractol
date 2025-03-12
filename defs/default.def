@@ -11,7 +11,7 @@
 	\
 	__fractol_idx = 0; \
 	__idx = 0; \
-	while (++__fractol_idx < __fractol_omp_size) \
+	while ((size_t)++__fractol_idx < __fractol_omp_size) \
 	{ \
 		__idx = __fractol_idx - 1; \
 		{ __s }; \

@@ -56,7 +56,7 @@ void
 		while (size + 3 >= sizeof(buf))
 			size -= write(fd, buf, size);
 	}
-	write(fd, buf, size);
+	size -= write(fd, buf, size);
 	close(fd);
 	ft_printf("File 'screenshot.ppm' saved.\n");
 }

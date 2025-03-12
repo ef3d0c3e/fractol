@@ -19,8 +19,9 @@
 #include <app/fractol.h>
 
 #include <ft_printf.h>
+#include <stdbool.h>
 
-static inline bool	parse_opts(int *i, char **argv, int *args)
+static bool	parse_opts(int *i, char **argv, int *args)
 {
 	if (!ft_strcmp(argv[*i], "-h") || !ft_strcmp(argv[*i], "--help"))
 		exit((print_help(argv[0]), 0));

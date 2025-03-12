@@ -1,6 +1,6 @@
 NAME := fractol
 CC := gcc
-CFLAGS := -Wall -Wextra -pedantic
+CFLAGS := -Wall -Wextra -Werror -pedantic
 IFLAGS := -I./src
 LFLAGS :=  -lm
 
@@ -95,29 +95,27 @@ OBJECTS_BONUS += $(addprefix objs/,$(BONUS_SOURCES:.c=.o))
 # Libraries
 LIB_MLX := ./libs/minilibx-linux/libmlx_Linux.a
 LIB_PRINTF := ./libs/ft_printf/libftprintf.a
-
 FRACTOL_DEFS := -include "defs/default.def"
+
 objs/%.o: IFLAGS += -I./libs/ft_printf/includes/ -I./libs/minilibx-linux
 objs/%.o: %.c
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) $(IFLAGS) $(FRACTOL_DEFS) -c $< -o $@
 
 # Default target
-$(NAME): LFLAGS += -L/usr/lib -lX11 -lXext $(LIB_MLX) $(LIB_PRINTF)
+$(NAME): LFLAGS += $(LIB_MLX) $(LIB_PRINTF) -L/usr/lib -lX11 -lXext
 $(NAME): $(LIB_MLX) $(LIB_PRINTF) $(OBJECTS)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJECTS) $(LFLAGS)
 
 # Bonus target
 bonus: LFLAGS += $(LIB_MLX) $(LIB_PRINTF) -L/usr/lib -lX11 -lXext
-bonus: FRACTOL_DEFS := -include "defs/bonus.def"
-bonus: CFLAGS += $(FLAGS_OPT) \
-	-flto
+bonus: CFLAGS += $(FLAGS_OPT)
 bonus: $(LIB_MLX) $(LIB_PRINTF) $(OBJECTS_BONUS)
 	$(CC) $(CFLAGS) -o $@ $(OBJECTS_BONUS) $(LFLAGS)
 
 # Openmp optimized target
-bonus-omp: LFLAGS += $(LIB_MLX) $(LIB_PRINTF) -L/usr/lib -lX11 -lXext
 bonus-omp: FRACTOL_DEFS := -include "defs/bonus.def"
+bonus-omp: LFLAGS += $(LIB_MLX) $(LIB_PRINTF) -L/usr/lib -lX11 -lXext
 bonus-omp: CFLAGS += $(FLAGS_OMP)
 bonus-omp: $(LIB_MLX) $(LIB_PRINTF) $(OBJECTS_BONUS)
 	echo $(LFLAGS)
@@ -125,6 +123,7 @@ bonus-omp: $(LIB_MLX) $(LIB_PRINTF) $(OBJECTS_BONUS)
 
 # Target for GCC's profiler
 $(NAME)-profile: FRACTOL_DEFS := -include "defs/bonus.def"
+$(NAME)-profile: LFLAGS += $(LIB_MLX) $(LIB_PRINTF) -L/usr/lib -lX11 -lXext
 $(NAME)-profile: CFLAGS += $(FLAGS_OMP) \
 	-pg \
 	--coverage \
@@ -136,6 +135,7 @@ $(NAME)-profile: clean $(OBJECTS_BONUS) $(LIB_MLX) $(LIB_PRINTF)
 
 # GCC instrumented target (requires profile)
 $(NAME)-instrumented: FRACTOL_DEFS := -include "defs/bonus.def"
+$(NAME)-instrumented: LFLAGS += $(LIB_MLX) $(LIB_PRINTF) -L/usr/lib -lX11 -lXext
 $(NAME)-instrumented: CFLAGS += $(FLAGS_OMP) \
 	-fprofile-use \
 	-flto
