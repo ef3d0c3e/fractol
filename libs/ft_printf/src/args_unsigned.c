@@ -55,7 +55,7 @@ int	__printf_print_unsigned(int fd, struct s_printf_fmt *fmt, unsigned int x)
 	if (fmt->has_precision && !x)
 	{
 		if (fmt->precision == 0)
-			write(fd, "(null)", 6);
+			width = write(fd, "(null)", 6);
 		else
 			w += __printf_pad(fd, '0', fmt->precision);
 	}

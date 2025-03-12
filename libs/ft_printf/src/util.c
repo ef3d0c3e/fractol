@@ -15,13 +15,15 @@
 int	__printf_pad(int fd, char c, int width)
 {
 	int	i;
+	int	_;
 
 	i = 0;
 	while (i < width)
 	{
-		write(fd, &c, 1);
+		_ = write(fd, &c, 1);
 		++i;
 	}
+	(void)_;
 	return ((width > 0) * width);
 }
 
