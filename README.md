@@ -7,6 +7,8 @@
 Fractol requires the following to be installed:
  - `libx11`
  - `libxext`
+ - `libbsd`
+
 Optional requirements:
  - `openmp` (`libgomp` for gcc, `libomp` for clang)\
     *Required for multithreading, might have to turn off `-Werror` when building without it.*
@@ -19,7 +21,7 @@ You can now run fractol: `./fractol 1024 1024`.
 
 In order to build the multithreaded version on fractal, you will need to install the matching OpenMP library for your compiler.
 
-Then use the `bonus` target: `make bonus`
+Then use the `bonus-omp` target: `make bonus-omp`
 (Be sure to run `make fclean` if you have already built Fractol)
 
 
@@ -48,7 +50,7 @@ The selector lets you navigate through rendering kernels and program options.
 
 ### Screenshot
 
-To save the current render as a screenshot, choose the `Screenshot to 'screenshot.ppm'` option, or press key `Z`.
+To save the current render as a screenshot, choose the `Screenshot to 'screenshot.ppm'` option, or press the `Z` key.
 The image will be saved in [ppm](https://netpbm.sourceforge.net/doc/ppm.html) format.
 
 You can convert a screenshot using imagemagick: `convert screenshot.ppm screenshot.png`.

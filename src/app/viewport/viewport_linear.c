@@ -59,7 +59,7 @@ t_pos
 
 	vec = (t_vec2d){
 		pos.x - (this->view.data[0] + this->view.data[1]) / 2.0,
-		pos.y - (this->view.data[2] + this->view.data[3]) / 2.0
+		- pos.y + (this->view.data[2] + this->view.data[3]) / 2.0
 	};
 	vec.x = vec.x * factor.x;
 	vec.y = vec.y * factor.y;
