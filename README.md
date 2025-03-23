@@ -88,11 +88,9 @@ The program uses two different rendering pipelines according to the value chosen
     - Edges are detected using [Sobel edge-detection](https://en.wikipedia.org/wiki/Sobel_operator)
     - Detected edges are propagated to their neighbor pixels in order to create a 'mask' of blurry regions.
     - Each pixel present in the mask is re-sampled from the fractal in order to get a newer accurate reading of their values.\
+        Pixels are rendered using at most 1 sample per pixel, which yields accurate-enough results\
+        while not compromising too much on speed.
         *A possible optimization to this method is to re-use the previously computed pixel data from the smaller image*\
-        *This upsampling method can save a lot of resources, as most smooth pixel regions would have\
-        stayed the same if they had been oversampled. Oversampling only the noisy regions uses\
-        less resources than supersampling. While still providing good quality images.\
-        However, expect very noisy images to result in global oversampling of the entire image (long).* \
         See [gallery](#gallery-downsampling) for how downsampling works.
 
  * **When using <a name="render-upsampling" style="text-decoration:none;">upsampling</a> (antialiasing): [Key = U]**
@@ -103,6 +101,10 @@ The program uses two different rendering pipelines according to the value chosen
     - Each pixel is recomputed using `(2 * floor(weight) + 1) ^ 2` samples.\
         *(The original pixel is subdivided into a grid with 1 cell for each sample)*
     - They are then blended into the final pixel value using gaussian sampling.\
+        *This upsampling method can save a lot of resources, as most smooth pixel regions would have\
+        stayed the same if they had been oversampled. Oversampling only the noisy regions uses\
+        less resources than supersampling. While still providing good quality images.\
+        However, expect very noisy images to result in global oversampling of the entire image (long).* \
         See [gallery](#gallery-upsampling) for examples of upsampling.
 
 # Parameters
