@@ -2,6 +2,22 @@
 
 ![Fractol in action](./docs/mandel_arg.png)
 
+# Table of content
+ 1. [Building](#building)
+    1. [Building the faster Fractol](#building-the-faster-fractol)
+ 2. [Navigation](#navigation)
+    1. [Selector ui](#selector-ui)
+    2. [Screenshot](#screenshot)
+ 3. [Rendering](#rendering)
+ 4. [Parameters](#parameters)
+    1. [Required parameters](#required-parameters)
+    2. [Additional parameters](#additional-parameters)
+ 5. [Gallery](#gallery)
+    1. [Upsampling](#upsampling)
+    2. [Downsampling](#downsampling)
+ 6. [Defining new fractals](#defining-new-fractals)
+ 7. [License](#license)
+
 # Building
 
 Fractol requires the following to be installed:
@@ -17,9 +33,9 @@ Then you can run `make` to build the `fractol` executable. Or `make bonus` for t
 
 You can now run fractol: `./fractol 1024 1024`.
 
-## Builder the faster Fractol
+## Building the faster Fractol
 
-In order to build the multithreaded version on fractal, you will need to install the matching OpenMP library for your compiler.
+In order to build the multithreaded version of `Fractol`, you will need to install the matching OpenMP library for your compiler.
 
 Then use the `bonus-omp` target: `make bonus-omp`
 (Be sure to run `make fclean` if you have already built Fractol)
@@ -69,24 +85,24 @@ The program uses two different rendering pipelines according to the value chosen
         *Doing so gives good result around 'smooth' regions in the smaller image.\
         However, 'noisy' regions become blurry when upscaled. Edge-detection can help to detect these regions\
         in order to 'fix' their blurryness.*
-    - Edges are detected using [Sobel edge detection](https://en.wikipedia.org/wiki/Sobel_operator)
+    - Edges are detected using [Sobel edge-detection](https://en.wikipedia.org/wiki/Sobel_operator)
     - Detected edges are propagated to their neighbor pixels in order to create a 'mask' of blurry regions.
     - Each pixel present in the mask is re-sampled from the fractal in order to get a newer accurate reading of their values.\
         *A possible optimization to this method is to re-use the previously computed pixel data from the smaller image*\
+        *This upsampling method can save a lot of resources, as most smooth pixel regions would have\
+        stayed the same if they had been oversampled. Oversampling only the noisy regions uses\
+        less resources than supersampling. While still providing good quality images.\
+        However, expect very noisy images to result in global oversampling of the entire image (long).* \
         See [gallery](#gallery-downsampling) for how downsampling works.
 
  * **When using <a name="render-upsampling" style="text-decoration:none;">upsampling</a> (antialiasing): [Key = U]**
-    - Sobel edge-detection is used to detect noisy regions that might need re-computing.
+    - [Sobel edge-detection](https://en.wikipedia.org/wiki/Sobel_operator) is used to detect noisy regions that might need re-computing.
     - A 5x5 gaussian blur is used to 'propagate' noisy pixels to their neighbors.
     - From then, each pixel gets an oversampling weight assigned.\
         *The assigned weights can be visualized using `Oversampling debug` in the selector ui.*
     - Each pixel is recomputed using `(2 * floor(weight) + 1) ^ 2` samples.\
         *(The original pixel is subdivided into a grid with 1 cell for each sample)*
     - They are then blended into the final pixel value using gaussian sampling.\
-        *This upsampling method can save a lot of resources, as most smooth pixel regions would have\
-        stayed the same if they had been oversampled. Oversampling only the noisy regions uses\
-        less resources than supersampling. While still providing good quality images.\
-        However, expect very noisy images to result in global oversampling of the entire image (long).* \
         See [gallery](#gallery-upsampling) for examples of upsampling.
 
 # Parameters
